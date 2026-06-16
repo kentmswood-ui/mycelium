@@ -1,0 +1,18 @@
+node_modules/
+dist/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.log
+_cockpit.log
+.DS_Store
+*.tmp
+_*.mjs
+# runtime data dirs at repo root (NOT src/ledger which holds schema.sql)
+/archive/
+/ledger/
+/skills/
+# internal working docs — kept on disk, excluded from the published repo
+/VERIFY.md
+/docs/superpowers/

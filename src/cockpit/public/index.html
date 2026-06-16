@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mycelium</title>
+<style>
+  /* ── Design tokens (OKLCH, dark) — a resident brain console beside a dark editor ── */
+  :root {
+    --bg: oklch(0.17 0.012 195);
+    --surface: oklch(0.21 0.014 195);
+    --surface-2: oklch(0.25 0.016 195);
+    --border: oklch(0.31 0.015 195);
+    --border-soft: oklch(0.27 0.014 195);
+    --ink: oklch(0.95 0.008 195);
+    --ink-2: oklch(0.82 0.012 195);
+    --muted: oklch(0.66 0.014 195);
+    --brand: oklch(0.82 0.15 172);      /* bioluminescent synapse teal-green */
+    --brand-ink: oklch(0.24 0.05 172);
+    --brand-dim: oklch(0.46 0.07 172);
+    --danger: oklch(0.7 0.16 24);
+    --warn: oklch(0.82 0.13 78);
+    --info: oklch(0.74 0.12 248);
+    --r: 10px;
+    --r-sm: 7px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --t: 180ms;
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: dark; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+  a { color: var(--brand); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  /* ── Topbar ── */
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding-bottom: 1.1rem; border-bottom: 1px solid var(--border-soft); margin-bottom: 1.6rem; }
+  .brand { display: flex; align-items: center; gap: .7rem; }
+  .glyph { width: 30px; height: 30px; flex: none; }
+  .brand h1 { font-size: 1.18rem; font-weight: 650; margin: 0; letter-spacing: -0.01em; }
+  .brand .tag { color: var(--muted); font-size: .82rem; margin-top: 1px; }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--brand);
+    box-shadow: 0 0 0 0 var(--brand); animation: pulse 2.4s var(--ease) infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 oklch(0.82 0.15 172 / .5); } 70%,100% { box-shadow: 0 0 0 7px oklch(0.82 0.15 172 / 0); } }
+
+  /* ── Language toggle (segmented) ── */
+  .lang { display: inline-flex; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 2px; }
+  .lang button { all: unset; cursor: pointer; padding: .25rem .7rem; border-radius: 999px;
+    font-size: .82rem; color: var(--muted); transition: color var(--t), background var(--t); }
+  .lang button[aria-pressed="true"] { background: var(--brand); color: var(--brand-ink); font-weight: 600; }
+  .lang button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  /* ── Sections & cards ── */
+  section { margin-top: 1.9rem; }
+  .sec-head { display: flex; align-items: baseline; gap: .6rem; margin-bottom: .7rem; }
+  .sec-head h2 { font-size: .82rem; font-weight: 650; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ink-2); margin: 0; }
+  .sec-head .hint { color: var(--muted); font-size: .8rem; }
+  .sec-head .count { color: var(--brand); font-size: .8rem; font-weight: 600; }
+  .card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r);
+    padding: 1.1rem 1.2rem; }
+
+  /* ── Trigger prefs form ── */
+  .field { display: grid; grid-template-columns: 7rem 1fr; gap: .6rem 1rem; align-items: center;
+    padding: .55rem 0; }
+  .field + .field { border-top: 1px solid var(--border-soft); }
+  .field > .lbl { color: var(--ink-2); font-size: .9rem; }
+  .field .sub { color: var(--muted); font-size: .8rem; margin-top: .2rem; }
+  input[type=text], input[type=number] { background: var(--surface-2); border: 1px solid var(--border);
+    color: var(--ink); border-radius: var(--r-sm); padding: .4rem .6rem; font: inherit; font-size: .88rem;
+    transition: border-color var(--t), box-shadow var(--t); }
+  input[type=text] { width: 100%; max-width: 22rem; }
+  input[type=number] { width: 5.5rem; }
+  input:focus-visible { outline: none; border-color: var(--brand);
+    box-shadow: 0 0 0 3px oklch(0.82 0.15 172 / .18); }
+
+  /* ── Segmented radios & source chips ── */
+  .seg, .chips { display: flex; gap: .45rem; flex-wrap: wrap; }
+  .opt { display: inline-flex; align-items: center; gap: .4rem; padding: .32rem .7rem;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px;
+    cursor: pointer; font-size: .85rem; color: var(--ink-2); user-select: none;
+    transition: border-color var(--t), background var(--t), color var(--t); }
+  .opt:hover { border-color: var(--brand-dim); }
+  .opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .opt:has(input:checked) { border-color: var(--brand); background: oklch(0.82 0.15 172 / .12); color: var(--brand); }
+  .opt:has(input:focus-visible) { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  /* ── Tables ── */
+  .tbl-wrap { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r); overflow: hidden; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: .6rem .85rem; vertical-align: top; font-size: .87rem; }
+  thead th { color: var(--muted); font-weight: 600; font-size: .76rem; text-transform: uppercase;
+    letter-spacing: 0.04em; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+  tbody tr + tr td { border-top: 1px solid var(--border-soft); }
+  tbody tr { transition: background var(--t); }
+  tbody tr:hover { background: var(--surface-2); }
+  td.muted, .muted { color: var(--muted); }
+  .mono { font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace; font-size: .82rem; }
+
+  /* ── Strength bar ── */
+  .bar { height: 6px; width: 110px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--brand); border-radius: 999px;
+    transition: width var(--t) var(--ease); }
+
+  /* ── Pills & dispositions ── */
+  .pill { display: inline-flex; align-items: center; padding: .1rem .55rem; border-radius: 999px;
+    font-size: .76rem; font-weight: 500; }
+  .pill.brand { background: oklch(0.82 0.15 172 / .15); color: var(--brand); }
+  .pill.warn { background: oklch(0.82 0.13 78 / .15); color: var(--warn); }
+  .pill.info { background: oklch(0.74 0.12 248 / .15); color: var(--info); }
+  .pill.synthesized { background: oklch(0.82 0.15 172 / .15); color: var(--brand); }
+  .pill.proposed-install { background: oklch(0.74 0.12 248 / .15); color: var(--info); }
+  .pill.duplicate { background: oklch(0.7 0.1 290 / .16); color: oklch(0.78 0.1 290); }
+  .pill.low-fit, .pill.logged { background: var(--surface-2); color: var(--muted); }
+
+  /* ── Buttons ── */
+  button.btn { all: unset; cursor: pointer; padding: .3rem .75rem; border-radius: var(--r-sm);
+    font-size: .82rem; font-weight: 550; border: 1px solid var(--border); color: var(--ink-2);
+    transition: border-color var(--t), background var(--t), color var(--t); }
+  button.btn:hover { background: var(--surface-2); }
+  button.btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  button.btn.approve { border-color: var(--brand-dim); color: var(--brand); }
+  button.btn.approve:hover { background: oklch(0.82 0.15 172 / .12); }
+  button.btn.reject { border-color: oklch(0.5 0.1 24); color: var(--danger); }
+  button.btn.reject:hover { background: oklch(0.7 0.16 24 / .12); }
+  button.btn:disabled { opacity: .45; cursor: default; }
+  .actions { display: flex; gap: .4rem; }
+
+  /* ── Empty / saved ── */
+  .empty { color: var(--muted); font-style: italic; }
+  .saved { color: var(--brand); font-size: .8rem; opacity: 0; transition: opacity var(--t); }
+  .saved.show { opacity: 1; }
+
+  /* ── Stats (usage panel) ── */
+  .stats { display: flex; gap: 1.4rem; flex-wrap: wrap; align-items: flex-end; }
+  .stat { display: flex; flex-direction: column; gap: .15rem; }
+  .stat .n { font-size: 1.6rem; font-weight: 650; color: var(--ink); letter-spacing: -0.02em; line-height: 1; }
+  .stat .n.brand { color: var(--brand); }
+  .stat .k { font-size: .78rem; color: var(--muted); }
+  .breakdown { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .9rem; }
+  .vchip { display: inline-flex; align-items: baseline; gap: .35rem; padding: .25rem .6rem;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; font-size: .82rem; }
+  .vchip b { color: var(--brand); font-weight: 600; }
+  .row-inline { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+  .weights { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); gap: .5rem; margin-top: .8rem; }
+  .weights label { display: flex; flex-direction: column; gap: .2rem; font-size: .78rem; color: var(--muted); }
+  .weights input { width: 100%; }
+  textarea { background: var(--surface-2); border: 1px solid var(--border); color: var(--ink);
+    border-radius: var(--r-sm); padding: .5rem .65rem; font: inherit; font-size: .85rem; width: 100%;
+    min-height: 6.5rem; resize: vertical; transition: border-color var(--t), box-shadow var(--t); }
+  textarea:focus-visible { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px oklch(0.82 0.15 172 / .18); }
+
+  /* ── Skills module (card list + header actions + per-row icons) ── */
+  .mod-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    margin-bottom: .9rem; flex-wrap: wrap; }
+  .mod-head .acts { display: flex; gap: .5rem; align-items: center; }
+  .summary { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .9rem; }
+  .schip { display: inline-flex; align-items: baseline; gap: .35rem; padding: .3rem .7rem;
+    background: var(--surface); border: 1px solid var(--border-soft); border-radius: 999px; font-size: .82rem; color: var(--ink-2); }
+  .schip b { color: var(--brand); font-weight: 650; font-size: .9rem; }
+  .skill-list { display: flex; flex-direction: column; gap: .5rem; }
+  .srow { display: grid; grid-template-columns: 1fr auto; gap: .8rem 1rem; align-items: center;
+    background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r);
+    padding: .8rem 1rem; transition: border-color var(--t), background var(--t); }
+  .srow:hover { border-color: var(--brand-dim); background: var(--surface-2); }
+  .srow .meta { min-width: 0; }
+  .srow .nm { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .srow .nm b { font-size: .95rem; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+  .srow .desc { color: var(--muted); font-size: .82rem; margin-top: .25rem; overflow: hidden;
+    text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
+  .srow .kw { margin-top: .35rem; display: flex; gap: .3rem; flex-wrap: wrap; }
+  .srow .kw span { font-size: .72rem; color: var(--brand); background: oklch(0.82 0.15 172 / .1);
+    border-radius: 4px; padding: .05rem .35rem; }
+  .srow .right { display: flex; align-items: center; gap: .9rem; }
+  .srow .stat-mini { display: flex; flex-direction: column; align-items: flex-end; gap: .25rem; }
+  .badge { font-size: .7rem; padding: .08rem .45rem; border-radius: 4px; font-weight: 500; }
+  .badge.local { background: var(--surface-2); color: var(--muted); }
+  .badge.protected { background: oklch(0.82 0.13 78 / .15); color: var(--warn); }
+  .badge.added { background: oklch(0.74 0.12 248 / .15); color: var(--info); }
+  .icon-btn { all: unset; cursor: pointer; width: 28px; height: 28px; display: inline-flex;
+    align-items: center; justify-content: center; border-radius: var(--r-sm); color: var(--muted);
+    border: 1px solid transparent; transition: color var(--t), background var(--t), border-color var(--t); }
+  .icon-btn:hover { background: var(--surface-2); color: var(--ink); border-color: var(--border); }
+  .icon-btn.danger:hover { color: var(--danger); border-color: oklch(0.5 0.1 24); background: oklch(0.7 0.16 24 / .1); }
+  .icon-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+  .icon-btn svg { width: 15px; height: 15px; }
+
+  /* ── Modal ── */
+  .modal-back { position: fixed; inset: 0; background: oklch(0.1 0.01 195 / .6); display: none;
+    align-items: center; justify-content: center; padding: 1.5rem; z-index: 50; }
+  .modal-back.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
+    width: 100%; max-width: 40rem; max-height: 88vh; overflow: auto; padding: 1.3rem 1.4rem; }
+  .modal h3 { margin: 0 0 .9rem; font-size: 1.02rem; font-weight: 650; }
+  .modal .grid { display: grid; gap: .6rem; }
+  .modal-foot { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1rem; align-items: center; }
+  .view-md { white-space: pre-wrap; font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: .8rem; background: var(--surface-2); border: 1px solid var(--border-soft);
+    border-radius: var(--r-sm); padding: .8rem; max-height: 50vh; overflow: auto; color: var(--ink-2); }
+
+  @media (max-width: 640px) {
+    .field { grid-template-columns: 1fr; gap: .3rem; }
+    .wrap { padding: 1rem 1rem 3rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <svg class="glyph" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="16" cy="16" r="3" fill="oklch(0.82 0.15 172)"/>
+        <circle cx="6" cy="8" r="2" fill="oklch(0.46 0.07 172)"/>
+        <circle cx="26" cy="9" r="2" fill="oklch(0.46 0.07 172)"/>
+        <circle cx="7" cy="24" r="2" fill="oklch(0.46 0.07 172)"/>
+        <circle cx="25" cy="24" r="2" fill="oklch(0.46 0.07 172)"/>
+        <path d="M16 16 L6 8 M16 16 L26 9 M16 16 L7 24 M16 16 L25 24" stroke="oklch(0.46 0.07 172)" stroke-width="1.3"/>
+      </svg>
+      <div>
+        <h1>Mycelium <span class="pulse" title="live"></span></h1>
+        <div class="tag" data-i18n="tagline">常驻 skill 大脑 · 跨工具互联</div>
+      </div>
+    </div>
+    <div class="lang" role="group" aria-label="language">
+      <button id="lang-zh" aria-pressed="true">中文</button>
+      <button id="lang-en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head">
+      <h2 data-i18n="triggers.title">触发设置</h2>
+      <span class="hint" data-i18n="triggers.hint">决定 Mycelium 何时唤醒</span>
+      <span id="prefs-saved" class="saved" data-i18n="saved">已保存</span>
+    </div>
+    <div class="card" id="prefs">
+      <div class="field">
+        <span class="lbl" data-i18n="triggers.mode">触发方式</span>
+        <span class="seg" id="trigger-modes"></span>
+      </div>
+      <div class="field" id="keywords-row">
+        <span class="lbl" data-i18n="triggers.keywords">关键词</span>
+        <input type="text" id="keywords" data-i18n-ph="triggers.kwPlaceholder" />
+      </div>
+      <div class="field">
+        <span class="lbl" data-i18n="triggers.recurrence">复发阈值</span>
+        <div>
+          <input type="number" id="recurrence" min="1" step="1" />
+          <div class="sub" data-i18n="triggers.recurrenceHint">同类任务连续未命中几次后，才升级为「自制 skill」</div>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl" data-i18n="triggers.quota">每日配额</span>
+        <div>
+          <input type="number" id="quota" min="0" step="1" />
+          <div class="sub" data-i18n="triggers.quotaHint">每天最多自动处理几个新 skill（0 = 不限）</div>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl" data-i18n="triggers.language">主要语言</span>
+        <div>
+          <span class="seg" id="lang-modes"></span>
+          <div class="sub" data-i18n="triggers.languageHint">设为中文后：后台默认中文，且自制 skill 必须带中文关键词以保证能被中文任务找到</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2 data-i18n="sources.title">数据源范围</h2>
+      <span class="hint" data-i18n="sources.hint">新 skill 只在勾选的来源里搜</span>
+    </div>
+    <div class="chips" id="sources"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2 data-i18n="usage.title">Token 用量</h2>
+      <span class="hint" data-i18n="usage.hint"></span>
+    </div>
+    <div class="card" id="usage">
+      <div class="stats">
+        <div class="stat"><span class="n" id="u-total">—</span><span class="k" data-i18n="usage.total">咨询次数</span></div>
+        <div class="stat"><span class="n brand" id="u-est">—</span><span class="k" data-i18n="usage.est">预计 token</span></div>
+        <div class="stat">
+          <span class="row-inline"><label class="k" data-i18n="usage.days">统计天数</label>
+            <input type="number" id="u-days" min="1" max="365" step="1" value="30" style="width:4.5rem">
+          </span>
+          <span class="k" data-i18n="usage.estNote"></span>
+        </div>
+      </div>
+      <div class="breakdown" id="u-verdicts"></div>
+      <div class="breakdown" id="u-tools"></div>
+      <details style="margin-top:1rem">
+        <summary class="k" style="cursor:pointer" data-i18n="usage.weights">每裁决 token 估算权重</summary>
+        <div class="sub" data-i18n="usage.weightsHint" style="margin:.3rem 0"></div>
+        <div class="weights" id="u-weights"></div>
+        <span id="weights-saved" class="saved" data-i18n="saved">已保存</span>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2 data-i18n="proposals.title">待确认操作</h2>
+      <span id="prop-count" class="count"></span>
+      <span class="hint" data-i18n="proposals.hint">只有安装/改写/删除才需确认；新增 skill 是全自动的</span>
+    </div>
+    <div class="tbl-wrap">
+      <table id="proposals">
+        <thead><tr>
+          <th data-i18n="proposals.kind">类型</th>
+          <th data-i18n="proposals.titleCol">标题</th>
+          <th data-i18n="common.trust">信任</th>
+          <th data-i18n="proposals.risk">风险</th>
+          <th data-i18n="common.source">来源</th>
+          <th></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="mod-head">
+      <h2 style="font-size:.82rem;font-weight:650;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);margin:0" data-i18n="skills.title">技能库</h2>
+      <div class="acts">
+        <input type="text" id="skill-filter" data-i18n-ph="skills.filter" style="max-width:14rem">
+        <button class="btn approve" id="open-add" data-i18n="skills.add">新增技能</button>
+      </div>
+    </div>
+    <div class="summary" id="skills-summary"></div>
+    <div class="skill-list" id="skills"></div>
+  </section>
+
+  <!-- Add-skill modal -->
+  <div class="modal-back" id="add-modal">
+    <div class="modal">
+      <h3 data-i18n="skills.add">新增技能</h3>
+      <div class="grid">
+        <textarea id="add-md" data-i18n-ph="skills.addMd"></textarea>
+        <input type="text" id="add-purpose" data-i18n-ph="skills.addPurpose" style="max-width:none">
+        <input type="text" id="add-keywords" data-i18n-ph="skills.addKeywords" style="max-width:none">
+        <div class="sub" data-i18n="skills.addKwHint"></div>
+      </div>
+      <div class="modal-foot">
+        <span id="add-skill-msg" class="muted" style="font-size:.82rem;margin-right:auto"></span>
+        <button class="btn" id="add-cancel" data-i18n="common.cancel">取消</button>
+        <button class="btn approve" id="add-skill-btn" data-i18n="skills.addBtn">新增</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View-skill modal -->
+  <div class="modal-back" id="view-modal">
+    <div class="modal">
+      <h3 id="view-title">—</h3>
+      <div id="view-purpose" class="muted" style="font-size:.85rem;margin-bottom:.7rem"></div>
+      <div class="view-md" id="view-body">—</div>
+      <div class="modal-foot">
+        <button class="btn" id="view-close" data-i18n="common.close">关闭</button>
+      </div>
+    </div>
+  </div>
+
+
+  <section>
+    <div class="sec-head">
+      <h2 data-i18n="discoveries.title">搜索发现</h2>
+      <span class="hint" data-i18n="discoveries.hint">只读日志，无需操作</span>
+    </div>
+    <div class="tbl-wrap">
+      <table id="discoveries">
+        <thead><tr>
+          <th data-i18n="common.when">时间</th>
+          <th data-i18n="common.task">任务</th>
+          <th data-i18n="discoveries.found">发现</th>
+          <th data-i18n="discoveries.tier">来源层</th>
+          <th data-i18n="common.trust">信任</th>
+          <th data-i18n="discoveries.result">结果</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2 data-i18n="aliases.title">中文别名</h2>
+      <span class="hint" data-i18n="aliases.hint"></span>
+      <span id="aliases-saved" class="saved" data-i18n="saved">已保存</span>
+    </div>
+    <div class="tbl-wrap">
+      <table id="aliases">
+        <thead><tr>
+          <th data-i18n="aliases.skill">技能</th>
+          <th data-i18n="aliases.default">内置别名</th>
+          <th data-i18n="aliases.override">你的别名</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2 data-i18n="ledger.title">大脑记忆 & 维护</h2>
+      <span class="hint" data-i18n="ledger.hint"></span>
+    </div>
+    <div class="card" id="ledger">
+      <div class="stats">
+        <div class="stat"><span class="n" id="l-size">—</span><span class="k" data-i18n="ledger.size">数据库大小</span></div>
+      </div>
+      <div class="breakdown" id="l-rows"></div>
+      <div class="row-inline" style="margin-top:1rem">
+        <label class="k" data-i18n="ledger.pruneDays">删除多少天前的日志</label>
+        <input type="number" id="prune-days" min="1" step="1" value="90" style="width:5rem">
+        <button class="btn reject" id="prune-btn" data-i18n="ledger.pruneBtn">清理</button>
+        <span id="prune-msg" class="muted" style="font-size:.82rem"></span>
+      </div>
+      <div class="sub" data-i18n="ledger.pruneNote" style="margin-top:.4rem"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2 data-i18n="activity.title">最近活动</h2></div>
+    <div class="tbl-wrap">
+      <table id="activity">
+        <thead><tr>
+          <th data-i18n="common.when">时间</th>
+          <th data-i18n="activity.tool">工具</th>
+          <th data-i18n="activity.skill">技能</th>
+          <th data-i18n="common.task">任务</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  const $ = (sel) => document.querySelector(sel)
+  const $$ = (sel) => [...document.querySelectorAll(sel)]
+
+  // ── i18n: every UI string keyed; dynamic enums (modes/tiers/dispositions) keyed by id ──
+  const I18N = {
+    zh: {
+      tagline: '常驻 skill 大脑 · 跨工具互联', saved: '已保存',
+      'common.trust': '信任', 'common.source': '来源', 'common.when': '时间', 'common.task': '任务', 'common.none': '—',
+      'common.cancel': '取消', 'common.close': '关闭',
+      'triggers.title': '触发设置', 'triggers.hint': '决定 Mycelium 何时唤醒',
+      'triggers.mode': '触发方式', 'triggers.keywords': '关键词',
+      'triggers.kwPlaceholder': '逗号分隔，如：研究, research',
+      'triggers.recurrence': '复发阈值', 'triggers.recurrenceHint': '同类任务连续未命中几次后，才升级为「自制 skill」',
+      'triggers.quota': '每日配额', 'triggers.quotaHint': '每天最多自动处理几个新 skill（0 = 不限）',
+      'triggers.language': '主要语言', 'triggers.languageHint': '设为中文后：后台默认中文，且自制 skill 必须带中文关键词以保证能被中文任务找到',
+      'mode.explicit': '显式调用', 'mode.session': '每会话自动', 'mode.keyword': '自定义关键词',
+      'mode.explicit.sub': 'prompt 里提到 mycelium 才触发', 'mode.session.sub': '每次任务都走一遍',
+      'mode.keyword.sub': '命中关键词才触发',
+      'sources.title': '数据源范围', 'sources.hint': '新 skill 只在勾选的来源里搜',
+      'tier.code': '代码 & skill 市场', 'tier.docs': '官方文档', 'tier.community': '开发者社区', 'tier.blogs': '技术博客',
+      'proposals.title': '待确认操作', 'proposals.hint': '只有安装/改写/删除才需确认；新增 skill 是全自动的',
+      'proposals.kind': '类型', 'proposals.titleCol': '标题', 'proposals.risk': '风险',
+      'proposals.empty': '无 — 没有待确认的操作', 'proposals.approve': '通过', 'proposals.reject': '拒绝',
+      'skills.title': '技能库', 'skills.name': '技能', 'skills.strength': '强度', 'skills.uses': '使用次数', 'skills.tools': '工具',
+      'skills.empty': '还没有技能',
+      'skills.filter': '搜索技能…', 'skills.total': '总计', 'skills.protected': '受保护', 'skills.added2': '自制/导入', 'skills.avgStrength': '平均强度',
+      'skills.viewBtn': '查看', 'skills.purpose': '用途', 'skills.addKeywords': '关键词（逗号分隔，中文任务必填）',
+      'skills.addKwHint': '中文关键词让自制 skill 能被同一个中文任务找到，建议填写触发任务的核心词。',
+      'discoveries.title': '搜索发现', 'discoveries.hint': '只读日志，无需操作',
+      'discoveries.found': '发现', 'discoveries.tier': '来源层', 'discoveries.result': '结果', 'discoveries.empty': '还没有搜索发现',
+      'activity.title': '最近活动', 'activity.tool': '工具', 'activity.skill': '技能', 'activity.empty': '还没有活动',
+      'disp.synthesized': '已合成', 'disp.proposed-install': '建议安装', 'disp.duplicate': '已有', 'disp.low-fit': '适配低', 'disp.logged': '已记录',
+      'usage.title': 'Token 用量', 'usage.hint': '大脑本身不耗 token；这是各裁决在你的模型里引发的下游花费「估算」',
+      'usage.total': '咨询次数', 'usage.est': '预计 token', 'usage.estNote': '估算值，非实测（本地大脑不耗 token）',
+      'usage.byVerdict': '按裁决', 'usage.byTool': '按工具 / 模型', 'usage.days': '统计天数',
+      'usage.weights': '每裁决 token 估算权重', 'usage.weightsHint': '改这里只影响估算显示，不改变行为',
+      'verdict.pass': '跳过', 'verdict.reuse': '复用', 'verdict.recall': '记忆', 'verdict.searching': '搜索', 'verdict.build': '自制',
+      'aliases.title': '中文别名', 'aliases.hint': '让中文任务命中英文 skill；与内置别名合并',
+      'aliases.skill': '技能', 'aliases.default': '内置别名', 'aliases.override': '你的别名（逗号分隔）', 'aliases.empty': '没有可加别名的技能',
+      'ledger.title': '大脑记忆 & 维护', 'ledger.hint': 'Mycelium 自己的账本（非你的 MEMORY.md，那个由你直接改）',
+      'ledger.size': '数据库大小', 'ledger.rows': '各表行数', 'ledger.prune': '清理日志', 'ledger.pruneDays': '删除多少天前的日志',
+      'ledger.pruneBtn': '清理', 'ledger.pruneNote': '只删使用/咨询/发现日志，不影响 skill 强度评分', 'ledger.pruned': '已清理',
+      'skills.add': '手动新增技能', 'skills.addMd': 'SKILL.md 内容（含 name/description）', 'skills.addPurpose': '一句话说明用途',
+      'skills.addBtn': '新增', 'skills.added': '已新增', 'skills.archive': '归档', 'skills.archiveCol': '操作',
+      'skills.archiveConfirm': '该 skill 与 cc-switch 共用，归档会把它移出共享目录。确认归档？', 'skills.archived': '已归档',
+    },
+    en: {
+      tagline: 'resident skill brain · cross-tool', saved: 'saved',
+      'common.trust': 'Trust', 'common.source': 'Source', 'common.when': 'When', 'common.task': 'Task', 'common.none': '—',
+      'common.cancel': 'Cancel', 'common.close': 'Close',
+      'triggers.title': 'Triggers', 'triggers.hint': 'when Mycelium wakes up',
+      'triggers.mode': 'Trigger mode', 'triggers.keywords': 'Keywords',
+      'triggers.kwPlaceholder': 'comma-separated, e.g. research, 研究',
+      'triggers.recurrence': 'Recurrence', 'triggers.recurrenceHint': 'misses of the same task-shape before it escalates to "build a skill"',
+      'triggers.quota': 'Daily quota', 'triggers.quotaHint': 'max new skills auto-handled per day (0 = unlimited)',
+      'triggers.language': 'Primary language', 'triggers.languageHint': 'Setting Chinese: cockpit defaults to Chinese, and self-built skills must carry Chinese keywords so the same task can find them',
+      'mode.explicit': 'Explicit', 'mode.session': 'Every session', 'mode.keyword': 'Keyword',
+      'mode.explicit.sub': 'only when the prompt names mycelium', 'mode.session.sub': 'once per task',
+      'mode.keyword.sub': 'only when a keyword matches',
+      'sources.title': 'Data sources', 'sources.hint': 'new skills are searched only in the checked sources',
+      'tier.code': 'Code & skill markets', 'tier.docs': 'Official docs', 'tier.community': 'Dev communities', 'tier.blogs': 'Tech blogs',
+      'proposals.title': 'Pending actions', 'proposals.hint': 'only install/rewrite/delete need approval; new skills are automatic',
+      'proposals.kind': 'Kind', 'proposals.titleCol': 'Title', 'proposals.risk': 'Risk',
+      'proposals.empty': 'none — nothing awaiting review', 'proposals.approve': 'Approve', 'proposals.reject': 'Reject',
+      'skills.title': 'Skills', 'skills.name': 'Skill', 'skills.strength': 'Strength', 'skills.uses': 'Uses', 'skills.tools': 'Tools',
+      'skills.empty': 'no skills yet',
+      'skills.filter': 'Search skills…', 'skills.total': 'Total', 'skills.protected': 'Protected', 'skills.added2': 'Built/imported', 'skills.avgStrength': 'Avg strength',
+      'skills.viewBtn': 'View', 'skills.purpose': 'Purpose', 'skills.addKeywords': 'Keywords (comma-separated; required for Chinese tasks)',
+      'skills.addKwHint': 'Keywords let a self-built skill be found by the same-language task. Use the trigger task\'s core terms.',
+      'discoveries.title': 'Discoveries', 'discoveries.hint': 'read-only log, no action needed',
+      'discoveries.found': 'Found', 'discoveries.tier': 'Tier', 'discoveries.result': 'Result', 'discoveries.empty': 'no discoveries yet',
+      'activity.title': 'Recent activity', 'activity.tool': 'Tool', 'activity.skill': 'Skill', 'activity.empty': 'no activity yet',
+      'disp.synthesized': 'synthesized', 'disp.proposed-install': 'install proposed', 'disp.duplicate': 'duplicate', 'disp.low-fit': 'low fit', 'disp.logged': 'logged',
+      'usage.title': 'Token usage', 'usage.hint': 'the brain itself spends no tokens — this ESTIMATES the host-model spend each verdict provokes',
+      'usage.total': 'Consults', 'usage.est': 'Est. tokens', 'usage.estNote': 'an estimate, not measured (the local brain spends no tokens)',
+      'usage.byVerdict': 'By verdict', 'usage.byTool': 'By tool / model', 'usage.days': 'Window (days)',
+      'usage.weights': 'Per-verdict token estimate', 'usage.weightsHint': 'editing these only changes the estimate, not behavior',
+      'verdict.pass': 'pass', 'verdict.reuse': 'reuse', 'verdict.recall': 'recall', 'verdict.searching': 'searching', 'verdict.build': 'build',
+      'aliases.title': 'Chinese aliases', 'aliases.hint': 'let Chinese tasks hit English skills; merged with bundled aliases',
+      'aliases.skill': 'Skill', 'aliases.default': 'Bundled', 'aliases.override': 'Your aliases (comma-separated)', 'aliases.empty': 'no aliasable skills',
+      'ledger.title': 'Brain memory & upkeep', 'ledger.hint': "mycelium's own ledger (not your MEMORY.md — you edit that directly)",
+      'ledger.size': 'DB size', 'ledger.rows': 'Row counts', 'ledger.prune': 'Prune logs', 'ledger.pruneDays': 'Delete logs older than (days)',
+      'ledger.pruneBtn': 'Prune', 'ledger.pruneNote': 'only usage/consult/discovery logs; skill strength is untouched', 'ledger.pruned': 'pruned',
+      'skills.add': 'Add a skill manually', 'skills.addMd': 'SKILL.md content (with name/description)', 'skills.addPurpose': 'one-line purpose',
+      'skills.addBtn': 'Add', 'skills.added': 'added', 'skills.archive': 'Archive', 'skills.archiveCol': 'Action',
+      'skills.archiveConfirm': 'This skill is shared with cc-switch; archiving moves it out of the shared store. Confirm?', 'skills.archived': 'archived',
+    },
+  }
+
+  let lang = localStorage.getItem('myc-lang') || 'zh'
+  const t = (key) => (I18N[lang] && I18N[lang][key]) ?? (I18N.zh[key] ?? key)
+
+  function applyStatic() {
+    document.documentElement.lang = lang === 'zh' ? 'zh' : 'en'
+    $$('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n) })
+    $$('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh) })
+    $('#lang-zh').setAttribute('aria-pressed', String(lang === 'zh'))
+    $('#lang-en').setAttribute('aria-pressed', String(lang === 'en'))
+  }
+
+  function setLang(next) {
+    lang = next; localStorage.setItem('myc-lang', next)
+    applyStatic()
+    refreshAll() // re-render dynamic rows in the new language
+  }
+  $('#lang-zh').addEventListener('click', () => setLang('zh'))
+  $('#lang-en').addEventListener('click', () => setLang('en'))
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+  const emptyRow = (cols, key) => `<tr><td colspan="${cols}" class="empty">${esc(t(key))}</td></tr>`
+
+  // ── Triggers ──
+  async function loadPrefs() {
+    let data
+    try { data = await (await fetch('/api/prefs')).json() } catch { return }
+    const p = data.prefs ?? {}
+    // build mode radios from server ids, labels from client i18n
+    $('#trigger-modes').innerHTML = (data.triggerModes ?? []).map((m) =>
+      `<label class="opt" title="${esc(t('mode.' + m.id + '.sub'))}">
+        <input type="radio" name="tmode" value="${esc(m.id)}" ${p.triggerMode === m.id ? 'checked' : ''}>
+        ${esc(t('mode.' + m.id))}</label>`).join('')
+    $('#keywords').value = (p.keywords ?? []).join(', ')
+    $('#recurrence').value = p.recurrenceThreshold ?? 3
+    $('#quota').value = p.dailyQuota ?? 5
+    $('#keywords-row').style.display = p.triggerMode === 'keyword' ? '' : 'none'
+    // language picker
+    $('#lang-modes').innerHTML = (data.languages ?? []).map((m) =>
+      `<label class="opt"><input type="radio" name="plang" value="${esc(m.id)}" ${(p.primaryLanguage ?? 'auto') === m.id ? 'checked' : ''}> ${esc(m.label)}</label>`).join('')
+    // server primaryLanguage sets the cockpit default UNLESS the user already chose one here
+    if (!localStorage.getItem('myc-lang') && (p.primaryLanguage === 'zh' || p.primaryLanguage === 'en') && p.primaryLanguage !== lang) {
+      lang = p.primaryLanguage; applyStatic()
+    }
+  }
+
+  let saveTimer
+  async function savePrefs() {
+    const body = {
+      triggerMode: $('input[name=tmode]:checked')?.value,
+      keywords: $('#keywords').value.split(',').map((s) => s.trim()).filter(Boolean),
+      recurrenceThreshold: Number($('#recurrence').value),
+      dailyQuota: Number($('#quota').value),
+      primaryLanguage: $('input[name=plang]:checked')?.value,
+    }
+    await fetch('/api/prefs', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+    const tag = $('#prefs-saved'); tag.classList.add('show')
+    clearTimeout(saveTimer); saveTimer = setTimeout(() => tag.classList.remove('show'), 1200)
+    $('#keywords-row').style.display = body.triggerMode === 'keyword' ? '' : 'none'
+  }
+  $('#prefs').addEventListener('change', savePrefs)
+  $('#keywords').addEventListener('blur', savePrefs)
+
+  // ── Sources ──
+  async function loadSources() {
+    let data
+    try { data = await (await fetch('/api/sources')).json() } catch { return }
+    const enabled = new Set(data.enabled ?? [])
+    $('#sources').innerHTML = (data.tiers ?? []).map((tier) =>
+      `<label class="opt"><input type="checkbox" data-tier="${esc(tier.id)}" ${enabled.has(tier.id) ? 'checked' : ''}> ${esc(t('tier.' + tier.id))}</label>`).join('')
+  }
+  $('#sources').addEventListener('change', async (e) => {
+    if (!e.target.closest('input[data-tier]')) return
+    const enabled = $$('#sources input[data-tier]:checked').map((b) => b.dataset.tier)
+    await fetch('/api/sources', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ enabled }) })
+  })
+
+  // ── Proposals ──
+  async function loadProposals() {
+    let list = []
+    try { list = await (await fetch('/api/proposals')).json() } catch {}
+    $('#prop-count').textContent = list.length ? `(${list.length})` : ''
+    const tb = $('#proposals tbody')
+    if (!list.length) { tb.innerHTML = emptyRow(6, 'proposals.empty'); return }
+    tb.innerHTML = list.map((p) => {
+      const risk = p.risk ? `<span class="pill warn">${esc(p.risk)}</span>` : `<span class="muted">${t('common.none')}</span>`
+      const src = `${esc(p.source ?? '')}${p.sourceUrl ? ` <a href="${esc(p.sourceUrl)}" target="_blank" rel="noopener">↗</a>` : ''}`
+      return `<tr>
+        <td><span class="pill info">${esc(p.kind)}</span></td>
+        <td>${esc(p.title)}${p.task ? `<br><span class="muted">${esc(p.task)}</span>` : ''}</td>
+        <td class="mono">${(p.trust ?? 0).toFixed(2)}</td>
+        <td>${risk}</td>
+        <td class="muted">${src}</td>
+        <td><div class="actions">
+          <button class="btn approve" data-act="approve" data-id="${p.id}">${esc(t('proposals.approve'))}</button>
+          <button class="btn reject" data-act="reject" data-id="${p.id}">${esc(t('proposals.reject'))}</button>
+        </div></td></tr>`
+    }).join('')
+  }
+  $('#proposals').addEventListener('click', async (e) => {
+    const btn = e.target.closest('button[data-act]')
+    if (!btn) return
+    btn.disabled = true
+    await fetch(`/api/proposals/${btn.dataset.id}/${btn.dataset.act}`, { method: 'POST' })
+    await Promise.all([loadProposals(), loadSkills()])
+  })
+
+  // ── Skills ──
+  // ── Skills (card module) ──
+  let allSkills = []
+  const I = {
+    view: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+    archive: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>',
+  }
+  function srcBadge(s) {
+    if (s.protected) return `<span class="badge protected">${esc(t('skills.protected'))}</span>`
+    if (/interactive|synthesis|cockpit/i.test(s.source || '')) return `<span class="badge added">${esc(t('skills.added2'))}</span>`
+    return `<span class="badge local">${esc(s.source || 'local')}</span>`
+  }
+  function renderSkills() {
+    const q = ($('#skill-filter').value || '').trim().toLowerCase()
+    const list = q
+      ? allSkills.filter((s) => (s.name + ' ' + (s.description||'') + ' ' + (s.keywords||[]).join(' ')).toLowerCase().includes(q))
+      : allSkills
+    const box = $('#skills')
+    if (!list.length) { box.innerHTML = `<div class="empty" style="padding:1rem">${esc(t('skills.empty'))}</div>`; return }
+    box.innerHTML = list.map((s) => `<div class="srow">
+      <div class="meta">
+        <div class="nm"><b>${esc(s.name)}</b>${srcBadge(s)}</div>
+        ${s.description ? `<div class="desc">${esc(s.description)}</div>` : ''}
+        ${(s.keywords && s.keywords.length) ? `<div class="kw">${s.keywords.slice(0,8).map((k)=>`<span>${esc(k)}</span>`).join('')}</div>` : ''}
+      </div>
+      <div class="right">
+        <div class="stat-mini">
+          <div class="bar" title="${t('skills.strength')} ${(s.strength ?? 0).toFixed(2)}"><i style="width:${Math.round((s.strength ?? 0) * 100)}%"></i></div>
+          <span class="muted mono" style="font-size:.74rem">${t('skills.uses')} ${s.totalUses} · ${s.tools.length ? esc(s.tools.join(',')) : t('common.none')}</span>
+        </div>
+        <button class="icon-btn" data-view="${esc(s.name)}" title="${esc(t('skills.viewBtn'))}">${I.view}</button>
+        <button class="icon-btn danger" data-archive="${esc(s.name)}" title="${esc(t('skills.archive'))}">${I.archive}</button>
+      </div>
+    </div>`).join('')
+  }
+  async function loadSkills() {
+    try { allSkills = await (await fetch('/api/skills')).json() } catch { allSkills = [] }
+    // summary chips
+    const total = allSkills.length
+    const prot = allSkills.filter((s) => s.protected).length
+    const added = allSkills.filter((s) => /interactive|synthesis|cockpit/i.test(s.source||'')).length
+    const avg = total ? (allSkills.reduce((a, s) => a + (s.strength||0), 0) / total) : 0
+    $('#skills-summary').innerHTML = [
+      `<span class="schip">${esc(t('skills.total'))} <b>${total}</b></span>`,
+      `<span class="schip">${esc(t('skills.protected'))} <b>${prot}</b></span>`,
+      `<span class="schip">${esc(t('skills.added2'))} <b>${added}</b></span>`,
+      `<span class="schip">${esc(t('skills.avgStrength'))} <b>${avg.toFixed(2)}</b></span>`,
+    ].join('')
+    renderSkills()
+  }
+  $('#skill-filter').addEventListener('input', renderSkills)
+
+  $('#skills').addEventListener('click', async (e) => {
+    const view = e.target.closest('button[data-view]')
+    if (view) return openView(view.dataset.view)
+    const btn = e.target.closest('button[data-archive]')
+    if (!btn) return
+    const name = btn.dataset.archive
+    btn.disabled = true
+    let r = await fetch(`/api/skills/${encodeURIComponent(name)}/archive`, {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({}),
+    })
+    if (r.status === 409) {
+      if (confirm(t('skills.archiveConfirm'))) {
+        r = await fetch(`/api/skills/${encodeURIComponent(name)}/archive`, {
+          method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ force: true }),
+        })
+      } else { btn.disabled = false; return }
+    }
+    await loadSkills()
+  })
+
+  // ── View modal ──
+  async function openView(name) {
+    $('#view-title').textContent = name
+    $('#view-purpose').textContent = ''
+    $('#view-body').textContent = '…'
+    $('#view-modal').classList.add('open')
+    try {
+      const d = await (await fetch(`/api/skills/${encodeURIComponent(name)}/view`)).json()
+      $('#view-purpose').textContent = d.purpose ? `${t('skills.purpose')}: ${d.purpose}` : ''
+      $('#view-body').textContent = d.content || '(empty)'
+    } catch { $('#view-body').textContent = '(load failed)' }
+  }
+  $('#view-close').addEventListener('click', () => $('#view-modal').classList.remove('open'))
+
+  // ── Add modal (same contract-validated path as register_skill) ──
+  $('#open-add').addEventListener('click', () => { $('#add-skill-msg').textContent = ''; $('#add-modal').classList.add('open') })
+  $('#add-cancel').addEventListener('click', () => $('#add-modal').classList.remove('open'))
+  ;[$('#add-modal'), $('#view-modal')].forEach((m) => m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open') }))
+  $('#add-skill-btn').addEventListener('click', async () => {
+    const skillMd = $('#add-md').value.trim()
+    const purpose = $('#add-purpose').value.trim()
+    const keywords = $('#add-keywords').value.split(/[,，]/).map((s) => s.trim()).filter(Boolean)
+    const msg = $('#add-skill-msg')
+    if (!skillMd || !purpose) { msg.textContent = '✗ skillMd + purpose'; return }
+    const r = await fetch('/api/skills/add', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ skillMd, purpose, keywords }),
+    })
+    const data = await r.json().catch(() => ({}))
+    if (r.ok) {
+      msg.textContent = `✓ ${t('skills.added')}: ${data.skill}`
+      $('#add-md').value = ''; $('#add-purpose').value = ''; $('#add-keywords').value = ''
+      await loadSkills()
+      setTimeout(() => $('#add-modal').classList.remove('open'), 700)
+    } else {
+      msg.textContent = `✗ ${data.error ?? 'error'}`
+    }
+  })
+
+  // ── Discoveries ──
+  async function loadDiscoveries() {
+    let list = []
+    try { list = await (await fetch('/api/discoveries')).json() } catch {}
+    const tb = $('#discoveries tbody')
+    if (!list.length) { tb.innerHTML = emptyRow(6, 'discoveries.empty'); return }
+    tb.innerHTML = list.map((d) => {
+      const found = d.url ? `<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.title)}</a>` : esc(d.title)
+      const disp = `<span class="pill ${esc(d.disposition)}">${esc(t('disp.' + d.disposition))}</span>${d.detail ? ` <span class="muted">${esc(d.detail)}</span>` : ''}`
+      return `<tr>
+        <td class="muted mono">${esc(d.createdAt)}</td>
+        <td class="muted">${esc(d.task ?? '')}</td>
+        <td>${found}</td>
+        <td class="muted">${d.tier ? esc(t('tier.' + d.tier)) : ''}</td>
+        <td class="mono">${(d.trust ?? 0).toFixed(2)}</td>
+        <td>${disp}</td></tr>`
+    }).join('')
+  }
+
+  // ── Activity ──
+  async function loadActivity() {
+    let activity = []
+    try { activity = await (await fetch('/api/activity')).json() } catch {}
+    const tb = $('#activity tbody')
+    if (!activity.length) { tb.innerHTML = emptyRow(4, 'activity.empty'); return }
+    tb.innerHTML = activity.map((a) =>
+      `<tr><td class="muted mono">${esc(a.created_at)}</td><td>${esc(a.tool)}</td><td>${esc(a.skill_name)}</td><td class="muted">${esc(a.task)}</td></tr>`).join('')
+  }
+
+  // ── Usage + token estimate ──
+  let weightsTimer
+  async function loadUsage() {
+    const days = Math.max(1, Math.min(365, Number($('#u-days').value) || 30))
+    let data
+    try { data = await (await fetch('/api/usage?days=' + days)).json() } catch { return }
+    $('#u-total').textContent = (data.totalConsults ?? 0).toLocaleString()
+    $('#u-est').textContent = '≈' + (data.estTokens ?? 0).toLocaleString()
+    const order = ['reuse', 'recall', 'searching', 'build', 'pass']
+    const bv = data.byVerdict ?? {}
+    $('#u-verdicts').innerHTML = order.filter((v) => bv[v]).map((v) =>
+      `<span class="vchip">${esc(t('verdict.' + v))} <b>${bv[v]}</b></span>`).join('') || `<span class="muted">${t('activity.empty')}</span>`
+    $('#u-tools').innerHTML = (data.byTool ?? []).map((row) =>
+      `<span class="vchip">${esc(row.tool)}${row.model ? '/' + esc(row.model) : ''} <b>${row.count}</b></span>`).join('')
+    // weight editors
+    const w = data.weights ?? {}
+    $('#u-weights').innerHTML = order.map((v) =>
+      `<label>${esc(t('verdict.' + v))}<input type="number" min="0" step="50" data-w="${v}" value="${w[v] ?? 0}"></label>`).join('')
+  }
+  $('#u-days').addEventListener('change', loadUsage)
+  $('#u-weights').addEventListener('change', async (e) => {
+    if (!e.target.closest('input[data-w]')) return
+    const weights = {}
+    $$('#u-weights input[data-w]').forEach((i) => { weights[i.dataset.w] = Number(i.value) })
+    await fetch('/api/token-weights', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ weights }) })
+    const tag = $('#weights-saved'); tag.classList.add('show')
+    clearTimeout(weightsTimer); weightsTimer = setTimeout(() => tag.classList.remove('show'), 1200)
+    await loadUsage()
+  })
+
+  // ── Aliases editor ──
+  let aliasTimer
+  async function loadAliases() {
+    let data
+    try { data = await (await fetch('/api/aliases')).json() } catch { return }
+    const defaults = data.defaults ?? {}
+    const overrides = data.overrides ?? {}
+    const names = [...new Set([...Object.keys(defaults), ...Object.keys(overrides)])].sort()
+    const tb = $('#aliases tbody')
+    if (!names.length) { tb.innerHTML = emptyRow(3, 'aliases.empty'); return }
+    tb.innerHTML = names.map((name) => `<tr>
+      <td>${esc(name)}</td>
+      <td class="muted">${esc((defaults[name] ?? []).join('、'))}</td>
+      <td><input type="text" data-alias="${esc(name)}" style="max-width:none" value="${esc((overrides[name] ?? []).join(', '))}"></td></tr>`).join('')
+  }
+  $('#aliases').addEventListener('change', async (e) => {
+    if (!e.target.closest('input[data-alias]')) return
+    const overrides = {}
+    $$('#aliases input[data-alias]').forEach((i) => {
+      const terms = i.value.split(/[,，]/).map((s) => s.trim()).filter(Boolean)
+      if (terms.length) overrides[i.dataset.alias] = terms
+    })
+    await fetch('/api/aliases', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ overrides }) })
+    const tag = $('#aliases-saved'); tag.classList.add('show')
+    clearTimeout(aliasTimer); aliasTimer = setTimeout(() => tag.classList.remove('show'), 1200)
+  })
+
+  // ── Ledger stats + prune ──
+  async function loadLedger() {
+    let data
+    try { data = await (await fetch('/api/ledger/stats')).json() } catch { return }
+    const kb = (data.dbBytes ?? 0) / 1024
+    $('#l-size').textContent = kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : Math.round(kb) + ' KB'
+    $('#l-rows').innerHTML = Object.entries(data.tables ?? {}).map(([tbl, n]) =>
+      `<span class="vchip">${esc(tbl)} <b>${n}</b></span>`).join('')
+  }
+  $('#prune-btn').addEventListener('click', async () => {
+    const days = Number($('#prune-days').value) || 0
+    if (!days) return
+    const r = await fetch('/api/ledger/prune', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ days }) })
+    const data = await r.json().catch(() => ({}))
+    if (r.ok) {
+      const total = Object.values(data.deleted ?? {}).reduce((a, b) => a + b, 0)
+      $('#prune-msg').textContent = `✓ ${t('ledger.pruned')}: ${total}`
+      await Promise.all([loadLedger(), loadActivity()])
+    } else {
+      $('#prune-msg').textContent = `✗ ${data.error ?? 'error'}`
+    }
+  })
+
+  function refreshAll() {
+    return Promise.all([loadPrefs(), loadSources(), loadUsage(), loadProposals(), loadSkills(), loadAliases(), loadDiscoveries(), loadLedger(), loadActivity()])
+  }
+
+  applyStatic()
+  await refreshAll()
+</script>
+</body>
+</html>

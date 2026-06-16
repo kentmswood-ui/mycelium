@@ -1,0 +1,62 @@
+{
+  "name": "mycelium",
+  "version": "0.1.0",
+  "description": "Mycelium — a resident, cross-tool skill brain for AI coding agents. Routes every task through one shared memory: reuse local skills, recall your notes, research curated sources, or build a new skill. Works across Claude Code, Codex, and more over MCP.",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "vitest run",
+    "dev": "tsx src/index.ts",
+    "build": "tsc && node scripts/copy-assets.mjs",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai-agents",
+    "claude-code",
+    "codex",
+    "skills",
+    "skill-management",
+    "agent-memory",
+    "cross-tool",
+    "llm-tools",
+    "developer-tools",
+    "knowledge-base",
+    "sqlite"
+  ],
+  "author": "kentmswood-ui",
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://github.com/kentmswood-ui/mycelium#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kentmswood-ui/mycelium.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kentmswood-ui/mycelium/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "better-sqlite3": "^12.10.1",
+    "chokidar": "^5.0.0",
+    "express": "^5.2.1",
+    "gray-matter": "^4.0.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.3",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  }
+}

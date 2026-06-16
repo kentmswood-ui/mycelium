@@ -1,0 +1,62 @@
+Mycelium Non-Commercial License (v1.0)
+
+Copyright (c) 2026 kentmswood-ui
+
+================================================================================
+PLAIN-LANGUAGE SUMMARY (not a substitute for the terms below)
+  - Personal, educational, research, and other NON-COMMERCIAL use: FREE.
+    Run it, study it, use it on your own machine.
+  - COMMERCIAL use of any kind: requires prior written permission.
+  - Creating and distributing DERIVATIVE WORKS (forks, modified versions,
+    repackaging): requires prior written permission.
+  - This is a "source-available" license. It is NOT an OSI-approved open
+    source license, because it restricts commercial use and redistribution.
+================================================================================
+
+1. DEFINITIONS
+   "Software" means the Mycelium source code and accompanying files in this
+   repository. "Licensor" means the copyright holder named above.
+   "Non-Commercial Use" means use that is not primarily intended for or directed
+   toward commercial advantage or monetary compensation. "Commercial Use" means
+   any use that is not Non-Commercial Use, including use within a for-profit
+   entity's operations, in a paid product or service, or to generate revenue.
+
+2. GRANT (NON-COMMERCIAL)
+   Subject to these terms, the Licensor grants you a worldwide, royalty-free,
+   non-exclusive, non-transferable license to use, run, and study the Software
+   for Non-Commercial Use only.
+
+3. COMMERCIAL USE
+   Any Commercial Use of the Software requires a separate written license from
+   the Licensor. Contact the Licensor to obtain one.
+
+4. DERIVATIVE WORKS & REDISTRIBUTION
+   You may modify the Software for your own Non-Commercial Use. You may NOT
+   distribute, publish, sublicense, or share the Software or any derivative work
+   (modified or unmodified) without prior written permission from the Licensor.
+   Forking for the sole purpose of submitting a contribution back to this
+   repository is permitted.
+
+5. CONDITIONS
+   All copies must retain this license and the copyright notice. You must not
+   misrepresent the origin of the Software or remove this notice.
+
+6. NO TRADEMARK RIGHTS
+   This license does not grant rights to use the Licensor's names, logos, or
+   trademarks.
+
+7. DISCLAIMER OF WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+8. LIMITATION OF LIABILITY
+   IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
+   OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+9. TERMINATION
+   Any breach of these terms automatically terminates the rights granted to you.
+
+To request a commercial or redistribution license, contact: kentmswood-ui (GitHub).

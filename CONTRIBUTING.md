@@ -5,17 +5,17 @@ project's license.
 
 ## License of contributions
 
-Mycelium is released under a **source-available, non-commercial license** (see
-[LICENSE](LICENSE)). By submitting a contribution (pull request, patch, etc.) you agree
-that:
+Mycelium is released under the **GNU AGPL-3.0-or-later** (see [LICENSE](LICENSE)).
+By submitting a contribution (pull request, patch, etc.) you agree that:
 
-- Your contribution is licensed to the project under the same terms.
-- You grant the project maintainer the right to relicense your contribution as part of
-  the project (including granting commercial licenses to third parties).
+- Your contribution is licensed to the project under the AGPL-3.0-or-later.
+- You grant the project maintainer a perpetual, irrevocable right to **also license
+  your contribution under other terms** — including granting commercial licenses to
+  third parties. This is what lets the project offer a commercial (non-AGPL) option
+  while staying open source. If you are not comfortable with this, say so in your PR.
 
-Forking **for the sole purpose of submitting a contribution back** is permitted.
-Redistributing Mycelium or a derivative independently is not — that needs written
-permission.
+You're free to fork under the AGPL. If you run a modified version as a network
+service, AGPL requires you to offer its source to that service's users.
 
 ## Before you start
 

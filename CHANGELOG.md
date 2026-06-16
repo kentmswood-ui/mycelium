@@ -37,7 +37,9 @@ First public release.
 
 ### Notes
 
-- Released under a custom source-available, non-commercial license. Commercial
-  use and redistribution / derivative works require prior written permission.
+- Released under the **GNU AGPL-3.0-or-later**. Free to use, study, modify, and
+  self-host; a network service running a modified version must offer its source to
+  users. A separate commercial license is available from the copyright holder for
+  closed-source use.
 
 [0.1.0]: https://github.com/kentmswood-ui/mycelium/releases/tag/v0.1.0

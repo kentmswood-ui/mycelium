@@ -8,7 +8,7 @@
 
 [![Node](https://img.shields.io/badge/node-%3E%3D20-3c873a)](https://nodejs.org)
 [![MCP](https://img.shields.io/badge/protocol-MCP-7c5cff)](https://modelcontextprotocol.io)
-[![License: Non-Commercial](https://img.shields.io/badge/license-Non--Commercial-orange)](LICENSE)
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-3c873a)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-159%20passing-3c873a)](#development)
 
 </div>
@@ -113,10 +113,19 @@ Contributions are welcome under the contribution terms — see **[CONTRIBUTING.m
 
 ## License
 
-Mycelium is released under a **custom source-available, non-commercial license**.
-Personal, educational, and research use is free. **Commercial use and redistribution / derivative works require prior written permission.** See **[LICENSE](LICENSE)** for the full terms.
+Mycelium is released under the **GNU Affero General Public License v3.0 or later
+(AGPL-3.0-or-later)**. See **[LICENSE](LICENSE)**.
 
-> Note: this is intentionally **not** an OSI-approved open-source license — it restricts commercial use. If you want to use Mycelium commercially, please open an issue or contact the author for a license.
+In plain terms:
+
+- **Free to use, study, modify, and self-host** — for anyone, including companies.
+- **If you run a modified version as a network service**, AGPL requires you to make
+  your modified source available to its users.
+- **If you redistribute it** (modified or not), it stays under AGPL.
+
+Want to use Mycelium in a **closed-source product or service** without the AGPL's
+source-disclosure obligation? The copyright holder can grant a separate **commercial
+license** — open an issue or contact the author to discuss dual licensing.
 
 ## Acknowledgements
 

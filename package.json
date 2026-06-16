@@ -26,7 +26,7 @@
     "sqlite"
   ],
   "author": "kentmswood-ui",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "AGPL-3.0-or-later",
   "homepage": "https://github.com/kentmswood-ui/mycelium#readme",
   "repository": {
     "type": "git",

@@ -1,0 +1,11 @@
+# Normalize line endings: store everything as LF in the repo.
+* text=auto eol=lf
+
+# Binary / generated — never touch.
+*.png binary
+*.jpg binary
+*.ico binary
+pnpm-lock.yaml linguist-generated=true
+
+# Keep shell scripts LF even on Windows checkouts.
+*.sh text eol=lf

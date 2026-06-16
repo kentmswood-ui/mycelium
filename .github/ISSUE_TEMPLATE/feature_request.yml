@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest an idea or improvement for Mycelium
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. For anything non-trivial, discussing here first
+        saves work that might not be merged.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: The motivation. What's painful today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What you'd like to see happen.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This keeps the consult hot-path local and free (no LLM call / no blocking network I/O).
+        - label: I considered the cross-tool / cross-model impact.

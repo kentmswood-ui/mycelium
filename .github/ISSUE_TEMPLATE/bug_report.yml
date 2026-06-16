@@ -1,0 +1,49 @@
+name: Bug report
+description: Report a problem with Mycelium
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please fill in as much as you can — it speeds up a fix.
+        For **security** issues, do NOT use this form; see SECURITY.md.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what actually happened?
+      placeholder: |
+        1. I called consult with task "..."
+        2. I expected verdict `reuse`
+        3. Instead I got `searching`
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps. Include the exact task/skill if relevant.
+    validations:
+      required: true
+  - type: input
+    id: tool
+    attributes:
+      label: Which tool was calling Mycelium?
+      placeholder: Claude Code / Codex / cockpit / direct
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node version, Mycelium version/commit.
+      placeholder: |
+        OS: Windows 11
+        Node: 20.x
+        Mycelium: v0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant output from the MCP server or cockpit. Redact any secrets.
+      render: shell

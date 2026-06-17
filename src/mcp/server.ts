@@ -50,12 +50,14 @@ export async function startMcpServer(brain: Brain): Promise<void> {
   server.registerTool(
     'feedback',
     {
-      description: 'Report task outcome for a skill so the brain can learn.',
+      description:
+        'Report task outcome for a skill so the brain can learn. Pass `task` (the task the skill was applied to) — on outcome "fail" it records a skill×task-shape misfit so this skill stops being suggested for that kind of task.',
       inputSchema: {
         skill: z.string(),
         tool: z.string(),
         outcome: z.enum(['ok', 'fail']),
         model: z.string().optional(),
+        task: z.string().optional(),
         note: z.string().optional(),
       },
     },

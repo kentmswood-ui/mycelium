@@ -36,16 +36,63 @@ export const DEFAULT_ALIASES: Record<string, string[]> = {
 }
 
 /**
- * Return copies of the skills with their (default + override) aliases merged into keywords and
- * tokens. Override arrays are merged with defaults, not replaced, so a user adding one alias keeps
- * the bundled ones. Skills with no alias entry pass through enriched only by overrides.
+ * Curated ENGLISH trigger keywords per skill. The matcher otherwise leans on each skill's prose
+ * description, which is full of filler ("use when ... and ... to ...") — low signal. These are the
+ * high-signal terms a task would actually contain, folded in as name-weighted keywords so the right
+ * skill wins on the words that matter, not on incidental filler overlap.
+ */
+export const SKILL_KEYWORDS_EN: Record<string, string[]> = {
+  'test-driven-development': ['tdd', 'failing', 'unit', 'red-green', 'refactor', 'spec-first'],
+  'systematic-debugging': ['debug', 'bug', 'stacktrace', 'traceback', 'reproduce', 'rootcause', 'crash'],
+  'writing-plans': ['plan', 'spec', 'requirements', 'breakdown', 'design-doc', 'roadmap'],
+  'executing-plans': ['execute', 'checkpoint', 'implement-plan'],
+  'subagent-driven-development': ['subagent', 'parallel', 'orchestrate'],
+  'dispatching-parallel-agents': ['parallel', 'concurrent', 'dispatch', 'fanout'],
+  brainstorming: ['brainstorm', 'ideate', 'explore', 'intent'],
+  'requesting-code-review': ['review', 'merge', 'pullrequest'],
+  'receiving-code-review': ['feedback', 'review', 'critique'],
+  'verification-before-completion': ['verify', 'verification', 'confirm', 'validate'],
+  'finishing-a-development-branch': ['branch', 'merge', 'integrate', 'finish'],
+  'using-git-worktrees': ['worktree', 'git', 'isolated', 'workspace'],
+  'writing-skills': ['skill', 'authoring', 'create-skill'],
+  'using-superpowers': ['superpowers', 'discovery'],
+  'frontend-design': ['frontend', 'design', 'visual', 'typography', 'aesthetic', 'layout'],
+  'ui-design-brain': ['ui', 'component', 'interface', 'widget'],
+  impeccable: ['redesign', 'polish', 'animation', 'oklch', 'color', 'motion', 'cockpit'],
+  hallmark: ['redesign', 'audit', 'aislop', 'screenshot', 'extraction'],
+  anysearch: ['search', 'web', 'scrape', 'extract', 'crawl'],
+  last30days: ['recent', 'reddit', 'trend', 'news', 'research'],
+  'agent-reach': ['research', 'social', 'github', 'rss', 'reach'],
+}
+
+/** Coarse domain per skill. NOT a hard gate (a task isn't domain-classified) — surfaced in the
+ *  cockpit for filtering/grouping and available for future routing. */
+export type Domain = 'dev' | 'design' | 'research' | 'meta'
+export const SKILL_DOMAINS: Record<string, Domain> = {
+  'test-driven-development': 'dev', 'systematic-debugging': 'dev', 'writing-plans': 'meta',
+  'executing-plans': 'meta', 'subagent-driven-development': 'dev', 'dispatching-parallel-agents': 'dev',
+  brainstorming: 'meta', 'requesting-code-review': 'dev', 'receiving-code-review': 'dev',
+  'verification-before-completion': 'dev', 'finishing-a-development-branch': 'dev',
+  'using-git-worktrees': 'dev', 'writing-skills': 'meta', 'using-superpowers': 'meta',
+  'frontend-design': 'design', 'ui-design-brain': 'design', impeccable: 'design', hallmark: 'design',
+  anysearch: 'research', last30days: 'research', 'agent-reach': 'research',
+}
+
+/**
+ * Return copies of the skills enriched for matching: bundled Chinese aliases + curated English
+ * keywords + per-skill user overrides, all merged into keywords (name-weighted) and tokens.
+ * Overrides merge with bundled, never replace. Skills with no entry pass through unchanged.
  */
 export function aliasedSkills(
   skills: Skill[],
   overrides: Record<string, string[]> = {},
 ): Skill[] {
   return skills.map((s) => {
-    const extra = [...(DEFAULT_ALIASES[s.name] ?? []), ...(overrides[s.name] ?? [])]
+    const extra = [
+      ...(DEFAULT_ALIASES[s.name] ?? []),
+      ...(SKILL_KEYWORDS_EN[s.name] ?? []),
+      ...(overrides[s.name] ?? []),
+    ]
     if (extra.length === 0) return s
     const keywords = [...new Set([...s.keywords, ...extra])]
     const tokens = [...new Set([...s.tokens, ...extra.flatMap(tokenize)])]

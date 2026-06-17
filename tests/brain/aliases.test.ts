@@ -15,7 +15,16 @@ describe('aliasedSkills', () => {
     const [enriched] = aliasedSkills([tdd])
     expect(enriched.tokens).toContain('测试') // from 单元测试/失败测试 bigrams
     const m = new KeywordMatcher()
-    const res = m.match('用 TDD 先写失败的测试再实现这个功能', aliasedSkills([tdd]))
+    // Match against a realistic multi-skill corpus (IDF/precision are meaningless with 1 skill,
+    // and a real install always has many). The Chinese task must still pick TDD over the decoys.
+    const corpus = aliasedSkills([
+      tdd,
+      skill('systematic-debugging', 'debug failing builds'),
+      skill('writing-plans', 'write an implementation plan'),
+      skill('frontend-design', 'visual design and typography'),
+      skill('anysearch', 'search the web'),
+    ])
+    const res = m.match('用 TDD 先写失败的测试再实现这个功能', corpus)
     expect(res[0]?.skill.name).toBe('test-driven-development')
   })
 

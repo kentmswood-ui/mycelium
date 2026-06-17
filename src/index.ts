@@ -11,6 +11,7 @@ import { SearchPipeline } from './brain/pipeline.js'
 import { DiscoveryStore } from './brain/discoveries.js'
 import { SettingsStore } from './brain/settings.js'
 import { RecurrenceLedger } from './brain/recurrence.js'
+import { MisfitStore } from './brain/misfits.js'
 import { EvolutionDetector } from './brain/evolution.js'
 import { Pruner } from './brain/pruning.js'
 import { createCockpit } from './cockpit/api.js'
@@ -27,6 +28,7 @@ export interface Core {
   discoveries: DiscoveryStore
   settings: SettingsStore
   recurrence: RecurrenceLedger
+  misfits: MisfitStore
   pipeline: SearchPipeline
   evolution: EvolutionDetector
   pruner: Pruner
@@ -60,6 +62,7 @@ export function bootCore(opts: BootOpts = {}): Core {
   const discoveries = new DiscoveryStore(db)
   const settings = new SettingsStore(db)
   const recurrence = new RecurrenceLedger(db)
+  const misfits = new MisfitStore(db)
   const pipeline = new SearchPipeline(discoveries, settings, repo, cfg.skillsDir, proposals, {
     ...(opts.search ? { search: opts.search } : {}),
     ...(opts.extract ? { extract: opts.extract } : {}),
@@ -80,6 +83,7 @@ export function bootCore(opts: BootOpts = {}): Core {
     },
     settings,
     recurrence,
+    misfits,
     memoryDir: cfg.memoryDir || undefined,
     skillsDir: cfg.skillsDir,
   })
@@ -92,6 +96,7 @@ export function bootCore(opts: BootOpts = {}): Core {
     discoveries,
     settings,
     recurrence,
+    misfits,
     pipeline,
     evolution,
     pruner,

@@ -16,6 +16,7 @@ import { tokenize } from '../skills/skill.js'
 import { aliasedSkills } from './aliases.js'
 import type { SettingsStore } from './settings.js'
 import type { RecurrenceLedger } from './recurrence.js'
+import type { MisfitStore } from './misfits.js'
 
 const TRIVIAL = /\b(typo|rename|format|lint|whitespace|comment)\b/i
 const MIN_WORDS = 3
@@ -27,6 +28,8 @@ export interface BrainDeps {
   settings?: SettingsStore
   /** recurrence/quota ledger; when absent, build is never escalated (legacy behavior) */
   recurrence?: RecurrenceLedger
+  /** negative-learning store; when present, known-misfit skills are suppressed for a task-shape */
+  misfits?: MisfitStore
   /** directory of the user's memory notes for step-1 recall; when absent, recall is skipped */
   memoryDir?: string
   /** canonical skills dir; required for register_skill to land interactively-built skills */
@@ -94,8 +97,12 @@ export class Brain {
       ? this.deps.settings.get<Record<string, string[]>>('skillAliases', {})
       : {}
     const matches = this.matcher.match(req.task, aliasedSkills(this.repo.list(), aliasOverrides))
-    if (matches.length > 0) {
-      const top = matches[0].skill.name
+    // Negative learning: drop any skill already marked a misfit for this task-shape, so a wrong
+    // suggestion the user corrected before never recurs for the same kind of task.
+    const suppressed = this.deps.misfits?.suppressedFor(req.task) ?? new Set<string>()
+    const kept = matches.filter((m) => !suppressed.has(m.skill.name))
+    if (kept.length > 0) {
+      const top = kept[0].skill.name
       this.ledger.recordUsage({
         skill: top,
         tool: req.tool,
@@ -157,6 +164,11 @@ export class Brain {
 
   feedback(f: FeedbackRequestT): void {
     this.ledger.recordFeedback(f)
+    // Negative learning: a 'fail' tied to a task means this skill was wrong for that task-shape.
+    // Record it so the matcher suppresses this skill for the same kind of task next time.
+    if (f.outcome === 'fail' && f.task && this.deps.misfits) {
+      this.deps.misfits.record(f.task, f.skill)
+    }
   }
 
   /**

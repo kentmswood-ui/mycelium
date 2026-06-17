@@ -32,6 +32,9 @@ export const FeedbackRequest = z.object({
   tool: z.string().min(1),
   outcome: z.enum(['ok', 'fail']),
   model: z.string().optional(),
+  /** the task the skill was applied to; when outcome is 'fail', records a skill×task-shape misfit
+   *  so the matcher stops suggesting this skill for that kind of task. */
+  task: z.string().optional(),
   note: z.string().optional(),
 })
 

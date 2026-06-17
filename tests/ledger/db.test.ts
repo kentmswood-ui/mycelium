@@ -16,6 +16,7 @@ test('openDb creates tables idempotently', () => {
     'proposals',
     'quota_log',
     'settings',
+    'skill_misfits',
     'skills',
     'usage_log',
   ])

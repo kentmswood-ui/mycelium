@@ -86,3 +86,13 @@ CREATE TABLE IF NOT EXISTS quota_log (
   day TEXT PRIMARY KEY,
   count INTEGER NOT NULL DEFAULT 0
 );
+-- Negative learning: a skill that was wrong for a normalized task-shape (the agent ignored the
+-- reuse, or feedback came back 'fail' with the task). The matcher suppresses a skill for a shape
+-- once its misfit count crosses a threshold, so the same wrong suggestion stops recurring.
+CREATE TABLE IF NOT EXISTS skill_misfits (
+  signature TEXT NOT NULL,
+  skill TEXT NOT NULL,
+  count INTEGER NOT NULL DEFAULT 1,
+  last_at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (signature, skill)
+);

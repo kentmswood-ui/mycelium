@@ -1,0 +1,401 @@
+[
+  {
+    "task": "帮我写这个功能的实现计划，先拆任务再开工",
+    "lang": "zh",
+    "expect": "writing-plans",
+    "notExpect": ["test-driven-development"],
+    "note": "历史混淆对：实现计划 vs TDD"
+  },
+  {
+    "task": "Create an implementation plan from the requirements before coding",
+    "lang": "en",
+    "expect": "writing-plans",
+    "notExpect": ["test-driven-development"],
+    "note": "English planning request should not route to test-first work"
+  },
+  {
+    "task": "把 billing feature 拆成 implementation roadmap 和任务清单",
+    "lang": "mixed",
+    "expect": "writing-plans",
+    "notExpect": ["test-driven-development"],
+    "note": "Mixed-language planning terms"
+  },
+  {
+    "task": "先写失败测试，用红绿重构修这个 bug",
+    "lang": "zh",
+    "expect": "test-driven-development",
+    "notExpect": ["writing-plans"],
+    "note": "TDD red-green flow"
+  },
+  {
+    "task": "Use TDD and write a failing regression test before fixing the bug",
+    "lang": "en",
+    "expect": "test-driven-development",
+    "notExpect": ["writing-plans"],
+    "note": "English test-first bug fix"
+  },
+  {
+    "task": "这个 API bug 先补 vitest regression test 再改",
+    "lang": "mixed",
+    "expect": "test-driven-development",
+    "notExpect": ["writing-plans"],
+    "note": "Mixed TDD with concrete test runner"
+  },
+  {
+    "task": "排查 pnpm test 报错，看看日志并复现失败",
+    "lang": "zh",
+    "expect": "systematic-debugging",
+    "note": "Bug investigation with logs and repro"
+  },
+  {
+    "task": "Debug this flaky failure from the logs and find a repro",
+    "lang": "en",
+    "expect": "systematic-debugging",
+    "note": "English debugging workflow"
+  },
+  {
+    "task": "CI 失败了，帮我 diagnose logs 并定位 error",
+    "lang": "mixed",
+    "expect": "systematic-debugging",
+    "note": "Mixed debug diagnosis"
+  },
+  {
+    "task": "设计一个新的前端表单页面和组件布局",
+    "lang": "zh",
+    "expect": "frontend-design",
+    "notExpect": ["ui-ux-review"],
+    "note": "New UI build should not be an audit"
+  },
+  {
+    "task": "Build a new frontend settings page with components and layout",
+    "lang": "en",
+    "expect": "frontend-design",
+    "notExpect": ["ui-ux-review"],
+    "note": "English frontend creation"
+  },
+  {
+    "task": "做一个 SaaS form UI layout，不是评审现有截图",
+    "lang": "mixed",
+    "expect": "frontend-design",
+    "notExpect": ["ui-ux-review"],
+    "note": "Mixed UI creation despite mentioning review negatively"
+  },
+  {
+    "task": "审查这张截图的界面层级和可用性问题",
+    "lang": "zh",
+    "expect": "ui-ux-review",
+    "notExpect": ["frontend-design"],
+    "note": "Existing screenshot review"
+  },
+  {
+    "task": "Review this existing UI screenshot for spacing and accessibility issues",
+    "lang": "en",
+    "expect": "ui-ux-review",
+    "notExpect": ["frontend-design"],
+    "note": "English UI audit"
+  },
+  {
+    "task": "帮我 audit 这个 app UI 的 UX 可用性和视觉问题",
+    "lang": "mixed",
+    "expect": "ui-ux-review",
+    "notExpect": ["frontend-design"],
+    "note": "Mixed UI/UX audit"
+  },
+  {
+    "task": "全网搜索最近的 SaaS 定价资料并列出来源",
+    "lang": "zh",
+    "expect": "web-research",
+    "note": "Current internet research"
+  },
+  {
+    "task": "Search the web for current competitor pricing sources",
+    "lang": "en",
+    "expect": "web-research",
+    "note": "English web search"
+  },
+  {
+    "task": "查一下 Reddit 上大家怎么评价这个工具，给来源",
+    "lang": "mixed",
+    "expect": "web-research",
+    "note": "Platform discussion lookup"
+  },
+  {
+    "task": "用浏览器打开 localhost 页面截图并点击按钮",
+    "lang": "zh",
+    "expect": "browser-automation",
+    "notExpect": ["web-research"],
+    "note": "Local browser action, not web search"
+  },
+  {
+    "task": "Use Playwright to click through the local app and take screenshots",
+    "lang": "en",
+    "expect": "browser-automation",
+    "notExpect": ["web-research"],
+    "note": "Playwright browser automation"
+  },
+  {
+    "task": "localhost 表单用 browser 自动输入测试一下",
+    "lang": "mixed",
+    "expect": "browser-automation",
+    "note": "Mixed local browser test"
+  },
+  {
+    "task": "看这个 GitHub PR 的 review comments 和 checks",
+    "lang": "mixed",
+    "expect": "github-pr-review",
+    "notExpect": ["code-review"],
+    "note": "GitHub pull request review context"
+  },
+  {
+    "task": "Inspect the pull request diff and unresolved review comments",
+    "lang": "en",
+    "expect": "github-pr-review",
+    "notExpect": ["code-review"],
+    "note": "PR diff and comments"
+  },
+  {
+    "task": "GitHub PR CI checks fail，整理 requested changes",
+    "lang": "mixed",
+    "expect": "github-pr-review",
+    "note": "Mixed GitHub PR checks"
+  },
+  {
+    "task": "整理 Gmail 收件箱里需要今天回复的邮件",
+    "lang": "zh",
+    "expect": "gmail-triage",
+    "note": "Gmail inbox triage"
+  },
+  {
+    "task": "Triage my Gmail inbox and draft replies for urgent threads",
+    "lang": "en",
+    "expect": "gmail-triage",
+    "note": "English Gmail triage"
+  },
+  {
+    "task": "帮我找 gmail label 里的 unread email thread",
+    "lang": "mixed",
+    "expect": "gmail-triage",
+    "note": "Mixed Gmail label search"
+  },
+  {
+    "task": "分析这个 xlsx 表格里的公式和透视表",
+    "lang": "zh",
+    "expect": "spreadsheet-analysis",
+    "note": "Spreadsheet formula and pivot work"
+  },
+  {
+    "task": "Clean a CSV workbook and add formulas and charts",
+    "lang": "en",
+    "expect": "spreadsheet-analysis",
+    "notExpect": ["data-dashboard"],
+    "note": "Workbook work should not become dashboard"
+  },
+  {
+    "task": "Excel 数据表 pivot table 帮我检查",
+    "lang": "mixed",
+    "expect": "spreadsheet-analysis",
+    "note": "Mixed Excel pivot table"
+  },
+  {
+    "task": "做一个 KPI 数据看板，带指标卡和筛选器",
+    "lang": "zh",
+    "expect": "data-dashboard",
+    "note": "Analytics dashboard"
+  },
+  {
+    "task": "Build an analytics dashboard with KPI scorecards and filters",
+    "lang": "en",
+    "expect": "data-dashboard",
+    "note": "English dashboard build"
+  },
+  {
+    "task": "metrics chart dashboard for revenue by segment",
+    "lang": "mixed",
+    "expect": "data-dashboard",
+    "note": "Mixed metrics dashboard"
+  },
+  {
+    "task": "编辑 Word 文档，增加批注和修订",
+    "lang": "zh",
+    "expect": "document-editing",
+    "note": "Word document editing"
+  },
+  {
+    "task": "Format this DOCX and add redline comments",
+    "lang": "en",
+    "expect": "document-editing",
+    "note": "English DOCX edit"
+  },
+  {
+    "task": "这个 docx 帮我排版 document comments",
+    "lang": "mixed",
+    "expect": "document-editing",
+    "note": "Mixed document formatting"
+  },
+  {
+    "task": "做一份 PPT 路演幻灯片和讲稿",
+    "lang": "zh",
+    "expect": "presentation-deck",
+    "note": "Presentation deck creation"
+  },
+  {
+    "task": "Create a PowerPoint deck with speaker notes",
+    "lang": "en",
+    "expect": "presentation-deck",
+    "note": "English slide deck"
+  },
+  {
+    "task": "把报告转成 slides deck 和 keynote 风格",
+    "lang": "mixed",
+    "expect": "presentation-deck",
+    "note": "Mixed deck request"
+  },
+  {
+    "task": "生成一张插画图标素材",
+    "lang": "zh",
+    "expect": "image-generation",
+    "note": "Image asset generation"
+  },
+  {
+    "task": "Edit this image mockup and generate an icon asset",
+    "lang": "en",
+    "expect": "image-generation",
+    "note": "English image editing"
+  },
+  {
+    "task": "generate image mockup for 产品首屏",
+    "lang": "mixed",
+    "expect": "image-generation",
+    "note": "Mixed image mockup"
+  },
+  {
+    "task": "创建 git worktree 隔离分支",
+    "lang": "zh",
+    "expect": "git-worktree",
+    "note": "Git worktree setup"
+  },
+  {
+    "task": "Create a git worktree for this feature branch",
+    "lang": "en",
+    "expect": "git-worktree",
+    "note": "English git worktree"
+  },
+  {
+    "task": "审本地代码，列出 bug 风险和缺测试",
+    "lang": "zh",
+    "expect": "code-review",
+    "notExpect": ["github-pr-review"],
+    "note": "Local code review, not GitHub PR"
+  },
+  {
+    "task": "Review the local code for risk findings and bugs",
+    "lang": "en",
+    "expect": "code-review",
+    "notExpect": ["github-pr-review"],
+    "note": "English local code review"
+  },
+  {
+    "task": "查 OpenAI API 官方文档，解释 embeddings",
+    "lang": "zh",
+    "expect": "openai-docs",
+    "notExpect": ["web-research"],
+    "note": "OpenAI docs route"
+  },
+  {
+    "task": "Use OpenAI official docs to explain the Responses API models",
+    "lang": "en",
+    "expect": "openai-docs",
+    "notExpect": ["web-research"],
+    "note": "English OpenAI API docs"
+  },
+  {
+    "task": "提醒我明天上午回访客户",
+    "lang": "zh",
+    "expect": "automation-reminders",
+    "note": "One-off reminder"
+  },
+  {
+    "task": "Create a recurring reminder monitor for next Monday",
+    "lang": "en",
+    "expect": "automation-reminders",
+    "note": "Recurring automation"
+  },
+  {
+    "task": "制作一个带字幕动画的视频片头",
+    "lang": "zh",
+    "expect": "video-composition",
+    "note": "Video animation request"
+  },
+  {
+    "task": "Render a video with captions and animated overlays",
+    "lang": "en",
+    "expect": "video-composition",
+    "note": "English video render"
+  },
+  {
+    "task": "在 checkout 页面接入 USDT TRC20 payment",
+    "lang": "mixed",
+    "expect": "usdt-pay",
+    "note": "Existing fixture skill still participates"
+  },
+  {
+    "task": "我头痛发烧该吃什么药",
+    "lang": "zh",
+    "expect": null,
+    "note": "Medical advice is unrelated"
+  },
+  {
+    "task": "今天上海天气怎么样",
+    "lang": "zh",
+    "expect": null,
+    "note": "Weather question should not match dev skills"
+  },
+  {
+    "task": "What is the capital of France?",
+    "lang": "en",
+    "expect": null,
+    "note": "General knowledge question"
+  },
+  {
+    "task": "Tell me a joke about coffee",
+    "lang": "en",
+    "expect": null,
+    "note": "Casual chat should not match"
+  },
+  {
+    "task": "给我写一首关于月亮的短诗",
+    "lang": "zh",
+    "expect": null,
+    "note": "Creative writing is outside this fixture corpus"
+  },
+  {
+    "task": "How many centimeters are in an inch?",
+    "lang": "en",
+    "expect": null,
+    "note": "Unit conversion"
+  },
+  {
+    "task": "帮我翻译这句话成英文：早上好",
+    "lang": "zh",
+    "expect": null,
+    "note": "Translation request"
+  },
+  {
+    "task": "Recommend a dinner recipe with tofu",
+    "lang": "en",
+    "expect": null,
+    "note": "Recipe recommendation is unrelated"
+  },
+  {
+    "task": "给咖啡店起一个中文名字",
+    "lang": "zh",
+    "expect": null,
+    "note": "Naming request should not match"
+  },
+  {
+    "task": "Calculate 15 percent of 240",
+    "lang": "en",
+    "expect": null,
+    "note": "Arithmetic question"
+  }
+]

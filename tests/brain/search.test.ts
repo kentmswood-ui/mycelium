@@ -24,6 +24,33 @@ test('parseAnysearchMarkdown extracts title/url/snippet per result', () => {
   expect(r[2].url).toBe('https://github.com/s4ndxyz/epusdt')
 })
 
+test('parseAnysearchMarkdown keeps titled results without URLs and joins bullet snippets', () => {
+  const r = parseAnysearchMarkdown(`## Search Results
+
+### 1. No URL Result
+- first sentence
+- second sentence
+
+### 2. Useful Result
+- **URL**: https://example.test/useful
+- third sentence
+plain paragraph ignored
+`)
+
+  expect(r).toEqual([
+    {
+      title: 'No URL Result',
+      url: '',
+      snippet: 'first sentence second sentence',
+    },
+    {
+      title: 'Useful Result',
+      url: 'https://example.test/useful',
+      snippet: 'third sentence',
+    },
+  ])
+})
+
 test('parseAnysearchMarkdown returns [] on empty / non-result text', () => {
   expect(parseAnysearchMarkdown('')).toEqual([])
   expect(parseAnysearchMarkdown('no results here')).toEqual([])
@@ -41,4 +68,18 @@ test('anysearchSearch degrades to [] when the runner throws', async () => {
 test('anysearchSearch parses runner output when it succeeds', async () => {
   const res = await anysearchSearch('q', { runner: () => SAMPLE })
   expect(res.map((x) => x.url)).toContain('https://github.com/s4ndxyz/epusdt')
+})
+
+test('anysearchSearch passes the requested max result count to injected runners', async () => {
+  const seen: Array<[string, number]> = []
+  const res = await anysearchSearch('billing crypto', {
+    maxResults: 2,
+    runner: async (query, maxResults) => {
+      seen.push([query, maxResults])
+      return SAMPLE
+    },
+  })
+
+  expect(seen).toEqual([['billing crypto', 2]])
+  expect(res).toHaveLength(3)
 })

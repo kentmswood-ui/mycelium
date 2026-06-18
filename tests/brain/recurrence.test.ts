@@ -14,6 +14,15 @@ test('recordMiss increments the count for a recurring shape', () => {
   expect(r.countFor('pipeline youtube build')).toBe(2)
 })
 
+test('recordMiss and counters degrade cleanly for empty task shapes', () => {
+  const r = new RecurrenceLedger(openDb(':memory:'))
+
+  expect(signatureOf('')).toBe('')
+  expect(r.recordMiss('')).toBe(0)
+  expect(r.countFor('never seen before')).toBe(0)
+  expect(r.wasBuildSuggested('never seen before')).toBe(false)
+})
+
 test('quota: underQuota gates after the cap is reached', () => {
   const r = new RecurrenceLedger(openDb(':memory:'))
   expect(r.underQuota(2)).toBe(true)
@@ -29,6 +38,7 @@ test('quota <= 0 means unlimited', () => {
   r.chargeQuota()
   r.chargeQuota()
   expect(r.underQuota(0)).toBe(true)
+  expect(r.underQuota(-1)).toBe(true)
 })
 
 test('build-suggested flag: marked once, sticks per shape', () => {
@@ -40,4 +50,14 @@ test('build-suggested flag: marked once, sticks per shape', () => {
   // a different shape is unaffected
   r.recordMiss('deploy kubernetes cluster')
   expect(r.wasBuildSuggested('deploy kubernetes cluster')).toBe(false)
+})
+
+test('markBuildSuggested is harmless for empty or unknown shapes', () => {
+  const r = new RecurrenceLedger(openDb(':memory:'))
+
+  r.markBuildSuggested('')
+  r.markBuildSuggested('missing shape')
+
+  expect(r.wasBuildSuggested('')).toBe(false)
+  expect(r.wasBuildSuggested('missing shape')).toBe(false)
 })

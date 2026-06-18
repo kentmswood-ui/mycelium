@@ -31,6 +31,24 @@ test('MisfitStore records and suppresses by task-shape', () => {
   expect(m.suppressedFor('export a pdf report').has('usdt-pay')).toBe(false)
 })
 
+test('MisfitStore ignores empty task signatures and empty skill names', () => {
+  const m = new MisfitStore(openDb(':memory:'))
+
+  expect(m.record('', 'usdt-pay')).toBe(0)
+  expect(m.record('add usdt payment', '')).toBe(0)
+  expect(m.suppressedFor('')).toEqual(new Set())
+  expect(m.suppressedFor('add usdt payment').size).toBe(0)
+})
+
+test('MisfitStore suppression threshold requires enough repeated misses', () => {
+  const m = new MisfitStore(openDb(':memory:'))
+
+  expect(m.record('add usdt payment billing', 'usdt-pay')).toBe(1)
+  expect(m.suppressedFor('billing usdt payment add', 2).has('usdt-pay')).toBe(false)
+  expect(m.record('billing usdt payment add', 'usdt-pay')).toBe(2)
+  expect(m.suppressedFor('add billing payment usdt', 2)).toEqual(new Set(['usdt-pay']))
+})
+
 test('a fail with a task suppresses that skill for the same task-shape on next consult', () => {
   const dir = corpus()
   try {

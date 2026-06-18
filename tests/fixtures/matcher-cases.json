@@ -2536,5 +2536,67 @@
     ],
     "expect": null,
     "split": "train"
+  },
+  {
+    "id": "executing-plans-hard-205",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "I already have the implementation plan; execute the checklist now and report after each checkpoint",
+    "note": "execution intent with plan wording should not route back to writing a plan",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "executing-plans",
+    "split": "train"
+  },
+  {
+    "id": "dispatching-parallel-agents-hard-206",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Research three independent vendor options in parallel agents and summarize; do not edit the codebase",
+    "note": "parallel independent research, not subagent implementation",
+    "notExpect": [
+      "subagent-driven-development"
+    ],
+    "expect": "dispatching-parallel-agents",
+    "split": "train"
+  },
+  {
+    "id": "receiving-code-review-hard-207",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "I already received review feedback; verify which comments are valid before changing code",
+    "note": "received feedback handling, not requesting a fresh review",
+    "notExpect": [
+      "requesting-code-review",
+      "github-pr-review"
+    ],
+    "expect": "receiving-code-review",
+    "split": "train"
+  },
+  {
+    "id": "verification-before-completion-hard-208",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Before claiming this is fixed, run the relevant tests and report the exact evidence",
+    "note": "completion evidence request, not code review",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "verification-before-completion",
+    "split": "train"
+  },
+  {
+    "id": "negative-github-word-translation-210",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "GitHub is only a word in this headline; translate the sentence, do not open PRs or review code",
+    "note": "platform word appears but requested action is translation",
+    "notExpect": [
+      "github-pr-review",
+      "code-review"
+    ],
+    "expect": null,
+    "split": "train"
   }
 ]

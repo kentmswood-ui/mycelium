@@ -119,6 +119,29 @@ Hybrid:
 3. Explore a two-stage matcher: conservative candidate retrieval followed by pairwise disambiguation rules for known neighbor clusters.
 4. If enabling a candidate manually, prefer `char-ngram` first for FP control, or `hybrid` when recall/top-1 matters more.
 
+## 2026-06-19 Train-Only Hardening Addendum
+
+No test split was run for this addendum. The previous final test numbers above remain the only holdout read.
+
+Red team:
+- Added 5 human-language train-only hard cases covering execution-vs-planning, parallel research-vs-subagent implementation, received-review-vs-requesting-review, completion evidence, and negated GitHub/code-review wording.
+- Train set changed from 142 to 147 cases.
+
+Blue team:
+- Added `conservative-char`, a default-off candidate that uses low-threshold character n-grams for recall but emits only the best hit. This directly targets the benchmark's top-3 false-positive rule by avoiding low-confidence neighbor suggestions.
+
+Train results after the red/blue round:
+
+| matcher | train cases | top-1 | FP | precision | recall | F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| bm25 | 147 | 69.3% | 54.4% | 0.651 | 0.693 | 0.671 |
+| char-ngram | 147 | 56.9% | 9.5% | 0.907 | 0.569 | 0.700 |
+| conservative-char | 147 | 70.1% | 9.5% | 0.842 | 0.701 | 0.765 |
+| hybrid | 147 | 70.1% | 17.0% | 0.733 | 0.701 | 0.716 |
+| keyword | 147 | 62.8% | 15.6% | 0.851 | 0.628 | 0.723 |
+
+Current train-only recommendation: `conservative-char` is the best default-off candidate from this hardening loop because it ties hybrid on top-1 while cutting FP from 17.0% to 9.5%, and improves over keyword on both top-1 and FP.
+
 ## How To Enable Later
 
 Production remains unchanged in this task. A future manual wiring change could look like:
@@ -131,4 +154,4 @@ Production remains unchanged in this task. A future manual wiring change could l
 + const brain = new Brain(repo, createMatcher(), ledger, {
 ```
 
-Then run with `MYCELIUM_MATCHER=char-ngram` or `MYCELIUM_MATCHER=hybrid`.
+Then run with `MYCELIUM_MATCHER=char-ngram` or `MYCELIUM_MATCHER=hybrid`. The `conservative-char` candidate is currently eval-only in this hardening pass because production factory wiring was deliberately left unchanged.

@@ -16,3 +16,4 @@ _*.mjs
 # internal working docs — kept on disk, excluded from the published repo
 /VERIFY.md
 /docs/superpowers/
+/.cache/embedding-eval/

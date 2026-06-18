@@ -4,19 +4,21 @@ import { KeywordMatcher } from '../../src/brain/matcher.js'
 import { Bm25Matcher } from '../../src/brain/matchers/bm25.js'
 import { CharNgramMatcher } from '../../src/brain/matchers/char-ngram.js'
 import { HybridMatcher } from '../../src/brain/matchers/hybrid.js'
+import { PrecisionGuardMatcher } from '../../src/brain/matchers/precision-guard.js'
 import { createMatcher } from '../../src/brain/matchers/factory.js'
 
-test('production boot still wires KeywordMatcher directly', () => {
+test('production boot routes the matcher through createMatcher (env-overridable)', () => {
   const source = readFileSync(join(process.cwd(), 'src', 'index.ts'), 'utf8')
 
-  expect(source).toContain('new KeywordMatcher()')
+  expect(source).toContain('createMatcher()')
+  expect(source).not.toContain('new KeywordMatcher()')
 })
 
-test('factory defaults to KeywordMatcher unless explicitly configured', () => {
+test('factory defaults to PrecisionGuardMatcher; keyword stays available as rollback', () => {
   const previous = process.env.MYCELIUM_MATCHER
   delete process.env.MYCELIUM_MATCHER
   try {
-    expect(createMatcher()).toBeInstanceOf(KeywordMatcher)
+    expect(createMatcher()).toBeInstanceOf(PrecisionGuardMatcher)
     expect(createMatcher('keyword')).toBeInstanceOf(KeywordMatcher)
   } finally {
     if (previous === undefined) delete process.env.MYCELIUM_MATCHER

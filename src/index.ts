@@ -4,7 +4,7 @@ import { resolveConfig } from './config.js'
 import { openDb, type DB } from './ledger/db.js'
 import { SynapseLedger } from './ledger/synapse.js'
 import { SkillRepository } from './skills/repository.js'
-import { KeywordMatcher } from './brain/matcher.js'
+import { createMatcher } from './brain/matchers/factory.js'
 import { Brain } from './brain/consult.js'
 import { ProposalStore } from './brain/proposals.js'
 import { SearchPipeline } from './brain/pipeline.js'
@@ -77,7 +77,7 @@ export function bootCore(opts: BootOpts = {}): Core {
     p.finally(() => jobs.delete(p))
   }
 
-  const brain = new Brain(repo, new KeywordMatcher(), ledger, {
+  const brain = new Brain(repo, createMatcher(), ledger, {
     onMiss: (task) => {
       track(pipeline.runForMiss(task).catch(() => ({ discovered: 0, synthesized: 0 })))
     },

@@ -5,7 +5,7 @@ import { SettingsStore } from '../../src/brain/settings.js'
 import { ProposalStore } from '../../src/brain/proposals.js'
 import { SkillRepository } from '../../src/skills/repository.js'
 import type { SearchResult } from '../../src/brain/search.js'
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -81,6 +81,52 @@ test('a ready-made SKILL.md on a high-trust hit becomes an install proposal (not
   expect(pending[0].payload.skillMd).toMatch(/name: usdt-pay/)
   // and nothing was written to the skills dir
   expect(h.repo.list()).toHaveLength(0)
+  h.cleanup()
+})
+
+test('a ready-made SKILL.md for an existing skill is logged as duplicate, not proposed', async () => {
+  const h = harness({
+    search: async () => [gh('usdt-skill')],
+    extract: async () => SKILL_PAGE,
+  })
+  mkdirSync(join(h.dir, 'usdt-pay'), { recursive: true })
+  writeFileSync(
+    join(h.dir, 'usdt-pay', 'SKILL.md'),
+    '---\nname: usdt-pay\ndescription: existing payment skill\n---\n# USDT Pay',
+  )
+  h.repo.scan()
+
+  const r = await h.pipe.runForMiss('integrate usdt payment into billing')
+  const recent = h.discoveries.recent()
+
+  expect(r).toEqual({ discovered: 1, proposed: 0 })
+  expect(h.proposals.listPendingDestructive()).toHaveLength(0)
+  expect(recent[0].disposition).toBe('duplicate')
+  expect(recent[0].detail).toContain('already have skill "usdt-pay"')
+  h.cleanup()
+})
+
+test('low-trust kept hits are logged but not probed for SKILL.md content', async () => {
+  let extracted = false
+  const h = harness({
+    search: async () => [
+      {
+        title: 'Reusable Claude skill notes',
+        url: 'https://someblog.example/skill-notes',
+        snippet: 'agent prompt workflow with no license signal',
+      },
+    ],
+    extract: async () => {
+      extracted = true
+      return SKILL_PAGE
+    },
+  })
+
+  const r = await h.pipe.runForMiss('find a reusable prompt workflow skill')
+
+  expect(r).toEqual({ discovered: 1, proposed: 0 })
+  expect(extracted).toBe(false)
+  expect(h.discoveries.recent()[0].disposition).toBe('logged')
   h.cleanup()
 })
 

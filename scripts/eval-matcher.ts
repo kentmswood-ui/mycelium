@@ -7,6 +7,9 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { KeywordMatcher } from '../src/brain/matcher.js'
 import type { Matcher } from '../src/brain/matcher.js'
+import { Bm25Matcher } from '../src/brain/matchers/bm25.js'
+import { CharNgramMatcher } from '../src/brain/matchers/char-ngram.js'
+import { HybridMatcher } from '../src/brain/matchers/hybrid.js'
 import {
   evaluateMatcher,
   selectCases,
@@ -25,6 +28,9 @@ interface SnapshotSkill {
 
 const MATCHERS: Record<string, () => Matcher> = {
   keyword: () => new KeywordMatcher(),
+  bm25: () => new Bm25Matcher(),
+  'char-ngram': () => new CharNgramMatcher(),
+  hybrid: () => new HybridMatcher(),
 }
 
 function argValue(name: string, fallback: string) {

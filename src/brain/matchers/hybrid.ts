@@ -21,7 +21,7 @@ export class HybridMatcher implements Matcher {
     this.keywordWeight = opts.keywordWeight ?? 0.35
     this.bm25Weight = opts.bm25Weight ?? 0.35
     this.charWeight = opts.charWeight ?? 0.3
-    this.defaultThreshold = opts.threshold ?? 0.35
+    this.defaultThreshold = opts.threshold ?? 0.85
   }
 
   match(task: string, skills: Skill[], threshold = this.defaultThreshold): Match[] {

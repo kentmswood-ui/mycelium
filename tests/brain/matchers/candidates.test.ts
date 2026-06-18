@@ -62,7 +62,10 @@ test('character n-grams recover from misspelled PR review wording', () => {
 })
 
 test('hybrid matcher can combine typo-tolerant and keyword signals', () => {
-  const result = new HybridMatcher().match('implemntation plan roadmp from product requirments', processSkills)
+  const result = new HybridMatcher({ threshold: 0.35 }).match(
+    'implemntation plan roadmp from product requirments',
+    processSkills,
+  )
 
   expect(result[0].skill.name).toBe('writing-plans')
 })

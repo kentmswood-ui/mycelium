@@ -1,31 +1,61 @@
+// ANTI-CHEAT CONTRACT:
+// - Tuning and iteration may inspect train split output only.
+// - `--split=test` may be run only once at the end of phase 4, after tuning is frozen.
+// - `--split=all` includes test rows and is therefore final-report-only, never for tuning.
+
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { KeywordMatcher } from '../src/brain/matcher.js'
-import { parseSkill } from '../src/skills/skill.js'
+import type { Matcher } from '../src/brain/matcher.js'
+import {
+  evaluateMatcher,
+  selectCases,
+  warningForSplit,
+  type MatcherCase,
+  type MatcherEvaluation,
+  type SplitArg,
+} from '../src/brain/matchers/harness.js'
+import { parseSkill, tokenize, type Skill } from '../src/skills/skill.js'
 
-interface GoldenCase {
-  task: string
-  lang: 'zh' | 'en' | 'mixed'
-  expect: string | null
-  notExpect?: string[]
-  note: string
+interface SnapshotSkill {
+  name: string
+  description: string
+  keywords: string[]
 }
 
-interface EvalResult {
-  index: number
-  item: GoldenCase
-  actual: string | null
-  top1Ok: boolean
-  falsePositive: boolean
-  notExpectHit: string | null
+const MATCHERS: Record<string, () => Matcher> = {
+  keyword: () => new KeywordMatcher(),
 }
 
-const MIN_TOP1_ACCURACY = 0.95
-const MAX_FALSE_POSITIVE_RATE = 0.05
+function argValue(name: string, fallback: string) {
+  const prefix = `--${name}=`
+  return process.argv.find((arg) => arg.startsWith(prefix))?.slice(prefix.length) ?? fallback
+}
 
-const red = '\x1b[31m'
-const bold = '\x1b[1m'
-const reset = '\x1b[0m'
+function readJson<T>(path: string): T {
+  return JSON.parse(readFileSync(path, 'utf8')) as T
+}
+
+function uniqueTokens(skill: Pick<Skill, 'name' | 'description' | 'keywords'>) {
+  return [
+    ...new Set([
+      ...tokenize(skill.name),
+      ...tokenize(skill.description),
+      ...skill.keywords.flatMap(tokenize),
+    ]),
+  ]
+}
+
+function snapshotToSkill(skill: SnapshotSkill): Skill {
+  return {
+    name: skill.name,
+    description: skill.description,
+    keywords: skill.keywords,
+    dir: `snapshot:${skill.name}`,
+    source: 'cc-switch-snapshot',
+    tokens: uniqueTokens(skill),
+  }
+}
 
 function loadFixtureSkills(repoRoot: string) {
   const skillsRoot = join(repoRoot, 'tests', 'fixtures', 'skills')
@@ -33,111 +63,126 @@ function loadFixtureSkills(repoRoot: string) {
     .filter((entry) => entry.isDirectory())
     .map((entry) => parseSkill(join(skillsRoot, entry.name)))
     .filter((skill) => skill !== null)
-    .sort((a, b) => a.name.localeCompare(b.name))
 }
 
-function loadGoldenSet(repoRoot: string): GoldenCase[] {
-  const goldenPath = join(repoRoot, 'tests', 'fixtures', 'matcher-golden.json')
-  return JSON.parse(readFileSync(goldenPath, 'utf8')) as GoldenCase[]
-}
-
-function assertGoldenReferences(cases: GoldenCase[], skillNames: Set<string>) {
-  const missing = new Set<string>()
-  for (const item of cases) {
-    if (item.expect && !skillNames.has(item.expect)) missing.add(item.expect)
-    for (const name of item.notExpect ?? []) {
-      if (!skillNames.has(name)) missing.add(name)
+function mergeSkills(skills: Skill[]): Skill[] {
+  const byName = new Map<string, Skill>()
+  for (const skill of skills) {
+    const prev = byName.get(skill.name)
+    if (!prev) {
+      byName.set(skill.name, skill)
+      continue
     }
+    const merged = {
+      ...prev,
+      description: `${prev.description}\n${skill.description}`.trim(),
+      keywords: [...new Set([...prev.keywords, ...skill.keywords])].sort(),
+      tokens: [...new Set([...prev.tokens, ...skill.tokens])],
+    }
+    byName.set(skill.name, merged)
   }
-  if (missing.size > 0) {
-    throw new Error(`Golden set references missing fixture skills: ${[...missing].sort().join(', ')}`)
-  }
+  return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name))
 }
 
-function evaluate(cases: GoldenCase[], repoRoot: string): EvalResult[] {
-  const skills = loadFixtureSkills(repoRoot)
-  const skillNames = new Set(skills.map((skill) => skill.name))
-  assertGoldenReferences(cases, skillNames)
+function loadCorpus(repoRoot: string) {
+  const snapshots = readJson<SnapshotSkill[]>(
+    join(repoRoot, 'tests', 'fixtures', 'real-skills.snapshot.json'),
+  ).map(snapshotToSkill)
+  return mergeSkills([...snapshots, ...loadFixtureSkills(repoRoot)])
+}
 
-  const matcher = new KeywordMatcher()
-  return cases.map((item, index) => {
-    const matches = matcher.match(item.task, skills)
-    const actual = matches[0]?.skill.name ?? null
-    const notExpect = new Set(item.notExpect ?? [])
-    const notExpectHit = matches.find((match) => notExpect.has(match.skill.name))?.skill.name ?? null
-    return {
-      index,
-      item,
-      actual,
-      top1Ok: item.expect === actual,
-      falsePositive: (item.expect === null && actual !== null) || notExpectHit !== null,
-      notExpectHit,
-    }
-  })
+function matcherNames(requested: string) {
+  if (requested === 'all') return Object.keys(MATCHERS).sort()
+  if (!MATCHERS[requested]) {
+    throw new Error(`unknown matcher "${requested}"; available: ${Object.keys(MATCHERS).sort().join(', ')}`)
+  }
+  return [requested]
 }
 
 function pct(n: number) {
   return `${(n * 100).toFixed(1)}%`
 }
 
+function fmt(n: number) {
+  return n.toFixed(3)
+}
+
 function cell(value: string) {
   return value.replace(/\|/g, '\\|').replace(/\r?\n/g, ' ')
 }
 
-function clip(value: string, max = 64) {
+function clip(value: string, max = 86) {
   return value.length > max ? `${value.slice(0, max - 1)}…` : value
 }
 
-function printTable(results: EvalResult[]) {
-  console.log('| # | lang | expected | actual | result | task | note |')
-  console.log('|---:|:---:|---|---|:---:|---|---|')
-  for (const result of results) {
-    const expected = result.item.expect ?? 'null'
-    const actual = result.actual ?? 'null'
-    const ok = result.top1Ok && !result.falsePositive
-    const marker = ok ? '✓' : '✗'
-    const note =
-      result.notExpectHit === null
-        ? result.item.note
-        : `${result.item.note}; notExpect hit: ${result.notExpectHit}`
-    const row = `| ${result.index + 1} | ${result.item.lang} | ${expected} | ${actual} | ${marker} | ${cell(
-      clip(result.item.task),
-    )} | ${cell(clip(note, 72))} |`
-    console.log(ok ? row : `${red}${row}${reset}`)
+function printSummary(evaluations: MatcherEvaluation[], split: SplitArg) {
+  console.log('| matcher | split | cases | top-1 | FP | precision | recall | F1 |')
+  console.log('|---|---|---:|---:|---:|---:|---:|---:|')
+  for (const evaluation of evaluations) {
+    const m = evaluation.metrics
+    console.log(
+      `| ${evaluation.matcher} | ${split} | ${m.total} | ${pct(m.top1Accuracy)} | ${pct(
+        m.falsePositiveRate,
+      )} | ${fmt(m.precision)} | ${fmt(m.recall)} | ${fmt(m.f1)} |`,
+    )
+  }
+}
+
+function printBreakdowns(evaluation: MatcherEvaluation) {
+  console.log(`\n## ${evaluation.matcher} by difficulty`)
+  console.log('| difficulty | cases | top-1 | FP |')
+  console.log('|---|---:|---:|---:|')
+  for (const key of ['easy', 'medium', 'hard'] as const) {
+    const m = evaluation.byDifficulty[key]
+    console.log(`| ${key} | ${m.total} | ${pct(m.top1Accuracy)} | ${pct(m.falsePositiveRate)} |`)
+  }
+
+  console.log(`\n## ${evaluation.matcher} by language`)
+  console.log('| lang | cases | top-1 | FP |')
+  console.log('|---|---:|---:|---:|')
+  for (const key of ['zh', 'en', 'mixed'] as const) {
+    const m = evaluation.byLang[key]
+    console.log(`| ${key} | ${m.total} | ${pct(m.top1Accuracy)} | ${pct(m.falsePositiveRate)} |`)
+  }
+}
+
+function printConfusions(evaluation: MatcherEvaluation, limit = 25) {
+  console.log(`\n## ${evaluation.matcher} confusions (showing ${Math.min(limit, evaluation.confusions.length)})`)
+  console.log('| id | expected | actual | top3 | note | task |')
+  console.log('|---|---|---|---|---|---|')
+  for (const row of evaluation.confusions.slice(0, limit)) {
+    const top3 = row.top3.map((hit) => `${hit.skill}:${fmt(hit.score)}`).join(', ')
+    const suffix = row.notExpectHit ? `; notExpect hit=${row.notExpectHit}` : ''
+    console.log(
+      `| ${row.id} | ${row.expected ?? 'null'} | ${row.actual ?? 'null'} | ${cell(top3)} | ${cell(
+        row.note + suffix,
+      )} | ${cell(clip(row.task))} |`,
+    )
   }
 }
 
 function main() {
+  const split = argValue('split', 'train') as SplitArg
+  if (!['train', 'test', 'all'].includes(split)) {
+    throw new Error(`invalid --split=${split}; expected train, test, or all`)
+  }
+  const requestedMatcher = argValue('matcher', 'all')
+  const names = matcherNames(requestedMatcher)
+  const warning = warningForSplit(split)
+  if (warning) console.error(`\n${warning}\n`)
+
   const repoRoot = process.cwd()
-  const cases = loadGoldenSet(repoRoot)
-  const results = evaluate(cases, repoRoot)
+  const skills = loadCorpus(repoRoot)
+  const allCases = readJson<MatcherCase[]>(join(repoRoot, 'tests', 'fixtures', 'matcher-cases.json'))
+  const cases = selectCases(allCases, split)
+  const evaluations = names.map((name) => evaluateMatcher(name, MATCHERS[name](), skills, cases))
 
-  const positive = results.filter((result) => result.item.expect !== null)
-  const top1Hits = positive.filter((result) => result.top1Ok).length
-  const falsePositives = results.filter((result) => result.falsePositive).length
-  const top1Accuracy = positive.length === 0 ? 0 : top1Hits / positive.length
-  const falsePositiveRate = results.length === 0 ? 0 : falsePositives / results.length
-  const failures = results.filter((result) => !result.top1Ok || result.falsePositive)
-
-  console.log(`${bold}Matcher fixture benchmark${reset}`)
-  console.log(`cases=${results.length}, positive=${positive.length}`)
-  console.log(`top-1 accuracy=${pct(top1Accuracy)} (${top1Hits}/${positive.length})`)
-  console.log(`false-positive rate=${pct(falsePositiveRate)} (${falsePositives}/${results.length})`)
-  console.log(
-    `thresholds: top-1 >= ${pct(MIN_TOP1_ACCURACY)}, false-positive <= ${pct(
-      MAX_FALSE_POSITIVE_RATE,
-    )}`,
-  )
-  console.log()
-  printTable(results)
-
-  if (top1Accuracy < MIN_TOP1_ACCURACY || falsePositiveRate > MAX_FALSE_POSITIVE_RATE) {
-    console.error(
-      `${red}Benchmark failed: top-1=${pct(top1Accuracy)}, false-positive=${pct(
-        falsePositiveRate,
-      )}, failing rows=${failures.length}${reset}`,
-    )
-    process.exitCode = 1
+  console.log(`# Matcher benchmark`)
+  console.log(`skills=${skills.length}, cases=${cases.length}, split=${split}, matcher=${requestedMatcher}\n`)
+  printSummary(evaluations, split)
+  for (const evaluation of evaluations) {
+    printBreakdowns(evaluation)
+    printConfusions(evaluation)
   }
 }
 

@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { KeywordMatcher } from '../../src/brain/matcher.js'
+import { aliasedSkills } from '../../src/brain/aliases.js'
 import { parseSkill } from '../../src/skills/skill.js'
 
 interface GoldenCase {
@@ -13,11 +14,12 @@ interface GoldenCase {
 
 function loadFixtureSkills() {
   const skillsRoot = join(process.cwd(), 'tests', 'fixtures', 'skills')
-  return readdirSync(skillsRoot, { withFileTypes: true })
+  const skills = readdirSync(skillsRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => parseSkill(join(skillsRoot, entry.name)))
     .filter((skill) => skill !== null)
     .sort((a, b) => a.name.localeCompare(b.name))
+  return aliasedSkills(skills)
 }
 
 function loadGoldenSet(): GoldenCase[] {

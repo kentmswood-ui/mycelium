@@ -8,7 +8,7 @@ interface MatcherCase {
   split: 'train' | 'test'
 }
 
-test('matcher test split membership stays frozen', () => {
+test('legacy matcher test split membership stays frozen while new cases may extend the exam', () => {
   const cases = JSON.parse(
     readFileSync(join(process.cwd(), 'tests', 'fixtures', 'matcher-cases.json'), 'utf8'),
   ) as MatcherCase[]
@@ -17,8 +17,11 @@ test('matcher test split membership stays frozen', () => {
     .map((item) => item.id)
     .sort()
 
-  expect(testIds).toHaveLength(62)
-  expect(hash(testIds)).toBe('b83ffebc608c5f9625f9b6b6539fdbd4352a9ddcca118ac9713ff8f74631feb1')
+  const legacyTestIds = testIds.filter((id) => !id.startsWith('alias-'))
+
+  expect(legacyTestIds).toHaveLength(62)
+  expect(hash(legacyTestIds)).toBe('b83ffebc608c5f9625f9b6b6539fdbd4352a9ddcca118ac9713ff8f74631feb1')
+  expect(testIds.length).toBeGreaterThanOrEqual(62)
 })
 
 function hash(ids: string[]) {

@@ -10,7 +10,9 @@ import type { Matcher } from '../src/brain/matcher.js'
 import { Bm25Matcher } from '../src/brain/matchers/bm25.js'
 import { CharNgramMatcher } from '../src/brain/matchers/char-ngram.js'
 import { ConservativeCharMatcher } from '../src/brain/matchers/conservative-char.js'
+import { AliasPrecisionGuardMatcher } from '../src/brain/matchers/alias-precision-guard.js'
 import { HybridMatcher } from '../src/brain/matchers/hybrid.js'
+import { PrecisionGuardMatcher } from '../src/brain/matchers/precision-guard.js'
 import {
   evaluateMatcher,
   selectCases,
@@ -19,6 +21,7 @@ import {
   type MatcherEvaluation,
   type SplitArg,
 } from '../src/brain/matchers/harness.js'
+import { aliasedSkills } from '../src/brain/aliases.js'
 import { parseSkill, tokenize, type Skill } from '../src/skills/skill.js'
 
 interface SnapshotSkill {
@@ -33,6 +36,8 @@ const MATCHERS: Record<string, () => Matcher> = {
   'char-ngram': () => new CharNgramMatcher(),
   'conservative-char': () => new ConservativeCharMatcher(),
   hybrid: () => new HybridMatcher(),
+  'precision-guard': () => new PrecisionGuardMatcher(),
+  'alias-precision-guard': () => new AliasPrecisionGuardMatcher(),
 }
 
 function argValue(name: string, fallback: string) {
@@ -96,7 +101,7 @@ function loadCorpus(repoRoot: string) {
   const snapshots = readJson<SnapshotSkill[]>(
     join(repoRoot, 'tests', 'fixtures', 'real-skills.snapshot.json'),
   ).map(snapshotToSkill)
-  return mergeSkills([...snapshots, ...loadFixtureSkills(repoRoot)])
+  return aliasedSkills(mergeSkills([...snapshots, ...loadFixtureSkills(repoRoot)]))
 }
 
 function matcherNames(requested: string) {

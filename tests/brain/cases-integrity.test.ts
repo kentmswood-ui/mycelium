@@ -80,7 +80,7 @@ test('matcher cases are complete, deterministic, and reference known skills', ()
   const difficulties = new Set<Difficulty>()
   const splits = new Set<Split>()
 
-  expect(cases.length).toBeGreaterThanOrEqual(200)
+  expect(cases.length).toBeGreaterThanOrEqual(500)
 
   for (const item of cases) {
     expect(item.id).toMatch(/^[a-z0-9-]+$/)

@@ -2598,5 +2598,3803 @@
     ],
     "expect": null,
     "split": "train"
+  },
+  {
+    "id": "alias-writing-plans-001",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我写一份实施计划",
+    "note": "writing-plans: expanded zh direct",
+    "notExpect": [
+      "executing-plans",
+      "test-driven-development"
+    ],
+    "expect": "writing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-writing-plans-002",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please turn requirements into an implementation plan",
+    "note": "writing-plans: expanded en direct",
+    "notExpect": [
+      "executing-plans",
+      "test-driven-development"
+    ],
+    "expect": "writing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-writing-plans-003",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "spec 拆成 roadmap 和文件边界，给我可执行结果",
+    "note": "writing-plans: expanded mixed request",
+    "notExpect": [
+      "executing-plans",
+      "test-driven-development"
+    ],
+    "expect": "writing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-writing-plans-004",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "先规划架构和任务，不要直接开始写代码",
+    "note": "writing-plans: expanded hard disambiguation",
+    "notExpect": [
+      "executing-plans",
+      "test-driven-development"
+    ],
+    "expect": "writing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-writing-plans-005",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 spec 拆成 roadmap 和文件边界，不是相邻的另一类流程",
+    "note": "writing-plans: mixed neighbor contrast",
+    "notExpect": [
+      "executing-plans",
+      "test-driven-development"
+    ],
+    "expect": "writing-plans",
+    "split": "test"
+  },
+  {
+    "id": "alias-writing-plans-006",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as turn requirements into an implementation plan; avoid the adjacent workflow",
+    "note": "writing-plans: en neighbor contrast",
+    "notExpect": [
+      "executing-plans",
+      "test-driven-development"
+    ],
+    "expect": "writing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-executing-plans-007",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我按已有计划逐步执行",
+    "note": "executing-plans: expanded zh direct",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "executing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-executing-plans-008",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please execute the approved plan step by step",
+    "note": "executing-plans: expanded en direct",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "executing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-executing-plans-009",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "已有 plan，按 checklist implementation，给我可执行结果",
+    "note": "executing-plans: expanded mixed request",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "executing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-executing-plans-010",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "计划已经定稿，现在只要照步骤推进",
+    "note": "executing-plans: expanded hard disambiguation",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "executing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-executing-plans-011",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 已有 plan，按 checklist implementation，不是相邻的另一类流程",
+    "note": "executing-plans: mixed neighbor contrast",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "executing-plans",
+    "split": "train"
+  },
+  {
+    "id": "alias-executing-plans-012",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as execute the approved plan step by step; avoid the adjacent workflow",
+    "note": "executing-plans: en neighbor contrast",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "executing-plans",
+    "split": "test"
+  },
+  {
+    "id": "alias-test-driven-development-013",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我先补失败测试再实现",
+    "note": "test-driven-development: expanded zh direct",
+    "notExpect": [
+      "systematic-debugging",
+      "writing-plans"
+    ],
+    "expect": "test-driven-development",
+    "split": "test"
+  },
+  {
+    "id": "alias-test-driven-development-014",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please write a failing test before the fix",
+    "note": "test-driven-development: expanded en direct",
+    "notExpect": [
+      "systematic-debugging",
+      "writing-plans"
+    ],
+    "expect": "test-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-test-driven-development-015",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "先 red test 再 implementation，给我可执行结果",
+    "note": "test-driven-development: expanded mixed request",
+    "notExpect": [
+      "systematic-debugging",
+      "writing-plans"
+    ],
+    "expect": "test-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-test-driven-development-016",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "我要红绿重构，不要先猜修法",
+    "note": "test-driven-development: expanded hard disambiguation",
+    "notExpect": [
+      "systematic-debugging",
+      "writing-plans"
+    ],
+    "expect": "test-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-test-driven-development-017",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 先 red test 再 implementation，不是相邻的另一类流程",
+    "note": "test-driven-development: mixed neighbor contrast",
+    "notExpect": [
+      "systematic-debugging",
+      "writing-plans"
+    ],
+    "expect": "test-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-test-driven-development-018",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as write a failing test before the fix; avoid the adjacent workflow",
+    "note": "test-driven-development: en neighbor contrast",
+    "notExpect": [
+      "systematic-debugging",
+      "writing-plans"
+    ],
+    "expect": "test-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-systematic-debugging-019",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我复现并排查这个故障",
+    "note": "systematic-debugging: expanded zh direct",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": "systematic-debugging",
+    "split": "train"
+  },
+  {
+    "id": "alias-systematic-debugging-020",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please diagnose the failure from logs and reproduction",
+    "note": "systematic-debugging: expanded en direct",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": "systematic-debugging",
+    "split": "train"
+  },
+  {
+    "id": "alias-systematic-debugging-021",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "看 CI logs 做 root cause debugging，给我可执行结果",
+    "note": "systematic-debugging: expanded mixed request",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": "systematic-debugging",
+    "split": "train"
+  },
+  {
+    "id": "alias-systematic-debugging-022",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "先定位根因，不要马上写实现",
+    "note": "systematic-debugging: expanded hard disambiguation",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": "systematic-debugging",
+    "split": "train"
+  },
+  {
+    "id": "alias-systematic-debugging-023",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 看 CI logs 做 root cause debugging，不是相邻的另一类流程",
+    "note": "systematic-debugging: mixed neighbor contrast",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": "systematic-debugging",
+    "split": "train"
+  },
+  {
+    "id": "alias-systematic-debugging-024",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as diagnose the failure from logs and reproduction; avoid the adjacent workflow",
+    "note": "systematic-debugging: en neighbor contrast",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": "systematic-debugging",
+    "split": "train"
+  },
+  {
+    "id": "alias-subagent-driven-development-025",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我把计划拆给多个子代理实现",
+    "note": "subagent-driven-development: expanded zh direct",
+    "notExpect": [
+      "dispatching-parallel-agents",
+      "executing-plans"
+    ],
+    "expect": "subagent-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-subagent-driven-development-026",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please use fresh subagents to implement independent tasks",
+    "note": "subagent-driven-development: expanded en direct",
+    "notExpect": [
+      "dispatching-parallel-agents",
+      "executing-plans"
+    ],
+    "expect": "subagent-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-subagent-driven-development-027",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "multi-part plan 用 subagents 开发，给我可执行结果",
+    "note": "subagent-driven-development: expanded mixed request",
+    "notExpect": [
+      "dispatching-parallel-agents",
+      "executing-plans"
+    ],
+    "expect": "subagent-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-subagent-driven-development-028",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "主会话负责 review，每个子任务交给新代理",
+    "note": "subagent-driven-development: expanded hard disambiguation",
+    "notExpect": [
+      "dispatching-parallel-agents",
+      "executing-plans"
+    ],
+    "expect": "subagent-driven-development",
+    "split": "test"
+  },
+  {
+    "id": "alias-subagent-driven-development-029",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 multi-part plan 用 subagents 开发，不是相邻的另一类流程",
+    "note": "subagent-driven-development: mixed neighbor contrast",
+    "notExpect": [
+      "dispatching-parallel-agents",
+      "executing-plans"
+    ],
+    "expect": "subagent-driven-development",
+    "split": "train"
+  },
+  {
+    "id": "alias-subagent-driven-development-030",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as use fresh subagents to implement independent tasks; avoid the adjacent workflow",
+    "note": "subagent-driven-development: en neighbor contrast",
+    "notExpect": [
+      "dispatching-parallel-agents",
+      "executing-plans"
+    ],
+    "expect": "subagent-driven-development",
+    "split": "test"
+  },
+  {
+    "id": "alias-dispatching-parallel-agents-031",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我并行调研几个互不依赖的问题",
+    "note": "dispatching-parallel-agents: expanded zh direct",
+    "notExpect": [
+      "subagent-driven-development"
+    ],
+    "expect": "dispatching-parallel-agents",
+    "split": "train"
+  },
+  {
+    "id": "alias-dispatching-parallel-agents-032",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please dispatch parallel agents for independent research",
+    "note": "dispatching-parallel-agents: expanded en direct",
+    "notExpect": [
+      "subagent-driven-development"
+    ],
+    "expect": "dispatching-parallel-agents",
+    "split": "test"
+  },
+  {
+    "id": "alias-dispatching-parallel-agents-033",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "四个 independent topics 并行跑 agents，给我可执行结果",
+    "note": "dispatching-parallel-agents: expanded mixed request",
+    "notExpect": [
+      "subagent-driven-development"
+    ],
+    "expect": "dispatching-parallel-agents",
+    "split": "test"
+  },
+  {
+    "id": "alias-dispatching-parallel-agents-034",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "只是并行查资料汇总，不要开代码实现子任务",
+    "note": "dispatching-parallel-agents: expanded hard disambiguation",
+    "notExpect": [
+      "subagent-driven-development"
+    ],
+    "expect": "dispatching-parallel-agents",
+    "split": "train"
+  },
+  {
+    "id": "alias-dispatching-parallel-agents-035",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 四个 independent topics 并行跑 agents，不是相邻的另一类流程",
+    "note": "dispatching-parallel-agents: mixed neighbor contrast",
+    "notExpect": [
+      "subagent-driven-development"
+    ],
+    "expect": "dispatching-parallel-agents",
+    "split": "train"
+  },
+  {
+    "id": "alias-dispatching-parallel-agents-036",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as dispatch parallel agents for independent research; avoid the adjacent workflow",
+    "note": "dispatching-parallel-agents: en neighbor contrast",
+    "notExpect": [
+      "subagent-driven-development"
+    ],
+    "expect": "dispatching-parallel-agents",
+    "split": "train"
+  },
+  {
+    "id": "alias-brainstorming-037",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我先探索这个产品想法",
+    "note": "brainstorming: expanded zh direct",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "brainstorming",
+    "split": "train"
+  },
+  {
+    "id": "alias-brainstorming-038",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please brainstorm the product idea before specs",
+    "note": "brainstorming: expanded en direct",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "brainstorming",
+    "split": "test"
+  },
+  {
+    "id": "alias-brainstorming-039",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "idea 还模糊，先做 discovery，给我可执行结果",
+    "note": "brainstorming: expanded mixed request",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "brainstorming",
+    "split": "test"
+  },
+  {
+    "id": "alias-brainstorming-040",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "不要写实现计划，先问问题厘清用户和边界",
+    "note": "brainstorming: expanded hard disambiguation",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "brainstorming",
+    "split": "train"
+  },
+  {
+    "id": "alias-brainstorming-041",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 idea 还模糊，先做 discovery，不是相邻的另一类流程",
+    "note": "brainstorming: mixed neighbor contrast",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "brainstorming",
+    "split": "train"
+  },
+  {
+    "id": "alias-brainstorming-042",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as brainstorm the product idea before specs; avoid the adjacent workflow",
+    "note": "brainstorming: en neighbor contrast",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "brainstorming",
+    "split": "train"
+  },
+  {
+    "id": "alias-requesting-code-review-043",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我提交前主动请求代码审查",
+    "note": "requesting-code-review: expanded zh direct",
+    "notExpect": [
+      "receiving-code-review",
+      "code-review"
+    ],
+    "expect": "requesting-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-requesting-code-review-044",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please request a code review before merge",
+    "note": "requesting-code-review: expanded en direct",
+    "notExpect": [
+      "receiving-code-review",
+      "code-review"
+    ],
+    "expect": "requesting-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-requesting-code-review-045",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "feature done，找 reviewer 检查，给我可执行结果",
+    "note": "requesting-code-review: expanded mixed request",
+    "notExpect": [
+      "receiving-code-review",
+      "code-review"
+    ],
+    "expect": "requesting-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-requesting-code-review-046",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "我想主动发起 review，不是处理别人评论",
+    "note": "requesting-code-review: expanded hard disambiguation",
+    "notExpect": [
+      "receiving-code-review",
+      "code-review"
+    ],
+    "expect": "requesting-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-requesting-code-review-047",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 feature done，找 reviewer 检查，不是相邻的另一类流程",
+    "note": "requesting-code-review: mixed neighbor contrast",
+    "notExpect": [
+      "receiving-code-review",
+      "code-review"
+    ],
+    "expect": "requesting-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-requesting-code-review-048",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as request a code review before merge; avoid the adjacent workflow",
+    "note": "requesting-code-review: en neighbor contrast",
+    "notExpect": [
+      "receiving-code-review",
+      "code-review"
+    ],
+    "expect": "requesting-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-receiving-code-review-049",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我处理已经收到的评审意见",
+    "note": "receiving-code-review: expanded zh direct",
+    "notExpect": [
+      "requesting-code-review",
+      "code-review"
+    ],
+    "expect": "receiving-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-receiving-code-review-050",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please address received review feedback carefully",
+    "note": "receiving-code-review: expanded en direct",
+    "notExpect": [
+      "requesting-code-review",
+      "code-review"
+    ],
+    "expect": "receiving-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-receiving-code-review-051",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "PR comments 已收到，先判断哪些合理，给我可执行结果",
+    "note": "receiving-code-review: expanded mixed request",
+    "notExpect": [
+      "requesting-code-review",
+      "code-review"
+    ],
+    "expect": "receiving-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-receiving-code-review-052",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "别人已经 review 了，请核验评论再改",
+    "note": "receiving-code-review: expanded hard disambiguation",
+    "notExpect": [
+      "requesting-code-review",
+      "code-review"
+    ],
+    "expect": "receiving-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-receiving-code-review-053",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 PR comments 已收到，先判断哪些合理，不是相邻的另一类流程",
+    "note": "receiving-code-review: mixed neighbor contrast",
+    "notExpect": [
+      "requesting-code-review",
+      "code-review"
+    ],
+    "expect": "receiving-code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-receiving-code-review-054",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as address received review feedback carefully; avoid the adjacent workflow",
+    "note": "receiving-code-review: en neighbor contrast",
+    "notExpect": [
+      "requesting-code-review",
+      "code-review"
+    ],
+    "expect": "receiving-code-review",
+    "split": "test"
+  },
+  {
+    "id": "alias-code-review-055",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我审查本地代码的 bug 和风险",
+    "note": "code-review: expanded zh direct",
+    "notExpect": [
+      "github-pr-review",
+      "requesting-code-review"
+    ],
+    "expect": "code-review",
+    "split": "test"
+  },
+  {
+    "id": "alias-code-review-056",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please review local code for regressions and missing tests",
+    "note": "code-review: expanded en direct",
+    "notExpect": [
+      "github-pr-review",
+      "requesting-code-review"
+    ],
+    "expect": "code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-code-review-057",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "local code review findings，给我可执行结果",
+    "note": "code-review: expanded mixed request",
+    "notExpect": [
+      "github-pr-review",
+      "requesting-code-review"
+    ],
+    "expect": "code-review",
+    "split": "test"
+  },
+  {
+    "id": "alias-code-review-058",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "只看当前工作树，不去 GitHub PR",
+    "note": "code-review: expanded hard disambiguation",
+    "notExpect": [
+      "github-pr-review",
+      "requesting-code-review"
+    ],
+    "expect": "code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-code-review-059",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 local code review findings，不是相邻的另一类流程",
+    "note": "code-review: mixed neighbor contrast",
+    "notExpect": [
+      "github-pr-review",
+      "requesting-code-review"
+    ],
+    "expect": "code-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-code-review-060",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as review local code for regressions and missing tests; avoid the adjacent workflow",
+    "note": "code-review: en neighbor contrast",
+    "notExpect": [
+      "github-pr-review",
+      "requesting-code-review"
+    ],
+    "expect": "code-review",
+    "split": "test"
+  },
+  {
+    "id": "alias-github-pr-review-061",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我查看 GitHub PR 评论和检查",
+    "note": "github-pr-review: expanded zh direct",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "github-pr-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-github-pr-review-062",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please inspect GitHub pull request review comments",
+    "note": "github-pr-review: expanded en direct",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "github-pr-review",
+    "split": "test"
+  },
+  {
+    "id": "alias-github-pr-review-063",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "GitHub PR comments 和 checks 总结，给我可执行结果",
+    "note": "github-pr-review: expanded mixed request",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "github-pr-review",
+    "split": "test"
+  },
+  {
+    "id": "alias-github-pr-review-064",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "去 GitHub 看 PR review thread，不是本地代码审查",
+    "note": "github-pr-review: expanded hard disambiguation",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "github-pr-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-github-pr-review-065",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 GitHub PR comments 和 checks 总结，不是相邻的另一类流程",
+    "note": "github-pr-review: mixed neighbor contrast",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "github-pr-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-github-pr-review-066",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as inspect GitHub pull request review comments; avoid the adjacent workflow",
+    "note": "github-pr-review: en neighbor contrast",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "github-pr-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-verification-before-completion-067",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我完成前跑验证命令",
+    "note": "verification-before-completion: expanded zh direct",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "verification-before-completion",
+    "split": "test"
+  },
+  {
+    "id": "alias-verification-before-completion-068",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please verify with tests before claiming done",
+    "note": "verification-before-completion: expanded en direct",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "verification-before-completion",
+    "split": "test"
+  },
+  {
+    "id": "alias-verification-before-completion-069",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "before completion 先跑 pnpm test，给我可执行结果",
+    "note": "verification-before-completion: expanded mixed request",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "verification-before-completion",
+    "split": "test"
+  },
+  {
+    "id": "alias-verification-before-completion-070",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "不要说应该能过，先拿命令输出证明",
+    "note": "verification-before-completion: expanded hard disambiguation",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "verification-before-completion",
+    "split": "train"
+  },
+  {
+    "id": "alias-verification-before-completion-071",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 before completion 先跑 pnpm test，不是相邻的另一类流程",
+    "note": "verification-before-completion: mixed neighbor contrast",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "verification-before-completion",
+    "split": "test"
+  },
+  {
+    "id": "alias-verification-before-completion-072",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as verify with tests before claiming done; avoid the adjacent workflow",
+    "note": "verification-before-completion: en neighbor contrast",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "verification-before-completion",
+    "split": "train"
+  },
+  {
+    "id": "alias-finishing-a-development-branch-073",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我实现完成后整理合并收尾",
+    "note": "finishing-a-development-branch: expanded zh direct",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "finishing-a-development-branch",
+    "split": "train"
+  },
+  {
+    "id": "alias-finishing-a-development-branch-074",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please finish the development branch after tests pass",
+    "note": "finishing-a-development-branch: expanded en direct",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "finishing-a-development-branch",
+    "split": "train"
+  },
+  {
+    "id": "alias-finishing-a-development-branch-075",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "branch done，整理 PR merge cleanup，给我可执行结果",
+    "note": "finishing-a-development-branch: expanded mixed request",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "finishing-a-development-branch",
+    "split": "test"
+  },
+  {
+    "id": "alias-finishing-a-development-branch-076",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "不是继续写代码，是收尾选项",
+    "note": "finishing-a-development-branch: expanded hard disambiguation",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "finishing-a-development-branch",
+    "split": "train"
+  },
+  {
+    "id": "alias-finishing-a-development-branch-077",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 branch done，整理 PR merge cleanup，不是相邻的另一类流程",
+    "note": "finishing-a-development-branch: mixed neighbor contrast",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "finishing-a-development-branch",
+    "split": "train"
+  },
+  {
+    "id": "alias-finishing-a-development-branch-078",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as finish the development branch after tests pass; avoid the adjacent workflow",
+    "note": "finishing-a-development-branch: en neighbor contrast",
+    "notExpect": [
+      "code-review"
+    ],
+    "expect": "finishing-a-development-branch",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-git-worktrees-079",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我开始开发前建隔离工作树",
+    "note": "using-git-worktrees: expanded zh direct",
+    "notExpect": [
+      "git-worktree"
+    ],
+    "expect": "using-git-worktrees",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-git-worktrees-080",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please create an isolated worktree before feature work",
+    "note": "using-git-worktrees: expanded en direct",
+    "notExpect": [
+      "git-worktree"
+    ],
+    "expect": "using-git-worktrees",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-git-worktrees-081",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "dirty workspace，先 isolated worktree，给我可执行结果",
+    "note": "using-git-worktrees: expanded mixed request",
+    "notExpect": [
+      "git-worktree"
+    ],
+    "expect": "using-git-worktrees",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-git-worktrees-082",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "保护当前工作区，开隔离目录再做功能",
+    "note": "using-git-worktrees: expanded hard disambiguation",
+    "notExpect": [
+      "git-worktree"
+    ],
+    "expect": "using-git-worktrees",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-git-worktrees-083",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 dirty workspace，先 isolated worktree，不是相邻的另一类流程",
+    "note": "using-git-worktrees: mixed neighbor contrast",
+    "notExpect": [
+      "git-worktree"
+    ],
+    "expect": "using-git-worktrees",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-git-worktrees-084",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as create an isolated worktree before feature work; avoid the adjacent workflow",
+    "note": "using-git-worktrees: en neighbor contrast",
+    "notExpect": [
+      "git-worktree"
+    ],
+    "expect": "using-git-worktrees",
+    "split": "train"
+  },
+  {
+    "id": "alias-git-worktree-085",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我执行 git worktree add 命令",
+    "note": "git-worktree: expanded zh direct",
+    "notExpect": [
+      "using-git-worktrees"
+    ],
+    "expect": "git-worktree",
+    "split": "train"
+  },
+  {
+    "id": "alias-git-worktree-086",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please run git worktree add for a branch",
+    "note": "git-worktree: expanded en direct",
+    "notExpect": [
+      "using-git-worktrees"
+    ],
+    "expect": "git-worktree",
+    "split": "train"
+  },
+  {
+    "id": "alias-git-worktree-087",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "git worktree add feature branch，给我可执行结果",
+    "note": "git-worktree: expanded mixed request",
+    "notExpect": [
+      "using-git-worktrees"
+    ],
+    "expect": "git-worktree",
+    "split": "train"
+  },
+  {
+    "id": "alias-git-worktree-088",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "只需要 git worktree 管理命令，不要完整开发流程",
+    "note": "git-worktree: expanded hard disambiguation",
+    "notExpect": [
+      "using-git-worktrees"
+    ],
+    "expect": "git-worktree",
+    "split": "test"
+  },
+  {
+    "id": "alias-git-worktree-089",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 git worktree add feature branch，不是相邻的另一类流程",
+    "note": "git-worktree: mixed neighbor contrast",
+    "notExpect": [
+      "using-git-worktrees"
+    ],
+    "expect": "git-worktree",
+    "split": "train"
+  },
+  {
+    "id": "alias-git-worktree-090",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as run git worktree add for a branch; avoid the adjacent workflow",
+    "note": "git-worktree: en neighbor contrast",
+    "notExpect": [
+      "using-git-worktrees"
+    ],
+    "expect": "git-worktree",
+    "split": "test"
+  },
+  {
+    "id": "alias-writing-skills-091",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我创建或编辑可复用技能说明",
+    "note": "writing-skills: expanded zh direct",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "writing-skills",
+    "split": "test"
+  },
+  {
+    "id": "alias-writing-skills-092",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please write a reusable SKILL.md with triggers",
+    "note": "writing-skills: expanded en direct",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "writing-skills",
+    "split": "train"
+  },
+  {
+    "id": "alias-writing-skills-093",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "帮我写 skill keywords 和说明，给我可执行结果",
+    "note": "writing-skills: expanded mixed request",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "writing-skills",
+    "split": "train"
+  },
+  {
+    "id": "alias-writing-skills-094",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "目标是沉淀 agent skill，不是项目实施计划",
+    "note": "writing-skills: expanded hard disambiguation",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "writing-skills",
+    "split": "train"
+  },
+  {
+    "id": "alias-writing-skills-095",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 帮我写 skill keywords 和说明，不是相邻的另一类流程",
+    "note": "writing-skills: mixed neighbor contrast",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "writing-skills",
+    "split": "train"
+  },
+  {
+    "id": "alias-writing-skills-096",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as write a reusable SKILL.md with triggers; avoid the adjacent workflow",
+    "note": "writing-skills: en neighbor contrast",
+    "notExpect": [
+      "writing-plans"
+    ],
+    "expect": "writing-skills",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-superpowers-097",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我先检查有没有适用技能",
+    "note": "using-superpowers: expanded zh direct",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": "using-superpowers",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-superpowers-098",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please check applicable skills before answering",
+    "note": "using-superpowers: expanded en direct",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": "using-superpowers",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-superpowers-099",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "skill discovery first，给我可执行结果",
+    "note": "using-superpowers: expanded mixed request",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": "using-superpowers",
+    "split": "test"
+  },
+  {
+    "id": "alias-using-superpowers-100",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "这是会话起步流程，不是写新 skill",
+    "note": "using-superpowers: expanded hard disambiguation",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": "using-superpowers",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-superpowers-101",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 skill discovery first，不是相邻的另一类流程",
+    "note": "using-superpowers: mixed neighbor contrast",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": "using-superpowers",
+    "split": "train"
+  },
+  {
+    "id": "alias-using-superpowers-102",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as check applicable skills before answering; avoid the adjacent workflow",
+    "note": "using-superpowers: en neighbor contrast",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": "using-superpowers",
+    "split": "train"
+  },
+  {
+    "id": "alias-frontend-design-103",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我设计一个新的前端页面",
+    "note": "frontend-design: expanded zh direct",
+    "notExpect": [
+      "ui-ux-review",
+      "impeccable"
+    ],
+    "expect": "frontend-design",
+    "split": "train"
+  },
+  {
+    "id": "alias-frontend-design-104",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please design a new frontend page and layout",
+    "note": "frontend-design: expanded en direct",
+    "notExpect": [
+      "ui-ux-review",
+      "impeccable"
+    ],
+    "expect": "frontend-design",
+    "split": "train"
+  },
+  {
+    "id": "alias-frontend-design-105",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "build new SaaS UI page，给我可执行结果",
+    "note": "frontend-design: expanded mixed request",
+    "notExpect": [
+      "ui-ux-review",
+      "impeccable"
+    ],
+    "expect": "frontend-design",
+    "split": "train"
+  },
+  {
+    "id": "alias-frontend-design-106",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "从零做页面体验，不是审查现有截图",
+    "note": "frontend-design: expanded hard disambiguation",
+    "notExpect": [
+      "ui-ux-review",
+      "impeccable"
+    ],
+    "expect": "frontend-design",
+    "split": "train"
+  },
+  {
+    "id": "alias-frontend-design-107",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 build new SaaS UI page，不是相邻的另一类流程",
+    "note": "frontend-design: mixed neighbor contrast",
+    "notExpect": [
+      "ui-ux-review",
+      "impeccable"
+    ],
+    "expect": "frontend-design",
+    "split": "train"
+  },
+  {
+    "id": "alias-frontend-design-108",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as design a new frontend page and layout; avoid the adjacent workflow",
+    "note": "frontend-design: en neighbor contrast",
+    "notExpect": [
+      "ui-ux-review",
+      "impeccable"
+    ],
+    "expect": "frontend-design",
+    "split": "test"
+  },
+  {
+    "id": "alias-ui-design-brain-109",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我用组件模式生成生产级 UI",
+    "note": "ui-design-brain: expanded zh direct",
+    "notExpect": [
+      "frontend-design"
+    ],
+    "expect": "ui-design-brain",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-design-brain-110",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please generate production UI with component patterns",
+    "note": "ui-design-brain: expanded en direct",
+    "notExpect": [
+      "frontend-design"
+    ],
+    "expect": "ui-design-brain",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-design-brain-111",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "dashboard cards/forms/navigation 用 design system，给我可执行结果",
+    "note": "ui-design-brain: expanded mixed request",
+    "notExpect": [
+      "frontend-design"
+    ],
+    "expect": "ui-design-brain",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-design-brain-112",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "重点是组件库和 SaaS UI 惯例",
+    "note": "ui-design-brain: expanded hard disambiguation",
+    "notExpect": [
+      "frontend-design"
+    ],
+    "expect": "ui-design-brain",
+    "split": "test"
+  },
+  {
+    "id": "alias-ui-design-brain-113",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 dashboard cards/forms/navigation 用 design system，不是相邻的另一类流程",
+    "note": "ui-design-brain: mixed neighbor contrast",
+    "notExpect": [
+      "frontend-design"
+    ],
+    "expect": "ui-design-brain",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-design-brain-114",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as generate production UI with component patterns; avoid the adjacent workflow",
+    "note": "ui-design-brain: en neighbor contrast",
+    "notExpect": [
+      "frontend-design"
+    ],
+    "expect": "ui-design-brain",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-ux-review-115",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我审查现有界面的 UX 问题",
+    "note": "ui-ux-review: expanded zh direct",
+    "notExpect": [
+      "frontend-design",
+      "impeccable"
+    ],
+    "expect": "ui-ux-review",
+    "split": "test"
+  },
+  {
+    "id": "alias-ui-ux-review-116",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please review an existing UI screenshot for issues",
+    "note": "ui-ux-review: expanded en direct",
+    "notExpect": [
+      "frontend-design",
+      "impeccable"
+    ],
+    "expect": "ui-ux-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-ux-review-117",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "audit current app UI hierarchy，给我可执行结果",
+    "note": "ui-ux-review: expanded mixed request",
+    "notExpect": [
+      "frontend-design",
+      "impeccable"
+    ],
+    "expect": "ui-ux-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-ux-review-118",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "已有屏幕，只列问题风险和建议",
+    "note": "ui-ux-review: expanded hard disambiguation",
+    "notExpect": [
+      "frontend-design",
+      "impeccable"
+    ],
+    "expect": "ui-ux-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-ux-review-119",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 audit current app UI hierarchy，不是相邻的另一类流程",
+    "note": "ui-ux-review: mixed neighbor contrast",
+    "notExpect": [
+      "frontend-design",
+      "impeccable"
+    ],
+    "expect": "ui-ux-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-ui-ux-review-120",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as review an existing UI screenshot for issues; avoid the adjacent workflow",
+    "note": "ui-ux-review: en neighbor contrast",
+    "notExpect": [
+      "frontend-design",
+      "impeccable"
+    ],
+    "expect": "ui-ux-review",
+    "split": "train"
+  },
+  {
+    "id": "alias-impeccable-121",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我打磨现有界面的视觉层级",
+    "note": "impeccable: expanded zh direct",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": "impeccable",
+    "split": "train"
+  },
+  {
+    "id": "alias-impeccable-122",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please polish an existing interface to feel refined",
+    "note": "impeccable: expanded en direct",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": "impeccable",
+    "split": "train"
+  },
+  {
+    "id": "alias-impeccable-123",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "improve dashboard UI hierarchy and motion，给我可执行结果",
+    "note": "impeccable: expanded mixed request",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": "impeccable",
+    "split": "train"
+  },
+  {
+    "id": "alias-impeccable-124",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "不是从零生成，也不只是列问题，要直接打磨",
+    "note": "impeccable: expanded hard disambiguation",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": "impeccable",
+    "split": "test"
+  },
+  {
+    "id": "alias-impeccable-125",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 improve dashboard UI hierarchy and motion，不是相邻的另一类流程",
+    "note": "impeccable: mixed neighbor contrast",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": "impeccable",
+    "split": "train"
+  },
+  {
+    "id": "alias-impeccable-126",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as polish an existing interface to feel refined; avoid the adjacent workflow",
+    "note": "impeccable: en neighbor contrast",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": "impeccable",
+    "split": "train"
+  },
+  {
+    "id": "alias-hallmark-127",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我识别并改掉 AI 模板感设计",
+    "note": "hallmark: expanded zh direct",
+    "notExpect": [
+      "frontend-design",
+      "ui-ux-review"
+    ],
+    "expect": "hallmark",
+    "split": "test"
+  },
+  {
+    "id": "alias-hallmark-128",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please audit AI-looking design and propose distinctive redesign",
+    "note": "hallmark: expanded en direct",
+    "notExpect": [
+      "frontend-design",
+      "ui-ux-review"
+    ],
+    "expect": "hallmark",
+    "split": "train"
+  },
+  {
+    "id": "alias-hallmark-129",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "Hallmark audit website direction，给我可执行结果",
+    "note": "hallmark: expanded mixed request",
+    "notExpect": [
+      "frontend-design",
+      "ui-ux-review"
+    ],
+    "expect": "hallmark",
+    "split": "train"
+  },
+  {
+    "id": "alias-hallmark-130",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "重点是反 AI 味和辨识度，不是普通 UI review",
+    "note": "hallmark: expanded hard disambiguation",
+    "notExpect": [
+      "frontend-design",
+      "ui-ux-review"
+    ],
+    "expect": "hallmark",
+    "split": "test"
+  },
+  {
+    "id": "alias-hallmark-131",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 Hallmark audit website direction，不是相邻的另一类流程",
+    "note": "hallmark: mixed neighbor contrast",
+    "notExpect": [
+      "frontend-design",
+      "ui-ux-review"
+    ],
+    "expect": "hallmark",
+    "split": "test"
+  },
+  {
+    "id": "alias-hallmark-132",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as audit AI-looking design and propose distinctive redesign; avoid the adjacent workflow",
+    "note": "hallmark: en neighbor contrast",
+    "notExpect": [
+      "frontend-design",
+      "ui-ux-review"
+    ],
+    "expect": "hallmark",
+    "split": "test"
+  },
+  {
+    "id": "alias-anysearch-133",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我调用实时搜索并抓取网页",
+    "note": "anysearch: expanded zh direct",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": "anysearch",
+    "split": "train"
+  },
+  {
+    "id": "alias-anysearch-134",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please run web search and URL extraction",
+    "note": "anysearch: expanded en direct",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": "anysearch",
+    "split": "train"
+  },
+  {
+    "id": "alias-anysearch-135",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "batch web search + extract URLs，给我可执行结果",
+    "note": "anysearch: expanded mixed request",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": "anysearch",
+    "split": "train"
+  },
+  {
+    "id": "alias-anysearch-136",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "搜索引擎能力本身，不是平台专项调研",
+    "note": "anysearch: expanded hard disambiguation",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": "anysearch",
+    "split": "train"
+  },
+  {
+    "id": "alias-anysearch-137",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 batch web search + extract URLs，不是相邻的另一类流程",
+    "note": "anysearch: mixed neighbor contrast",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": "anysearch",
+    "split": "train"
+  },
+  {
+    "id": "alias-anysearch-138",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as run web search and URL extraction; avoid the adjacent workflow",
+    "note": "anysearch: en neighbor contrast",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": "anysearch",
+    "split": "test"
+  },
+  {
+    "id": "alias-web-research-139",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我联网找资料并列出处",
+    "note": "web-research: expanded zh direct",
+    "notExpect": [
+      "browser-automation"
+    ],
+    "expect": "web-research",
+    "split": "train"
+  },
+  {
+    "id": "alias-web-research-140",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please research the web and cite sources",
+    "note": "web-research: expanded en direct",
+    "notExpect": [
+      "browser-automation"
+    ],
+    "expect": "web-research",
+    "split": "train"
+  },
+  {
+    "id": "alias-web-research-141",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "search web sources for this question，给我可执行结果",
+    "note": "web-research: expanded mixed request",
+    "notExpect": [
+      "browser-automation"
+    ],
+    "expect": "web-research",
+    "split": "train"
+  },
+  {
+    "id": "alias-web-research-142",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "要网页资料和来源，不控制本地浏览器",
+    "note": "web-research: expanded hard disambiguation",
+    "notExpect": [
+      "browser-automation"
+    ],
+    "expect": "web-research",
+    "split": "train"
+  },
+  {
+    "id": "alias-web-research-143",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 search web sources for this question，不是相邻的另一类流程",
+    "note": "web-research: mixed neighbor contrast",
+    "notExpect": [
+      "browser-automation"
+    ],
+    "expect": "web-research",
+    "split": "train"
+  },
+  {
+    "id": "alias-web-research-144",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as research the web and cite sources; avoid the adjacent workflow",
+    "note": "web-research: en neighbor contrast",
+    "notExpect": [
+      "browser-automation"
+    ],
+    "expect": "web-research",
+    "split": "train"
+  },
+  {
+    "id": "alias-agent-reach-145",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我跨 Reddit X B站小红书调研",
+    "note": "agent-reach: expanded zh direct",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": "agent-reach",
+    "split": "train"
+  },
+  {
+    "id": "alias-agent-reach-146",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please research across Reddit X YouTube and web",
+    "note": "agent-reach: expanded en direct",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": "agent-reach",
+    "split": "train"
+  },
+  {
+    "id": "alias-agent-reach-147",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "platform research Reddit+B站+小红书，给我可执行结果",
+    "note": "agent-reach: expanded mixed request",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": "agent-reach",
+    "split": "train"
+  },
+  {
+    "id": "alias-agent-reach-148",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "用户点名社媒平台，要跨平台抓讨论",
+    "note": "agent-reach: expanded hard disambiguation",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": "agent-reach",
+    "split": "train"
+  },
+  {
+    "id": "alias-agent-reach-149",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 platform research Reddit+B站+小红书，不是相邻的另一类流程",
+    "note": "agent-reach: mixed neighbor contrast",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": "agent-reach",
+    "split": "train"
+  },
+  {
+    "id": "alias-agent-reach-150",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as research across Reddit X YouTube and web; avoid the adjacent workflow",
+    "note": "agent-reach: en neighbor contrast",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": "agent-reach",
+    "split": "test"
+  },
+  {
+    "id": "alias-last30days-151",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我调研最近 30 天趋势",
+    "note": "last30days: expanded zh direct",
+    "notExpect": [
+      "agent-reach",
+      "web-research"
+    ],
+    "expect": "last30days",
+    "split": "train"
+  },
+  {
+    "id": "alias-last30days-152",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please research the last 30 days of trends",
+    "note": "last30days: expanded en direct",
+    "notExpect": [
+      "agent-reach",
+      "web-research"
+    ],
+    "expect": "last30days",
+    "split": "train"
+  },
+  {
+    "id": "alias-last30days-153",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "last 30 days Reddit+X+Web trend，给我可执行结果",
+    "note": "last30days: expanded mixed request",
+    "notExpect": [
+      "agent-reach",
+      "web-research"
+    ],
+    "expect": "last30days",
+    "split": "train"
+  },
+  {
+    "id": "alias-last30days-154",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "重点是近 30 天动态和可复制 prompt",
+    "note": "last30days: expanded hard disambiguation",
+    "notExpect": [
+      "agent-reach",
+      "web-research"
+    ],
+    "expect": "last30days",
+    "split": "test"
+  },
+  {
+    "id": "alias-last30days-155",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 last 30 days Reddit+X+Web trend，不是相邻的另一类流程",
+    "note": "last30days: mixed neighbor contrast",
+    "notExpect": [
+      "agent-reach",
+      "web-research"
+    ],
+    "expect": "last30days",
+    "split": "test"
+  },
+  {
+    "id": "alias-last30days-156",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as research the last 30 days of trends; avoid the adjacent workflow",
+    "note": "last30days: en neighbor contrast",
+    "notExpect": [
+      "agent-reach",
+      "web-research"
+    ],
+    "expect": "last30days",
+    "split": "test"
+  },
+  {
+    "id": "alias-browser-automation-157",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我控制浏览器点页面截图",
+    "note": "browser-automation: expanded zh direct",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "browser-automation",
+    "split": "test"
+  },
+  {
+    "id": "alias-browser-automation-158",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please control a local browser and inspect UI",
+    "note": "browser-automation: expanded en direct",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "browser-automation",
+    "split": "train"
+  },
+  {
+    "id": "alias-browser-automation-159",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "localhost app browser interaction，给我可执行结果",
+    "note": "browser-automation: expanded mixed request",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "browser-automation",
+    "split": "train"
+  },
+  {
+    "id": "alias-browser-automation-160",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "目标在本地页面，需要真实浏览器操作",
+    "note": "browser-automation: expanded hard disambiguation",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "browser-automation",
+    "split": "test"
+  },
+  {
+    "id": "alias-browser-automation-161",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 localhost app browser interaction，不是相邻的另一类流程",
+    "note": "browser-automation: mixed neighbor contrast",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "browser-automation",
+    "split": "test"
+  },
+  {
+    "id": "alias-browser-automation-162",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as control a local browser and inspect UI; avoid the adjacent workflow",
+    "note": "browser-automation: en neighbor contrast",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "browser-automation",
+    "split": "train"
+  },
+  {
+    "id": "alias-data-dashboard-163",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我构建数据看板和图表",
+    "note": "data-dashboard: expanded zh direct",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": "data-dashboard",
+    "split": "train"
+  },
+  {
+    "id": "alias-data-dashboard-164",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please build an analytics dashboard from metrics",
+    "note": "data-dashboard: expanded en direct",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": "data-dashboard",
+    "split": "train"
+  },
+  {
+    "id": "alias-data-dashboard-165",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "KPI dashboard with filters and charts，给我可执行结果",
+    "note": "data-dashboard: expanded mixed request",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": "data-dashboard",
+    "split": "train"
+  },
+  {
+    "id": "alias-data-dashboard-166",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "交付物是可探索看板，不是单纯表格清洗",
+    "note": "data-dashboard: expanded hard disambiguation",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": "data-dashboard",
+    "split": "test"
+  },
+  {
+    "id": "alias-data-dashboard-167",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 KPI dashboard with filters and charts，不是相邻的另一类流程",
+    "note": "data-dashboard: mixed neighbor contrast",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": "data-dashboard",
+    "split": "train"
+  },
+  {
+    "id": "alias-data-dashboard-168",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as build an analytics dashboard from metrics; avoid the adjacent workflow",
+    "note": "data-dashboard: en neighbor contrast",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": "data-dashboard",
+    "split": "train"
+  },
+  {
+    "id": "alias-spreadsheet-analysis-169",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我分析和整理工作簿公式表格",
+    "note": "spreadsheet-analysis: expanded zh direct",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": "spreadsheet-analysis",
+    "split": "test"
+  },
+  {
+    "id": "alias-spreadsheet-analysis-170",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please analyze spreadsheet formulas sheets and charts",
+    "note": "spreadsheet-analysis: expanded en direct",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": "spreadsheet-analysis",
+    "split": "train"
+  },
+  {
+    "id": "alias-spreadsheet-analysis-171",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "xlsx workbook cleanup formulas，给我可执行结果",
+    "note": "spreadsheet-analysis: expanded mixed request",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": "spreadsheet-analysis",
+    "split": "test"
+  },
+  {
+    "id": "alias-spreadsheet-analysis-172",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "任务对象是 spreadsheet 文件，不是 BI 看板",
+    "note": "spreadsheet-analysis: expanded hard disambiguation",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": "spreadsheet-analysis",
+    "split": "test"
+  },
+  {
+    "id": "alias-spreadsheet-analysis-173",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 xlsx workbook cleanup formulas，不是相邻的另一类流程",
+    "note": "spreadsheet-analysis: mixed neighbor contrast",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": "spreadsheet-analysis",
+    "split": "test"
+  },
+  {
+    "id": "alias-spreadsheet-analysis-174",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as analyze spreadsheet formulas sheets and charts; avoid the adjacent workflow",
+    "note": "spreadsheet-analysis: en neighbor contrast",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": "spreadsheet-analysis",
+    "split": "train"
+  },
+  {
+    "id": "alias-document-editing-175",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我编辑润色 Word 文档",
+    "note": "document-editing: expanded zh direct",
+    "notExpect": [
+      "presentation-deck",
+      "spreadsheet-analysis"
+    ],
+    "expect": "document-editing",
+    "split": "train"
+  },
+  {
+    "id": "alias-document-editing-176",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please edit a document with comments and formatting",
+    "note": "document-editing: expanded en direct",
+    "notExpect": [
+      "presentation-deck",
+      "spreadsheet-analysis"
+    ],
+    "expect": "document-editing",
+    "split": "test"
+  },
+  {
+    "id": "alias-document-editing-177",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "docx redline and layout cleanup，给我可执行结果",
+    "note": "document-editing: expanded mixed request",
+    "notExpect": [
+      "presentation-deck",
+      "spreadsheet-analysis"
+    ],
+    "expect": "document-editing",
+    "split": "train"
+  },
+  {
+    "id": "alias-document-editing-178",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "交付物是文档，不是幻灯片或表格",
+    "note": "document-editing: expanded hard disambiguation",
+    "notExpect": [
+      "presentation-deck",
+      "spreadsheet-analysis"
+    ],
+    "expect": "document-editing",
+    "split": "test"
+  },
+  {
+    "id": "alias-document-editing-179",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 docx redline and layout cleanup，不是相邻的另一类流程",
+    "note": "document-editing: mixed neighbor contrast",
+    "notExpect": [
+      "presentation-deck",
+      "spreadsheet-analysis"
+    ],
+    "expect": "document-editing",
+    "split": "test"
+  },
+  {
+    "id": "alias-document-editing-180",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as edit a document with comments and formatting; avoid the adjacent workflow",
+    "note": "document-editing: en neighbor contrast",
+    "notExpect": [
+      "presentation-deck",
+      "spreadsheet-analysis"
+    ],
+    "expect": "document-editing",
+    "split": "train"
+  },
+  {
+    "id": "alias-presentation-deck-181",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我制作演示文稿结构和幻灯片",
+    "note": "presentation-deck: expanded zh direct",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "presentation-deck",
+    "split": "train"
+  },
+  {
+    "id": "alias-presentation-deck-182",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please create a presentation deck narrative",
+    "note": "presentation-deck: expanded en direct",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "presentation-deck",
+    "split": "test"
+  },
+  {
+    "id": "alias-presentation-deck-183",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "PPT slides outline and visuals，给我可执行结果",
+    "note": "presentation-deck: expanded mixed request",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "presentation-deck",
+    "split": "test"
+  },
+  {
+    "id": "alias-presentation-deck-184",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "目标是 slides，不是 Word 文档",
+    "note": "presentation-deck: expanded hard disambiguation",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "presentation-deck",
+    "split": "train"
+  },
+  {
+    "id": "alias-presentation-deck-185",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 PPT slides outline and visuals，不是相邻的另一类流程",
+    "note": "presentation-deck: mixed neighbor contrast",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "presentation-deck",
+    "split": "test"
+  },
+  {
+    "id": "alias-presentation-deck-186",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as create a presentation deck narrative; avoid the adjacent workflow",
+    "note": "presentation-deck: en neighbor contrast",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "presentation-deck",
+    "split": "train"
+  },
+  {
+    "id": "alias-image-generation-187",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我生成或编辑位图视觉资产",
+    "note": "image-generation: expanded zh direct",
+    "notExpect": [
+      "frontend-design",
+      "video-composition"
+    ],
+    "expect": "image-generation",
+    "split": "test"
+  },
+  {
+    "id": "alias-image-generation-188",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please generate or edit raster image assets",
+    "note": "image-generation: expanded en direct",
+    "notExpect": [
+      "frontend-design",
+      "video-composition"
+    ],
+    "expect": "image-generation",
+    "split": "test"
+  },
+  {
+    "id": "alias-image-generation-189",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "create bitmap illustration from prompt，给我可执行结果",
+    "note": "image-generation: expanded mixed request",
+    "notExpect": [
+      "frontend-design",
+      "video-composition"
+    ],
+    "expect": "image-generation",
+    "split": "test"
+  },
+  {
+    "id": "alias-image-generation-190",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "需要图片素材，不是 CSS 搭页面",
+    "note": "image-generation: expanded hard disambiguation",
+    "notExpect": [
+      "frontend-design",
+      "video-composition"
+    ],
+    "expect": "image-generation",
+    "split": "train"
+  },
+  {
+    "id": "alias-image-generation-191",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 create bitmap illustration from prompt，不是相邻的另一类流程",
+    "note": "image-generation: mixed neighbor contrast",
+    "notExpect": [
+      "frontend-design",
+      "video-composition"
+    ],
+    "expect": "image-generation",
+    "split": "train"
+  },
+  {
+    "id": "alias-image-generation-192",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as generate or edit raster image assets; avoid the adjacent workflow",
+    "note": "image-generation: en neighbor contrast",
+    "notExpect": [
+      "frontend-design",
+      "video-composition"
+    ],
+    "expect": "image-generation",
+    "split": "train"
+  },
+  {
+    "id": "alias-video-composition-193",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我制作带时间轴的视频动画",
+    "note": "video-composition: expanded zh direct",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": "video-composition",
+    "split": "train"
+  },
+  {
+    "id": "alias-video-composition-194",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please create a video composition with captions",
+    "note": "video-composition: expanded en direct",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": "video-composition",
+    "split": "test"
+  },
+  {
+    "id": "alias-video-composition-195",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "animated video timeline and scenes，给我可执行结果",
+    "note": "video-composition: expanded mixed request",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": "video-composition",
+    "split": "test"
+  },
+  {
+    "id": "alias-video-composition-196",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "输出视频，不是静态图片",
+    "note": "video-composition: expanded hard disambiguation",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": "video-composition",
+    "split": "test"
+  },
+  {
+    "id": "alias-video-composition-197",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 animated video timeline and scenes，不是相邻的另一类流程",
+    "note": "video-composition: mixed neighbor contrast",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": "video-composition",
+    "split": "train"
+  },
+  {
+    "id": "alias-video-composition-198",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as create a video composition with captions; avoid the adjacent workflow",
+    "note": "video-composition: en neighbor contrast",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": "video-composition",
+    "split": "train"
+  },
+  {
+    "id": "alias-openai-docs-199",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我查官方 OpenAI 文档",
+    "note": "openai-docs: expanded zh direct",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "openai-docs",
+    "split": "train"
+  },
+  {
+    "id": "alias-openai-docs-200",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please use official OpenAI docs for API guidance",
+    "note": "openai-docs: expanded en direct",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "openai-docs",
+    "split": "test"
+  },
+  {
+    "id": "alias-openai-docs-201",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "OpenAI API docs lookup，给我可执行结果",
+    "note": "openai-docs: expanded mixed request",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "openai-docs",
+    "split": "train"
+  },
+  {
+    "id": "alias-openai-docs-202",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "信息源必须是官方文档，不是泛泛搜索",
+    "note": "openai-docs: expanded hard disambiguation",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "openai-docs",
+    "split": "test"
+  },
+  {
+    "id": "alias-openai-docs-203",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 OpenAI API docs lookup，不是相邻的另一类流程",
+    "note": "openai-docs: mixed neighbor contrast",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "openai-docs",
+    "split": "test"
+  },
+  {
+    "id": "alias-openai-docs-204",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as use official OpenAI docs for API guidance; avoid the adjacent workflow",
+    "note": "openai-docs: en neighbor contrast",
+    "notExpect": [
+      "web-research"
+    ],
+    "expect": "openai-docs",
+    "split": "train"
+  },
+  {
+    "id": "alias-gmail-triage-205",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我整理 Gmail 收件箱优先级",
+    "note": "gmail-triage: expanded zh direct",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "gmail-triage",
+    "split": "test"
+  },
+  {
+    "id": "alias-gmail-triage-206",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please triage Gmail inbox into action buckets",
+    "note": "gmail-triage: expanded en direct",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "gmail-triage",
+    "split": "train"
+  },
+  {
+    "id": "alias-gmail-triage-207",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "Gmail threads need reply waiting FYI，给我可执行结果",
+    "note": "gmail-triage: expanded mixed request",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "gmail-triage",
+    "split": "train"
+  },
+  {
+    "id": "alias-gmail-triage-208",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "对象是邮箱收件箱，不是文档编辑",
+    "note": "gmail-triage: expanded hard disambiguation",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "gmail-triage",
+    "split": "train"
+  },
+  {
+    "id": "alias-gmail-triage-209",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 Gmail threads need reply waiting FYI，不是相邻的另一类流程",
+    "note": "gmail-triage: mixed neighbor contrast",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "gmail-triage",
+    "split": "train"
+  },
+  {
+    "id": "alias-gmail-triage-210",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as triage Gmail inbox into action buckets; avoid the adjacent workflow",
+    "note": "gmail-triage: en neighbor contrast",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": "gmail-triage",
+    "split": "train"
+  },
+  {
+    "id": "alias-automation-reminders-211",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我创建提醒或周期监控",
+    "note": "automation-reminders: expanded zh direct",
+    "notExpect": [
+      "executing-plans"
+    ],
+    "expect": "automation-reminders",
+    "split": "test"
+  },
+  {
+    "id": "alias-automation-reminders-212",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please create a reminder or recurring automation",
+    "note": "automation-reminders: expanded en direct",
+    "notExpect": [
+      "executing-plans"
+    ],
+    "expect": "automation-reminders",
+    "split": "test"
+  },
+  {
+    "id": "alias-automation-reminders-213",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "remind me tomorrow and repeat weekly，给我可执行结果",
+    "note": "automation-reminders: expanded mixed request",
+    "notExpect": [
+      "executing-plans"
+    ],
+    "expect": "automation-reminders",
+    "split": "train"
+  },
+  {
+    "id": "alias-automation-reminders-214",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "目标是设置提醒，不是解释 reminder 单词",
+    "note": "automation-reminders: expanded hard disambiguation",
+    "notExpect": [
+      "executing-plans"
+    ],
+    "expect": "automation-reminders",
+    "split": "train"
+  },
+  {
+    "id": "alias-automation-reminders-215",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 remind me tomorrow and repeat weekly，不是相邻的另一类流程",
+    "note": "automation-reminders: mixed neighbor contrast",
+    "notExpect": [
+      "executing-plans"
+    ],
+    "expect": "automation-reminders",
+    "split": "train"
+  },
+  {
+    "id": "alias-automation-reminders-216",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as create a reminder or recurring automation; avoid the adjacent workflow",
+    "note": "automation-reminders: en neighbor contrast",
+    "notExpect": [
+      "executing-plans"
+    ],
+    "expect": "automation-reminders",
+    "split": "train"
+  },
+  {
+    "id": "alias-usdt-pay-217",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我集成 USDT 加密货币支付",
+    "note": "usdt-pay: expanded zh direct",
+    "notExpect": [
+      "openai-docs"
+    ],
+    "expect": "usdt-pay",
+    "split": "train"
+  },
+  {
+    "id": "alias-usdt-pay-218",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please integrate USDT crypto payment flow",
+    "note": "usdt-pay: expanded en direct",
+    "notExpect": [
+      "openai-docs"
+    ],
+    "expect": "usdt-pay",
+    "split": "test"
+  },
+  {
+    "id": "alias-usdt-pay-219",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "stablecoin payment checkout，给我可执行结果",
+    "note": "usdt-pay: expanded mixed request",
+    "notExpect": [
+      "openai-docs"
+    ],
+    "expect": "usdt-pay",
+    "split": "train"
+  },
+  {
+    "id": "alias-usdt-pay-220",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "这是加密货币支付，不是普通文档解释",
+    "note": "usdt-pay: expanded hard disambiguation",
+    "notExpect": [
+      "openai-docs"
+    ],
+    "expect": "usdt-pay",
+    "split": "train"
+  },
+  {
+    "id": "alias-usdt-pay-221",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 stablecoin payment checkout，不是相邻的另一类流程",
+    "note": "usdt-pay: mixed neighbor contrast",
+    "notExpect": [
+      "openai-docs"
+    ],
+    "expect": "usdt-pay",
+    "split": "train"
+  },
+  {
+    "id": "alias-usdt-pay-222",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as integrate USDT crypto payment flow; avoid the adjacent workflow",
+    "note": "usdt-pay: en neighbor contrast",
+    "notExpect": [
+      "openai-docs"
+    ],
+    "expect": "usdt-pay",
+    "split": "train"
+  },
+  {
+    "id": "alias-rust-embedded-isr-223",
+    "lang": "zh",
+    "difficulty": "easy",
+    "task": "请帮我处理 Rust 裸机中断固件",
+    "note": "rust-embedded-isr: expanded zh direct",
+    "notExpect": [
+      "systematic-debugging"
+    ],
+    "expect": "rust-embedded-isr",
+    "split": "train"
+  },
+  {
+    "id": "alias-rust-embedded-isr-224",
+    "lang": "en",
+    "difficulty": "easy",
+    "task": "Please work on Rust embedded ISR firmware",
+    "note": "rust-embedded-isr: expanded en direct",
+    "notExpect": [
+      "systematic-debugging"
+    ],
+    "expect": "rust-embedded-isr",
+    "split": "test"
+  },
+  {
+    "id": "alias-rust-embedded-isr-225",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "no_std interrupt handler bug，给我可执行结果",
+    "note": "rust-embedded-isr: expanded mixed request",
+    "notExpect": [
+      "systematic-debugging"
+    ],
+    "expect": "rust-embedded-isr",
+    "split": "train"
+  },
+  {
+    "id": "alias-rust-embedded-isr-226",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "目标是嵌入式中断，不是普通后端 debug",
+    "note": "rust-embedded-isr: expanded hard disambiguation",
+    "notExpect": [
+      "systematic-debugging"
+    ],
+    "expect": "rust-embedded-isr",
+    "split": "test"
+  },
+  {
+    "id": "alias-rust-embedded-isr-227",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我需要 no_std interrupt handler bug，不是相邻的另一类流程",
+    "note": "rust-embedded-isr: mixed neighbor contrast",
+    "notExpect": [
+      "systematic-debugging"
+    ],
+    "expect": "rust-embedded-isr",
+    "split": "test"
+  },
+  {
+    "id": "alias-rust-embedded-isr-228",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Please handle this as work on Rust embedded ISR firmware; avoid the adjacent workflow",
+    "note": "rust-embedded-isr: en neighbor contrast",
+    "notExpect": [
+      "systematic-debugging"
+    ],
+    "expect": "rust-embedded-isr",
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-229",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "解释 TDD 这个缩写是什么意思，不要启动测试流程",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-230",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "把 GitHub 这个词翻译成中文，不要打开 PR 或 review code",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "github-pr-review",
+      "code-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-231",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "我只是问 dashboard 这个英文单词怎么读，不要做数据看板",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-232",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "请总结这句话里的 reminder 一词，不要给我设置提醒",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "automation-reminders"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-233",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "不要联网搜索，只把下面这段英文改成更自然的中文",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "anysearch",
+      "web-research"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-234",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "我不是要 Hallmark audit，只想知道 hallmark 这个词的发音",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "hallmark"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-235",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要生成图片，解释一下 image generation 的概念",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-236",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要制作视频，只列出 video composition 的中文意思",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "video-composition"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-237",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要写技能说明，只解释 SKILL.md 是什么文件",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-238",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要开 worktree，只告诉我 git worktree 这个命令的用途",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "git-worktree",
+      "using-git-worktrees"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-239",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要发起 code review，只把这段 review 文案翻译成英文",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "code-review",
+      "requesting-code-review"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-240",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "这不是 UI audit，我只是问 UI 这两个字母代表什么",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-241",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "What is the capital of Japan?",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-01-242",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Recommend a quick dinner recipe without using any coding tools",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-243",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Translate this product tagline into French; no web research needed",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-244",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Explain what Reddit is in one sentence; do not research trends",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-245",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Summarize the word spreadsheet; do not open or analyze a workbook",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-246",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "What does PR mean in public relations, not GitHub?",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "github-pr-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-247",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "帮我写一句生日祝福，不要做文档排版",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-01-248",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "只是问 USDT 是什么，不要设计支付集成",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "usdt-pay"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-249",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "解释 TDD 这个缩写是什么意思，不要启动测试流程，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-02-250",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "把 GitHub 这个词翻译成中文，不要打开 PR 或 review code，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "github-pr-review",
+      "code-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-251",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我只是问 dashboard 这个英文单词怎么读，不要做数据看板，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-02-252",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "请总结这句话里的 reminder 一词，不要给我设置提醒，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "automation-reminders"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-02-253",
+    "lang": "zh",
+    "difficulty": "medium",
+    "task": "不要联网搜索，只把下面这段英文改成更自然的中文，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "anysearch",
+      "web-research"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-02-254",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我不是要 Hallmark audit，只想知道 hallmark 这个词的发音，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "hallmark"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-255",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要生成图片，解释一下 image generation 的概念，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-256",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要制作视频，只列出 video composition 的中文意思，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "video-composition"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-257",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要写技能说明，只解释 SKILL.md 是什么文件，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-258",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要开 worktree，只告诉我 git worktree 这个命令的用途，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "git-worktree",
+      "using-git-worktrees"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-259",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要发起 code review，只把这段 review 文案翻译成英文，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "code-review",
+      "requesting-code-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-260",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "这不是 UI audit，我只是问 UI 这两个字母代表什么，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-261",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "What is the capital of Japan?，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-262",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "Recommend a quick dinner recipe without using any coding tools，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-263",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "Translate this product tagline into French; no web research needed，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-264",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "Explain what Reddit is in one sentence; do not research trends，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-02-265",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "Summarize the word spreadsheet; do not open or analyze a workbook，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-02-266",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "What does PR mean in public relations, not GitHub?，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "github-pr-review"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-02-267",
+    "lang": "zh",
+    "difficulty": "medium",
+    "task": "帮我写一句生日祝福，不要做文档排版，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-02-268",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "只是问 USDT 是什么，不要设计支付集成，只要一句话回答",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "usdt-pay"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-03-269",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "解释 TDD 这个缩写是什么意思，不要启动测试流程，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-270",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "把 GitHub 这个词翻译成中文，不要打开 PR 或 review code，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "github-pr-review",
+      "code-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-271",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "我只是问 dashboard 这个英文单词怎么读，不要做数据看板，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-272",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "请总结这句话里的 reminder 一词，不要给我设置提醒，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "automation-reminders"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-273",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "不要联网搜索，只把下面这段英文改成更自然的中文，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "anysearch",
+      "web-research"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-274",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "我不是要 Hallmark audit，只想知道 hallmark 这个词的发音，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "hallmark"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-03-275",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要生成图片，解释一下 image generation 的概念，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-03-276",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要制作视频，只列出 video composition 的中文意思，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "video-composition"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-03-277",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要写技能说明，只解释 SKILL.md 是什么文件，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-278",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要开 worktree，只告诉我 git worktree 这个命令的用途，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "git-worktree",
+      "using-git-worktrees"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-279",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "不要发起 code review，只把这段 review 文案翻译成英文，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "code-review",
+      "requesting-code-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-280",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "这不是 UI audit，我只是问 UI 这两个字母代表什么，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-03-281",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "What is the capital of Japan?，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-03-282",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Recommend a quick dinner recipe without using any coding tools，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-283",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Translate this product tagline into French; no web research needed，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-03-284",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Explain what Reddit is in one sentence; do not research trends，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-285",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "Summarize the word spreadsheet; do not open or analyze a workbook，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-286",
+    "lang": "en",
+    "difficulty": "hard",
+    "task": "What does PR mean in public relations, not GitHub?，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "github-pr-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-287",
+    "lang": "zh",
+    "difficulty": "hard",
+    "task": "帮我写一句生日祝福，不要做文档排版，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-03-288",
+    "lang": "mixed",
+    "difficulty": "hard",
+    "task": "只是问 USDT 是什么，不要设计支付集成，不要调用工具",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "usdt-pay"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-289",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "解释 TDD 这个缩写是什么意思，不要启动测试流程，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "test-driven-development"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-290",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "把 GitHub 这个词翻译成中文，不要打开 PR 或 review code，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "github-pr-review",
+      "code-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-291",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我只是问 dashboard 这个英文单词怎么读，不要做数据看板，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "data-dashboard"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-292",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "请总结这句话里的 reminder 一词，不要给我设置提醒，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "automation-reminders"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-293",
+    "lang": "zh",
+    "difficulty": "medium",
+    "task": "不要联网搜索，只把下面这段英文改成更自然的中文，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "anysearch",
+      "web-research"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-294",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "我不是要 Hallmark audit，只想知道 hallmark 这个词的发音，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "hallmark"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-295",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要生成图片，解释一下 image generation 的概念，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "image-generation"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-04-296",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要制作视频，只列出 video composition 的中文意思，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "video-composition"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-297",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要写技能说明，只解释 SKILL.md 是什么文件，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "writing-skills"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-298",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要开 worktree，只告诉我 git worktree 这个命令的用途，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "git-worktree",
+      "using-git-worktrees"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-299",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "不要发起 code review，只把这段 review 文案翻译成英文，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "code-review",
+      "requesting-code-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-300",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "这不是 UI audit，我只是问 UI 这两个字母代表什么，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "ui-ux-review",
+      "frontend-design"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-301",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "What is the capital of Japan?，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-302",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "Recommend a quick dinner recipe without using any coding tools，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-303",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "Translate this product tagline into French; no web research needed，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "web-research",
+      "anysearch"
+    ],
+    "expect": null,
+    "split": "test"
+  },
+  {
+    "id": "alias-negative-04-304",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "Explain what Reddit is in one sentence; do not research trends，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "agent-reach",
+      "last30days"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-305",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "Summarize the word spreadsheet; do not open or analyze a workbook，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "spreadsheet-analysis"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-306",
+    "lang": "en",
+    "difficulty": "medium",
+    "task": "What does PR mean in public relations, not GitHub?，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "github-pr-review"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-307",
+    "lang": "zh",
+    "difficulty": "medium",
+    "task": "帮我写一句生日祝福，不要做文档排版，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "document-editing"
+    ],
+    "expect": null,
+    "split": "train"
+  },
+  {
+    "id": "alias-negative-04-308",
+    "lang": "mixed",
+    "difficulty": "medium",
+    "task": "只是问 USDT 是什么，不要设计支付集成，这是普通语言问题",
+    "note": "expanded negative/meta-language guard",
+    "notExpect": [
+      "usdt-pay"
+    ],
+    "expect": null,
+    "split": "train"
   }
 ]

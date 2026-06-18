@@ -1,0 +1,119 @@
+[
+  {
+    "name": "agent-reach",
+    "description": "MUST USE when user wants to 调研/research/搜索/search/查/找/look up anything on the internet — e.g. 全网调研 X / 帮我调研一下 X / 查一下 X / 搜搜 X / 看看大家怎么评价 X / X 上有什么讨论 / research this topic。\nAlso MUST USE when user mentions any platform or shares any URL/链接: 小红书/xiaohongshu/xhs, Twitter/推特/X, B站/bilibili, Reddit, V2EX, LinkedIn/领英/招聘/求职/jobs, YouTube, GitHub code search, 小宇宙播客, 雪球/股票行情, RSS feeds, or any web URL.\n13 platforms, multi-backend routing (OpenCLI / per-platform CLIs / APIs). Zero config for 6 channels. Run `agent-reach doctor --json` to see which backend serves each platform right now.\nNOT for: 写报告/数据分析/翻译等内容加工（本 skill 只负责从互联网获取内容）； 发帖/评论/点赞等写操作；已有专门 skill 的平台（先用专门 skill）。\n【路由方式】SKILL.md 包含路由表和常用命令，复杂场景需按需阅读对应分类的 references/*.md。 分类：search / social (小红书/推特/B站/V2EX/Reddit) / career(LinkedIn) / dev(github) / web(网页/文章/RSS) / video(YouTube/B站/播客)。",
+    "keywords": []
+  },
+  {
+    "name": "anysearch",
+    "description": "Real-time search engine supporting web search, vertical domain search, parallel batch search, and URL content extraction.",
+    "keywords": []
+  },
+  {
+    "name": "brainstorming",
+    "description": "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.",
+    "keywords": []
+  },
+  {
+    "name": "dispatching-parallel-agents",
+    "description": "Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies",
+    "keywords": []
+  },
+  {
+    "name": "executing-plans",
+    "description": "Use when you have a written implementation plan to execute in a separate session with review checkpoints",
+    "keywords": []
+  },
+  {
+    "name": "finishing-a-development-branch",
+    "description": "Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup",
+    "keywords": []
+  },
+  {
+    "name": "frontend-design",
+    "description": "Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+    "keywords": []
+  },
+  {
+    "name": "hallmark",
+    "description": "Anti-AI-slop design skill for greenfield pages, audits, redesigns, and design extraction from URLs or screenshots. Use when the user asks to build a new app or landing page, wants to redesign something, invokes Hallmark by name, or uses audit/redesign/study.",
+    "keywords": []
+  },
+  {
+    "name": "impeccable",
+    "description": "Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Handles UX review, visual hierarchy, information architecture, cognitive load, accessibility, performance, responsive behavior, theming, anti-patterns, typography, fonts, spacing, layout, alignment, color, motion, micro-interactions, UX copy, error states, edge cases, i18n, and reusable design systems or tokens. Also use for bland designs that need to become bolder or more delightful, loud designs that should become quieter, live browser iteration on UI elements, or ambitious visual effects that should feel technically extraordinary. Not for backend-only or non-UI tasks.",
+    "keywords": []
+  },
+  {
+    "name": "last30days",
+    "description": "Research a topic from the last 30 days on Reddit + X + Web, become an expert, and write copy-paste-ready prompts for the user's target tool.",
+    "keywords": []
+  },
+  {
+    "name": "receiving-code-review",
+    "description": "Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or technically questionable - requires technical rigor and verification, not performative agreement or blind implementation",
+    "keywords": []
+  },
+  {
+    "name": "requesting-code-review",
+    "description": "Use when completing tasks, implementing major features, or before merging to verify work meets requirements",
+    "keywords": []
+  },
+  {
+    "name": "rust-embedded-isr",
+    "description": "Write safe interrupt handlers (ISRs) in Rust embedded/bare-metal firmware",
+    "keywords": [
+      "isr",
+      "midi",
+      "中断",
+      "中断处理",
+      "固件",
+      "嵌入式"
+    ]
+  },
+  {
+    "name": "subagent-driven-development",
+    "description": "Use when executing implementation plans with independent tasks in the current session",
+    "keywords": []
+  },
+  {
+    "name": "systematic-debugging",
+    "description": "Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes",
+    "keywords": []
+  },
+  {
+    "name": "test-driven-development",
+    "description": "Use when implementing any feature or bugfix, before writing implementation code",
+    "keywords": []
+  },
+  {
+    "name": "ui-design-brain",
+    "description": "Generate production-grade UI using real component patterns and best practices from 60+ documented interface components. Use when the user asks to build web interfaces, pages, dashboards, forms, navigation, or any UI — ensures modern, minimal, SaaS-quality output grounded in design system conventions rather than generic AI patterns.",
+    "keywords": []
+  },
+  {
+    "name": "using-git-worktrees",
+    "description": "Use when starting feature work that needs isolation from current workspace or before executing implementation plans - ensures an isolated workspace exists via native tools or git worktree fallback",
+    "keywords": []
+  },
+  {
+    "name": "using-superpowers",
+    "description": "Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions",
+    "keywords": []
+  },
+  {
+    "name": "verification-before-completion",
+    "description": "Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always",
+    "keywords": []
+  },
+  {
+    "name": "writing-plans",
+    "description": "Use when you have a spec or requirements for a multi-step task, before touching code",
+    "keywords": []
+  },
+  {
+    "name": "writing-skills",
+    "description": "Use when creating new skills, editing existing skills, or verifying skills work before deployment",
+    "keywords": []
+  }
+]

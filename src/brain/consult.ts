@@ -163,11 +163,22 @@ export class Brain {
   }
 
   feedback(f: FeedbackRequestT): void {
-    this.ledger.recordFeedback(f)
-    // Negative learning: a 'fail' tied to a task means this skill was wrong for that task-shape.
-    // Record it so the matcher suppresses this skill for the same kind of task next time.
-    if (f.outcome === 'fail' && f.task && this.deps.misfits) {
+    // 'reject' = the suggestion was irrelevant (agent's instant judgment). It must NOT touch the
+    // skill's global strength — the skill may be excellent for its real domain. It only records a
+    // skill×task-shape misfit so the matcher stops offering it for THIS kind of task.
+    if (f.outcome === 'reject') {
+      if (f.task && this.deps.misfits) this.deps.misfits.record(f.task, f.skill)
+      return
+    }
+    // ok / fail adjust the skill's strength as before.
+    this.ledger.recordFeedback({ skill: f.skill, tool: f.tool, outcome: f.outcome, ...(f.model ? { model: f.model } : {}), ...(f.note ? { note: f.note } : {}) })
+    if (!f.task || !this.deps.misfits) return
+    if (f.outcome === 'fail') {
+      // used but failed for this task-shape → record a misfit.
       this.deps.misfits.record(f.task, f.skill)
+    } else {
+      // ok → positive evidence reverses any prior misfit on this shape (self-healing).
+      this.deps.misfits.clear(f.task, f.skill)
     }
   }
 

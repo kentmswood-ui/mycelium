@@ -30,10 +30,15 @@ export const ConsultResponse = z.discriminatedUnion('verdict', [
 export const FeedbackRequest = z.object({
   skill: z.string().min(1),
   tool: z.string().min(1),
-  outcome: z.enum(['ok', 'fail']),
+  /** ok = skill worked (strengthens + clears any misfit for this task-shape);
+   *  fail = skill was used but failed (weakens + records a misfit);
+   *  reject = the suggested skill was IRRELEVANT to the task (the agent's instant judgment). This
+   *  does NOT weaken the skill's global strength — the skill may be great for its real domain — it
+   *  only records a skill×task-shape misfit so the matcher stops suggesting it for THIS kind of task. */
+  outcome: z.enum(['ok', 'fail', 'reject']),
   model: z.string().optional(),
-  /** the task the skill was applied to; when outcome is 'fail', records a skill×task-shape misfit
-   *  so the matcher stops suggesting this skill for that kind of task. */
+  /** the task the skill was applied to / suggested for. Required for fail/reject to learn the
+   *  skill×task-shape misfit; for ok it clears a prior misfit on that shape. */
   task: z.string().optional(),
   note: z.string().optional(),
 })

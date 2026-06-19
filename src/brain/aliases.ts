@@ -44,6 +44,7 @@ export const DEFAULT_ALIASES: Record<string, string[]> = {
   'document-editing': ['可审阅文档', '文档编辑', 'Word 文档'],
   'ui-ux-review': ['界面审查', '体验审查'],
   'code-review': ['本地代码', '当前工作树', '代码风险', '缺测试'],
+  'loop-goal': ['循环', '跑到完成', '自动迭代', '反复验证', '迭代直到完成', '自治循环', '一直做到', '直到通过', '目标循环', '运行到完成'],
 }
 
 /**
@@ -86,6 +87,7 @@ export const SKILL_KEYWORDS_EN: Record<string, string[]> = {
   'ui-ux-review': ['ui review', 'ux review', 'interface audit'],
   'code-review': ['local code review', 'current worktree'],
   'github-pr-review': ['github pr comments', 'checks summary'],
+  'loop-goal': ['loop', 'run-until-done', 'autonomous loop', 'iterate', 'iterative', 'until tests pass', 'until complete', 'keep working', 'verifiable goal', 'agent loop', 'run until green'],
 }
 
 /** Coarse domain per skill. NOT a hard gate (a task isn't domain-classified) — surfaced in the
@@ -99,6 +101,7 @@ export const SKILL_DOMAINS: Record<string, Domain> = {
   'using-git-worktrees': 'dev', 'writing-skills': 'meta', 'using-superpowers': 'meta',
   'frontend-design': 'design', 'ui-design-brain': 'design', impeccable: 'design', hallmark: 'design',
   anysearch: 'research', last30days: 'research', 'agent-reach': 'research',
+  'loop-goal': 'meta',
 }
 
 /**

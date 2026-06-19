@@ -3,6 +3,7 @@ import { SkillRepository } from '../../src/skills/repository.js'
 import { SynapseLedger } from '../../src/ledger/synapse.js'
 import { KeywordMatcher } from '../../src/brain/matcher.js'
 import { MisfitStore } from '../../src/brain/misfits.js'
+import { signatureOf } from '../../src/brain/recurrence.js'
 import { openDb } from '../../src/ledger/db.js'
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
@@ -89,4 +90,43 @@ test('an ok outcome does NOT suppress', () => {
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
+})
+
+test('reject records a misfit WITHOUT weakening the skill strength', () => {
+  const db = openDb(':memory:')
+  const led = new SynapseLedger(db)
+  const misfits = new MisfitStore(db)
+  // seed strength so a fail vs reject difference is observable
+  led.recordFeedback({ skill: 'frontend-design', tool: 'codex', outcome: 'ok' })
+  const before = led.strengthOf('frontend-design')
+  const brain = new Brain(new SkillRepository(mkdtempSync(join(tmpdir(), 'myc-x-'))), new KeywordMatcher(), led, { misfits })
+  const task = 'explain what these two medications are used for'
+  brain.feedback({ skill: 'frontend-design', tool: 'codex', outcome: 'reject', task })
+  // strength untouched (the skill is fine for design; just irrelevant here)
+  expect(led.strengthOf('frontend-design')).toBe(before)
+  // but it is now suppressed for this task-shape
+  expect(misfits.suppressedFor(task).has('frontend-design')).toBe(true)
+})
+
+test('a later ok REVERSES a prior misfit (self-healing)', () => {
+  const db = openDb(':memory:')
+  const misfits = new MisfitStore(db)
+  const brain = new Brain(new SkillRepository(mkdtempSync(join(tmpdir(), 'myc-y-'))), new KeywordMatcher(), new SynapseLedger(db), { misfits })
+  const task = 'integrate usdt payment into billing'
+  brain.feedback({ skill: 'usdt-pay', tool: 'codex', outcome: 'reject', task })
+  expect(misfits.suppressedFor(task).has('usdt-pay')).toBe(true)
+  // positive evidence clears the mark
+  brain.feedback({ skill: 'usdt-pay', tool: 'codex', outcome: 'ok', task })
+  expect(misfits.suppressedFor(task).has('usdt-pay')).toBe(false)
+})
+
+test('a stale misfit (past the decay window) no longer suppresses', () => {
+  const db = openDb(':memory:')
+  const misfits = new MisfitStore(db)
+  const task = 'some recurring task shape alpha beta'
+  misfits.record(task, 'usdt-pay')
+  expect(misfits.suppressedFor(task).has('usdt-pay')).toBe(true)
+  // backdate the misfit 60 days → outside the 30-day decay window → self-healed
+  db.prepare("UPDATE skill_misfits SET last_at = datetime('now','-60 days') WHERE signature=?").run(signatureOf(task))
+  expect(misfits.suppressedFor(task).has('usdt-pay')).toBe(false)
 })

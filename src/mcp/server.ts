@@ -51,11 +51,11 @@ export async function startMcpServer(brain: Brain): Promise<void> {
     'feedback',
     {
       description:
-        'Report task outcome for a skill so the brain can learn. Pass `task` (the task the skill was applied to) — on outcome "fail" it records a skill×task-shape misfit so this skill stops being suggested for that kind of task.',
+        'Report a skill outcome so the brain learns. Pass `task` (what the skill was for). Outcomes: "ok" (worked — strengthens it and clears any misfit for this task-shape), "fail" (used but failed — weakens it and records a misfit), "reject" (the suggested skill was IRRELEVANT to the task — does NOT weaken the skill, only records a skill×task-shape misfit so it stops being suggested for THIS kind of task). Call "reject" the moment a reuse suggestion is off-topic.',
       inputSchema: {
         skill: z.string(),
         tool: z.string(),
-        outcome: z.enum(['ok', 'fail']),
+        outcome: z.enum(['ok', 'fail', 'reject']),
         model: z.string().optional(),
         task: z.string().optional(),
         note: z.string().optional(),

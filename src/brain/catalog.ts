@@ -9,6 +9,11 @@ import type { DB } from '../ledger/db.js'
  *
  * Safety is enforced HERE, in Mycelium, not by the crawler: every entry is risk-classified and
  * tiered. A red entry is cataloged for awareness but can never be auto-installed.
+ *
+ * Two-pass design: the first crawl ingests name+purpose (thin scan). A deep re-scan resubmits the
+ * full SKILL.md body as `scanText`; `ingest` upserts — same content_hash → re-classify + update —
+ * so the verdict sharpens as more text is seen. This is how false positives get rescued and hidden
+ * malware gets caught.
  */
 
 export type Tier = 'green' | 'yellow' | 'red'
@@ -23,21 +28,29 @@ const SOURCE_TRUST: Record<string, 'high' | 'medium'> = {
 }
 
 /**
- * Dangerous-pattern → risk level. Scanned against the skill's name+purpose+keywords (and any
- * body excerpt the crawler includes). L3 = can own the machine; L2 = runs code / installs; these
- * gate a skill to the red tier (never auto-installable) regardless of source.
+ * Dangerous-pattern detectors. `hard:true` patterns gate a skill to RED (never auto-installable)
+ * regardless of source — they indicate the skill can own the machine, move money, or exfiltrate.
+ * `hard:false` patterns are NOTED (raise the risk level / shown as flags) but only push to yellow,
+ * because tons of legitimate dev skills merely MENTION npm/network/tokens in their docs. Patterns
+ * are tightened to fire on actual dangerous USAGE, not incidental mention (the old classifier
+ * flagged `bun-development` L3 for the words "rm -rf" appearing in prose).
  */
-const RISK_PATTERNS: { re: RegExp; label: string; level: RiskLevel }[] = [
-  { re: /\|\s*(ba)?sh\b|curl\s+\S+\s*\|\s*(ba)?sh|wget\s+\S+\s*\|\s*(ba)?sh/i, label: 'pipe-to-shell', level: 'L3' },
-  { re: /\brm\s+-rf\b/i, label: 'rm -rf', level: 'L3' },
-  { re: /\b(wallet|private[_-]?key|seed[_-]?phrase|banking|payment\s+api|send\s+(funds|crypto))\b/i, label: 'financial', level: 'L3' },
-  { re: /\b(sudo|root\s+access|chmod\s+777|setuid)\b/i, label: 'privilege', level: 'L3' },
-  { re: /\bexfiltrat|upload\s+.*(env|secret|credential)/i, label: 'exfiltration', level: 'L3' },
-  { re: /\beval\s*\(|new\s+Function\s*\(|exec\s*\(/i, label: 'dynamic-exec', level: 'L2' },
-  { re: /\b(npm\s+install|pip\s+install|apt\s+(get\s+)?install|brew\s+install)\b/i, label: 'installs-packages', level: 'L2' },
-  { re: /base64\s+-d|atob\(/i, label: 'base64-decode', level: 'L2' },
-  { re: /\b(token|api[_-]?key|secret|password)\b/i, label: 'credential-handling', level: 'L1' },
-  { re: /\b(http|fetch|request|network|download)\b/i, label: 'network', level: 'L1' },
+const RISK_PATTERNS: { re: RegExp; label: string; level: RiskLevel; hard: boolean }[] = [
+  // ── HARD: own the machine / steal / move money ──
+  { re: /(curl|wget|fetch)(\s+\S+)?\s*\|\s*(ba|z|fi)?sh\b/i, label: 'pipe-to-shell', level: 'L3', hard: true },
+  { re: /\brm\s+-rf\s+(\/|~|\$HOME|\*|%USERPROFILE%|C:\\)/i, label: 'rm -rf dangerous target', level: 'L3', hard: true },
+  { re: /\b(bash|sh|nc|ncat)\s+-i\b|\/dev\/tcp\/|reverse\s+shell|bind\s+shell/i, label: 'reverse-shell', level: 'L3', hard: true },
+  { re: /(send|transfer|withdraw|drain|sweep)\s+(funds|crypto|tokens|money|balance)|private[_-]?key|seed\s+phrase|mnemonic/i, label: 'financial-action', level: 'L3', hard: true },
+  { re: /(curl|wget|fetch|http[s]?|post|upload)[^\n]{0,60}(\.env|id_rsa|\.ssh|credentials|secret|api[_-]?key|token)/i, label: 'credential-exfil', level: 'L3', hard: true },
+  { re: /\bexfiltrat/i, label: 'exfiltration', level: 'L3', hard: true },
+  { re: /(ignore|disregard|override)\s+(previous|all|your)\s+(instructions|prompt|rules)|system\s+prompt\s+(leak|override)/i, label: 'prompt-injection', level: 'L3', hard: true },
+  { re: /\b(chmod\s+777|setuid|sudo\s+su|privilege\s+escalation)\b/i, label: 'privilege', level: 'L3', hard: true },
+  // ── SOFT: noted, but not auto-red (legit skills mention these) ──
+  { re: /\beval\s*\(|new\s+Function\s*\(/i, label: 'dynamic-exec', level: 'L2', hard: false },
+  { re: /\b(npm|pip|pip3|apt|brew|cargo|gem)\s+(install|add|i)\b/i, label: 'installs-packages', level: 'L1', hard: false },
+  { re: /base64\s+-d|atob\(/i, label: 'base64-decode', level: 'L2', hard: false },
+  { re: /\b(api[_-]?key|secret|password|access[_-]?token)\b/i, label: 'credential-handling', level: 'L1', hard: false },
+  { re: /\b(https?:\/\/|fetch\(|axios|requests\.(get|post))/i, label: 'network', level: 'L1', hard: false },
 ]
 
 export interface CatalogInput {
@@ -48,7 +61,7 @@ export interface CatalogInput {
   domain?: string
   keywords?: string[]
   stars?: number
-  /** optional extra text (body excerpt) to scan for risk beyond name/purpose */
+  /** optional extra text (full SKILL.md body) to scan for risk beyond name/purpose */
   scanText?: string
 }
 
@@ -66,19 +79,21 @@ export function classify(input: CatalogInput): { tier: Tier; risk: RiskLevel; ri
   const hay = `${input.name} ${input.purpose ?? ''} ${(input.keywords ?? []).join(' ')} ${input.scanText ?? ''}`
   const flags: string[] = []
   let risk: RiskLevel = 'L0'
+  let hardHit = false
   for (const p of RISK_PATTERNS) {
     if (p.re.test(hay)) {
       flags.push(p.label)
+      if (p.hard) hardHit = true
       if (LEVEL_ORDER.indexOf(p.level) > LEVEL_ORDER.indexOf(risk)) risk = p.level
     }
   }
   const trust = SOURCE_TRUST[input.source] ?? 'medium'
-  // red: anything that can run code / own the machine, regardless of source.
-  // green: high-trust source AND no risk above L1.
-  // yellow: everything else (clean-ish, but install needs explicit approval).
+  // red: a HARD danger signal, regardless of source — never auto-installable.
+  // green: high-trust source AND no hard signal (soft mentions are fine for official skills).
+  // yellow: everything else — installable only with explicit approval.
   let tier: Tier
-  if (risk === 'L3' || risk === 'L2') tier = 'red'
-  else if (trust === 'high' && (risk === 'L0' || risk === 'L1')) tier = 'green'
+  if (hardHit) tier = 'red'
+  else if (trust === 'high') tier = 'green'
   else tier = 'yellow'
   return { tier, risk, riskFlags: flags }
 }
@@ -91,31 +106,45 @@ function hashOf(input: CatalogInput): string {
 export class CatalogStore {
   constructor(private db: DB) {}
 
-  /** Ingest one entry (dedupe by content hash). Returns {inserted} — false if it was a duplicate. */
-  ingest(input: CatalogInput): { inserted: boolean; entry: CatalogEntry } {
+  /**
+   * Ingest/upsert one entry (dedupe by content hash). First sight → insert. Same hash again (a deep
+   * re-scan carrying full `scanText`) → re-classify and UPDATE the verdict + enrich metadata.
+   * Returns which happened.
+   */
+  ingest(input: CatalogInput): { inserted: boolean; updated: boolean; entry: CatalogEntry } {
     const contentHash = hashOf(input)
     const { tier, risk, riskFlags } = classify(input)
     const entry: CatalogEntry = { ...input, contentHash, tier, risk, riskFlags }
-    const info = this.db
+    const existing = this.db.prepare('SELECT content_hash FROM catalog WHERE content_hash=?').get(contentHash)
+    if (existing) {
+      this.db
+        .prepare(
+          `UPDATE catalog SET tier=?, risk=?, risk_flags=?,
+             url=COALESCE(?,url), domain=COALESCE(?,domain),
+             keywords=CASE WHEN ?='[]' THEN keywords ELSE ? END,
+             stars=COALESCE(?,stars)
+           WHERE content_hash=?`,
+        )
+        .run(
+          tier, risk, riskFlags.join(','),
+          input.url ?? null, input.domain ?? null,
+          JSON.stringify(input.keywords ?? []), JSON.stringify(input.keywords ?? []),
+          input.stars ?? null, contentHash,
+        )
+      return { inserted: false, updated: true, entry }
+    }
+    this.db
       .prepare(
-        `INSERT OR IGNORE INTO catalog
+        `INSERT INTO catalog
            (content_hash, name, purpose, source, url, domain, keywords, tier, risk, risk_flags, stars)
          VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
       )
       .run(
-        contentHash,
-        input.name,
-        input.purpose ?? null,
-        input.source,
-        input.url ?? null,
-        input.domain ?? null,
-        JSON.stringify(input.keywords ?? []),
-        tier,
-        risk,
-        riskFlags.join(','),
-        input.stars ?? null,
+        contentHash, input.name, input.purpose ?? null, input.source, input.url ?? null,
+        input.domain ?? null, JSON.stringify(input.keywords ?? []), tier, risk,
+        riskFlags.join(','), input.stars ?? null,
       )
-    return { inserted: info.changes > 0, entry }
+    return { inserted: true, updated: false, entry }
   }
 
   /** Aggregate counts for the cockpit (total, by tier, by source). */

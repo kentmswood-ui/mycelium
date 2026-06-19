@@ -36,16 +36,15 @@ export function buildMcpHandlers(brain: Brain, catalog?: CatalogStore) {
       const p = CatalogIngestRequest.safeParse(raw)
       if (!p.success) return text(`invalid catalog_ingest: ${p.error.message}`, true)
       let inserted = 0
-      let dup = 0
+      let updated = 0
       const byTier: Record<string, number> = { green: 0, yellow: 0, red: 0 }
       for (const e of p.data.entries) {
         const r = catalog.ingest({ ...e, source: p.data.source })
-        if (r.inserted) {
-          inserted++
-          byTier[r.entry.tier] = (byTier[r.entry.tier] ?? 0) + 1
-        } else dup++
+        if (r.inserted) inserted++
+        else if (r.updated) updated++
+        byTier[r.entry.tier] = (byTier[r.entry.tier] ?? 0) + 1
       }
-      return text(JSON.stringify({ ok: true, inserted, duplicates: dup, byTier }))
+      return text(JSON.stringify({ ok: true, inserted, updated, byTier }))
     },
   }
 }

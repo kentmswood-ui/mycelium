@@ -9,6 +9,7 @@ test('openDb creates tables idempotently', () => {
     .all()
     .map((r: any) => r.name)
   expect(tables).toEqual([
+    'catalog',
     'consult_log',
     'discoveries',
     'feedback',

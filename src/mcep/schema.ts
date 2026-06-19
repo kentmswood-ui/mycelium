@@ -61,7 +61,29 @@ export const RegisterSkillRequest = z.object({
   sourceUrl: z.string().optional(),
 })
 
+// An external crawl (Codex over anthropics/skills, antigravity-awesome-skills, skills.sh, skillsmp)
+// ingests the ecosystem catalog in batches. Mycelium classifies risk + tier on its side — the
+// crawler only supplies raw metadata, never the safety verdict.
+export const CatalogIngestRequest = z.object({
+  source: z.enum(['anthropics', 'antigravity', 'skills.sh', 'skillsmp']),
+  entries: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        purpose: z.string().optional(),
+        url: z.string().optional(),
+        domain: z.string().optional(),
+        keywords: z.array(z.string()).optional(),
+        stars: z.number().optional(),
+        scanText: z.string().optional(),
+      }),
+    )
+    .min(1)
+    .max(500),
+})
+
 export type ConsultRequestT = z.infer<typeof ConsultRequest>
 export type ConsultResponseT = z.infer<typeof ConsultResponse>
 export type FeedbackRequestT = z.infer<typeof FeedbackRequest>
 export type RegisterSkillRequestT = z.infer<typeof RegisterSkillRequest>
+export type CatalogIngestRequestT = z.infer<typeof CatalogIngestRequest>

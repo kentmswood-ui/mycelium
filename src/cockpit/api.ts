@@ -50,6 +50,8 @@ export interface CockpitExtras {
   registerSkill?: SkillRegistrar
   /** for the one-line NL feedback endpoint */
   feedbackLedger?: { recordFeedback(f: { skill: string; tool: string; outcome: 'ok' | 'fail'; note?: string }): void }
+  /** ecosystem catalog (read-only stats for the cockpit) */
+  catalog?: { stats(): { total: number; byTier: Record<string, number>; bySource: Record<string, number> } }
 }
 
 export function createCockpit(
@@ -239,6 +241,11 @@ export function createCockpit(
     if (!days) return res.status(400).json({ error: 'days must be a positive integer' })
     res.json({ ok: true, deleted: ledger.pruneLogs(days) })
   })
+
+  // Ecosystem catalog stats (knowledge map of skills out in the world, by tier + source).
+  if (extras.catalog) {
+    app.get('/api/catalog/stats', (_req, res) => res.json(extras.catalog!.stats()))
+  }
 
   // Skill management. ADD goes through the same contract-validated path as register_skill.
   // ARCHIVE is a reversible soft-delete; it refuses protected (boot-present, cc-switch-shared)

@@ -12,6 +12,7 @@ import { DiscoveryStore } from './brain/discoveries.js'
 import { SettingsStore } from './brain/settings.js'
 import { RecurrenceLedger } from './brain/recurrence.js'
 import { MisfitStore } from './brain/misfits.js'
+import { CatalogStore } from './brain/catalog.js'
 import { EvolutionDetector } from './brain/evolution.js'
 import { Pruner } from './brain/pruning.js'
 import { createCockpit } from './cockpit/api.js'
@@ -29,6 +30,7 @@ export interface Core {
   settings: SettingsStore
   recurrence: RecurrenceLedger
   misfits: MisfitStore
+  catalog: CatalogStore
   pipeline: SearchPipeline
   evolution: EvolutionDetector
   pruner: Pruner
@@ -63,6 +65,7 @@ export function bootCore(opts: BootOpts = {}): Core {
   const settings = new SettingsStore(db)
   const recurrence = new RecurrenceLedger(db)
   const misfits = new MisfitStore(db)
+  const catalog = new CatalogStore(db)
   const pipeline = new SearchPipeline(discoveries, settings, repo, cfg.skillsDir, proposals, {
     ...(opts.search ? { search: opts.search } : {}),
     ...(opts.extract ? { extract: opts.extract } : {}),
@@ -97,6 +100,7 @@ export function bootCore(opts: BootOpts = {}): Core {
     settings,
     recurrence,
     misfits,
+    catalog,
     pipeline,
     evolution,
     pruner,
@@ -139,6 +143,7 @@ export async function main(): Promise<void> {
     feedbackLedger: core.ledger,
     isProtected: (name) => core.ledger.isProtected(name),
     registerSkill: (req) => core.brain.registerSkill(req),
+    catalog: core.catalog,
   })
   const server = app.listen(cfg.cockpitPort, cfg.bindAddr, () =>
     console.error(`cockpit on http://${cfg.bindAddr}:${cfg.cockpitPort}`),
@@ -151,7 +156,7 @@ export async function main(): Promise<void> {
     }
   })
 
-  await startMcpServer(core.brain)
+  await startMcpServer(core.brain, core.catalog)
 }
 
 // run only when invoked directly

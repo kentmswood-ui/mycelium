@@ -17,3 +17,5 @@ _*.mjs
 /VERIFY.md
 /docs/superpowers/
 /.cache/embedding-eval/
+# internal codex task briefs — kept on disk, never published
+/docs/tasks/

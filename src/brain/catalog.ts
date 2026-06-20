@@ -41,7 +41,24 @@ export const SEVERE_CAPS = new Set([
   'financial-action',
   'exfiltration',
   'prompt-injection',
+  'path-traversal',
 ])
+
+/**
+ * Detect path-traversal / arbitrary-file-read intent in stored text. Deliberately requires an
+ * EXPLICIT phrase or a CHAINED `../../` (a single `../` is a normal relative path/import and must
+ * not trip). Used to re-derive the severe `path-traversal` cap on already-assessed rows whose crawl
+ * predated that capability label — fixes the file-path-traversal gap an AV catch exposed.
+ */
+export function hasPathTraversal(text: string): boolean {
+  if (!text) return false
+  return (
+    /\b(path|directory)\s+traversal\b/i.test(text) ||
+    /\b(read|access|include|fetch)\s+arbitrary\s+files?\b/i.test(text) ||
+    /\blocal\s+file\s+inclusion\b|\bLFI\b/.test(text) ||
+    /(\.\.[\/\\]){2,}|%2e%2e(%2f|%5c)/i.test(text)
+  )
+}
 
 /**
  * Dangerous-pattern detectors. `hard:true` patterns gate a skill to RED (never auto-installable)
@@ -202,12 +219,16 @@ export class CatalogStore {
     const hasSevere = caps.some((c) => SEVERE_CAPS.has(c))
     const trust = SOURCE_TRUST[row.source] ?? 'medium'
 
-    // VERDICT (Mycelium owns this): only a body that PERFORMS a severe capability is red. A skill
-    // that DETECTS/audits or only DISCUSSES danger is not itself dangerous → tier by source trust.
+    // VERDICT (Mycelium owns this). HARD RULE learned from a real AV catch: if the body actually
+    // carries a SEVERE capability (a working reverse shell, exfil code, path-traversal exploit…),
+    // it is red REGARDLESS of klass. "I'm just teaching/detecting the attack" is exactly the cover
+    // a malicious skill hides behind, and an agent that auto-loads such a body can be prompt-injected
+    // into running the payload. The detects/discusses rescue applies ONLY to soft capabilities
+    // (a security doc that merely mentions credentials/network) — never to a severe payload.
     let tier: Tier
-    if (input.klass === 'performs' && hasSevere) tier = 'red'
-    else if (input.klass === 'performs' && caps.length > 0) tier = trust === 'high' ? 'green' : 'yellow'
-    else tier = trust === 'high' ? 'green' : 'yellow' // detects / discusses / benign performs
+    if (hasSevere) tier = 'red'
+    else if (caps.length > 0 && input.klass === 'performs') tier = trust === 'high' ? 'green' : 'yellow'
+    else tier = trust === 'high' ? 'green' : 'yellow' // detects / discusses / benign soft performs
 
     const risk: RiskLevel = hasSevere ? 'L3' : caps.length ? 'L2' : 'L0'
     this.db
@@ -228,6 +249,46 @@ export class CatalogStore {
     const byClass: Record<string, number> = {}
     for (const r of rows) byClass[r.k] = r.c
     return { assessed, byClass }
+  }
+
+  /**
+   * Re-derive tiers over ALREADY-ASSESSED rows locally — no Codex re-crawl. Applies the hardened
+   * verdict (any severe cap → red, regardless of klass) and BACKFILLS the `path-traversal` severe
+   * cap on rows whose crawl predated that label, by scanning stored name/purpose/evidence/scan_text.
+   * This is how an AV-exposed gap gets closed across the whole catalog for free. Returns counts.
+   */
+  reassessTiers(): { scanned: number; changed: number; toRed: number } {
+    const rows = this.db
+      .prepare(
+        "SELECT content_hash, name, purpose, source, tier, assess_class, assess_caps, assess_evidence, scan_text FROM catalog WHERE assess_class IS NOT NULL",
+      )
+      .all() as any[]
+    const upd = this.db.prepare('UPDATE catalog SET tier=?, risk=?, assess_caps=? WHERE content_hash=?')
+    let changed = 0
+    let toRed = 0
+    const tx = this.db.transaction(() => {
+      for (const r of rows) {
+        const caps = new Set<string>((r.assess_caps || '').split(',').map((c: string) => c.trim()).filter(Boolean))
+        // backfill path-traversal from stored text (label didn't exist at crawl time)
+        const text = `${r.name} ${r.purpose ?? ''} ${r.assess_evidence ?? ''} ${r.scan_text ?? ''}`
+        if (hasPathTraversal(text)) caps.add('path-traversal')
+        const capArr = [...caps]
+        const hasSevere = capArr.some((c) => SEVERE_CAPS.has(c))
+        const trust = SOURCE_TRUST[r.source] ?? 'medium'
+        let tier: Tier
+        if (hasSevere) tier = 'red'
+        else if (capArr.length > 0 && r.assess_class === 'performs') tier = trust === 'high' ? 'green' : 'yellow'
+        else tier = trust === 'high' ? 'green' : 'yellow'
+        const risk: RiskLevel = hasSevere ? 'L3' : capArr.length ? 'L2' : 'L0'
+        if (tier !== r.tier) {
+          changed++
+          if (tier === 'red') toRed++
+        }
+        upd.run(tier, risk, capArr.join(','), r.content_hash)
+      }
+    })
+    tx()
+    return { scanned: rows.length, changed, toRed }
   }
 
   /**

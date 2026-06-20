@@ -1,6 +1,6 @@
 {
   "name": "mycelium",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Mycelium — a resident, cross-tool skill brain for AI coding agents. Routes every task through one shared memory: reuse local skills, recall your notes, research curated sources, or build a new skill. Works across Claude Code, Codex, and more over MCP.",
   "type": "module",
   "main": "dist/index.js",

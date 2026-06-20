@@ -1,7 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
-import { ConsultRequest, FeedbackRequest, RegisterSkillRequest, CatalogIngestRequest } from '../mcep/schema.js'
+import { ConsultRequest, FeedbackRequest, RegisterSkillRequest, CatalogIngestRequest, CatalogAssessRequest } from '../mcep/schema.js'
 import type { Brain } from '../brain/consult.js'
 import type { CatalogStore } from '../brain/catalog.js'
 
@@ -45,6 +45,22 @@ export function buildMcpHandlers(brain: Brain, catalog?: CatalogStore) {
         byTier[r.entry.tier] = (byTier[r.entry.tier] ?? 0) + 1
       }
       return text(JSON.stringify({ ok: true, inserted, updated, byTier }))
+    },
+    async catalogAssess(raw: unknown): Promise<ToolResult> {
+      if (!catalog) return text('catalog not available', true)
+      const p = CatalogAssessRequest.safeParse(raw)
+      if (!p.success) return text(`invalid catalog_assess: ${p.error.message}`, true)
+      let applied = 0
+      let notFound = 0
+      const byTier: Record<string, number> = { green: 0, yellow: 0, red: 0 }
+      for (const e of p.data.entries) {
+        const r = catalog.assess({ ...e, source: p.data.source })
+        if (r.found) {
+          applied++
+          byTier[r.tier] = (byTier[r.tier] ?? 0) + 1
+        } else notFound++
+      }
+      return text(JSON.stringify({ ok: true, applied, notFound, byTier }))
     },
   }
 }
@@ -119,6 +135,27 @@ export async function startMcpServer(brain: Brain, catalog?: CatalogStore): Prom
       },
     },
     async (args) => (await h.catalogIngest(args)) as any,
+  )
+
+  server.registerTool(
+    'catalog_assess',
+    {
+      description:
+        'Submit a batch of SEMANTIC SECURITY VERDICTS for already-cataloged skills (a body-reading audit pass). For each skill you READ the full SKILL.md and report EVIDENCE — never a safety decision; Mycelium decides the tier. `klass`: "performs" (the body actually runs/instructs a dangerous capability), "detects" (it audits/scans/teaches detection OF danger — not itself dangerous), or "discusses" (merely mentions danger in prose). `caps`: which capability labels the body actually invokes, from this controlled set — pipe-to-shell, reverse-shell, rm-rf-dangerous, privilege-escalation, credential-exfil, financial-action, exfiltration, prompt-injection (severe); dynamic-exec, installs-packages, network, credential-handling, base64-decode (soft). `evidence`: a short quote. Match name+purpose EXACTLY as ingested (hash key). Returns {applied, notFound, byTier}.',
+      inputSchema: {
+        source: z.enum(['anthropics', 'antigravity', 'skills.sh', 'skillsmp']),
+        entries: z.array(
+          z.object({
+            name: z.string(),
+            purpose: z.string().optional(),
+            klass: z.enum(['performs', 'detects', 'discusses']),
+            caps: z.array(z.string()).optional(),
+            evidence: z.string().optional(),
+          }),
+        ),
+      },
+    },
+    async (args) => (await h.catalogAssess(args)) as any,
   )
 
   await server.connect(new StdioServerTransport())

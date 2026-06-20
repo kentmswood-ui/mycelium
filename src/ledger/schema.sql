@@ -118,6 +118,12 @@ CREATE TABLE IF NOT EXISTS catalog (
   risk TEXT NOT NULL DEFAULT 'L0',
   risk_flags TEXT,                 -- comma-joined dangerous-pattern labels, '' when clean
   stars INTEGER,
+  scan_text TEXT,                  -- capped full SKILL.md body (deep scan); enables local re-classify
+  -- semantic audit (Codex reads the body, Mycelium decides): 'performs' | 'detects' | 'discusses'
+  assess_class TEXT,
+  assess_evidence TEXT,            -- short quote/justification from the body
+  assess_caps TEXT,                -- comma-joined dangerous capabilities the body actually invokes
+  assessed_at TEXT,
   ingested_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE INDEX IF NOT EXISTS idx_catalog_name ON catalog(name);

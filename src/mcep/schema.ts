@@ -82,8 +82,28 @@ export const CatalogIngestRequest = z.object({
     .max(500),
 })
 
+// Semantic-audit verdicts from a body-reading crawl. Codex supplies EVIDENCE per skill (does the
+// body perform/detect/discuss danger + which capability labels it invokes + a quote); MYCELIUM
+// decides the tier. The crawler never sets safety. Keyed by name+purpose+source (ingest's hash).
+export const CatalogAssessRequest = z.object({
+  source: z.enum(['anthropics', 'antigravity', 'skills.sh', 'skillsmp']),
+  entries: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        purpose: z.string().optional(),
+        klass: z.enum(['performs', 'detects', 'discusses']),
+        caps: z.array(z.string()).optional(),
+        evidence: z.string().optional(),
+      }),
+    )
+    .min(1)
+    .max(500),
+})
+
 export type ConsultRequestT = z.infer<typeof ConsultRequest>
 export type ConsultResponseT = z.infer<typeof ConsultResponse>
 export type FeedbackRequestT = z.infer<typeof FeedbackRequest>
 export type RegisterSkillRequestT = z.infer<typeof RegisterSkillRequest>
 export type CatalogIngestRequestT = z.infer<typeof CatalogIngestRequest>
+export type CatalogAssessRequestT = z.infer<typeof CatalogAssessRequest>

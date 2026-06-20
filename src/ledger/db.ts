@@ -31,6 +31,22 @@ export function migrateDb(db: DB): void {
       db.exec(`ALTER TABLE ${table} ADD COLUMN model TEXT`)
     }
   }
+  // catalog may predate scan_text (added so deep-scan bodies persist for free local re-classify).
+  const catCols = (db.prepare('PRAGMA table_info(catalog)').all() as any[]).map((r) => r.name)
+  if (catCols.length && !catCols.includes('scan_text')) {
+    db.exec('ALTER TABLE catalog ADD COLUMN scan_text TEXT')
+  }
+  // catalog semantic-audit columns (Codex reads body → Mycelium re-classifies).
+  if (catCols.length) {
+    for (const [col, ddl] of [
+      ['assess_class', 'ALTER TABLE catalog ADD COLUMN assess_class TEXT'],
+      ['assess_evidence', 'ALTER TABLE catalog ADD COLUMN assess_evidence TEXT'],
+      ['assess_caps', 'ALTER TABLE catalog ADD COLUMN assess_caps TEXT'],
+      ['assessed_at', 'ALTER TABLE catalog ADD COLUMN assessed_at TEXT'],
+    ] as const) {
+      if (!catCols.includes(col)) db.exec(ddl)
+    }
+  }
 }
 
 export function openDb(path: string): DB {

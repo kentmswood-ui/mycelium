@@ -4,6 +4,7 @@ import { SynapseLedger } from '../../src/ledger/synapse.js'
 import { KeywordMatcher } from '../../src/brain/matcher.js'
 import { SettingsStore } from '../../src/brain/settings.js'
 import { RecurrenceLedger } from '../../src/brain/recurrence.js'
+import { CatalogStore } from '../../src/brain/catalog.js'
 import { PREF_KEYS } from '../../src/brain/prefs.js'
 import { openDb } from '../../src/ledger/db.js'
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs'
@@ -133,4 +134,42 @@ test('quota: research + charge stops once the daily cap is hit', () => {
   brain.consult({ task: 'different gamma delta epsilon', tool: 'c' })
   brain.consult({ task: 'yet another zeta eta theta', tool: 'c' })
   expect(misses.length).toBe(2) // 3rd blocked by quota
+})
+
+test('catalog hit returns install BEFORE expensive research, and suppresses onMiss', () => {
+  const repo = new SkillRepository(mkdtempSync(join(tmpdir(), 'myc-cat-')))
+  repo.scan() // empty → no local skill
+  const db = openDb(':memory:')
+  const led = new SynapseLedger(db)
+  const catalog = new CatalogStore(db)
+  catalog.ingest({
+    name: 'logo-svg-animator',
+    purpose: 'generate animated svg logo demos',
+    source: 'anthropics',
+    keywords: ['logo', 'svg', 'animation', 'demo'],
+  })
+  const misses: string[] = []
+  const brain = new Brain(repo, new KeywordMatcher(), led, {
+    onMiss: (t) => misses.push(t),
+    catalog,
+  })
+  const r = brain.consult({ task: 'make an animated svg logo demo', tool: 'c' })
+  expect(r.verdict).toBe('install')
+  if (r.verdict === 'install') expect(r.candidates[0].name).toBe('logo-svg-animator')
+  expect(misses.length).toBe(0) // catalog hit short-circuits the expensive web research
+})
+
+test('catalog miss falls through to the expensive research path', () => {
+  const repo = new SkillRepository(mkdtempSync(join(tmpdir(), 'myc-cat2-')))
+  repo.scan()
+  const db = openDb(':memory:')
+  const catalog = new CatalogStore(db) // empty catalog
+  const misses: string[] = []
+  const brain = new Brain(repo, new KeywordMatcher(), new SynapseLedger(db), {
+    onMiss: (t) => misses.push(t),
+    catalog,
+  })
+  const r = brain.consult({ task: 'orchestrate kubernetes blue green deploy pipeline', tool: 'c' })
+  expect(r.verdict).toBe('searching')
+  expect(misses.length).toBe(1) // no catalog hit → expensive research fires
 })

@@ -13,6 +13,16 @@ const RecallNote = z.object({
   score: z.number(),
 })
 
+// A ready-made skill the catalog already knows about — surfaced on a local miss BEFORE any
+// expensive web research, so the brain can say "there's a skill XXX for this at <url>, install it?"
+const CatalogCandidate = z.object({
+  name: z.string(),
+  purpose: z.string().optional(),
+  source: z.string(),
+  url: z.string().optional(),
+  tier: z.string(),
+})
+
 export const ConsultResponse = z.discriminatedUnion('verdict', [
   // not woken / trivial / meta — nothing to do
   z.object({ verdict: z.literal('pass'), note: z.string().optional() }),
@@ -20,7 +30,10 @@ export const ConsultResponse = z.discriminatedUnion('verdict', [
   z.object({ verdict: z.literal('reuse'), skill: z.string(), experience: z.string().optional() }),
   // step 1b: the user's own memory covers this — read these notes before anything else
   z.object({ verdict: z.literal('recall'), notes: z.array(RecallNote), note: z.string().optional() }),
-  // local miss — async research (steps 2/3) queued; nothing actionable yet
+  // step 2 (FREE): no local skill, but the catalog knows ready-made ones for this task. Offer to
+  // install the best candidate(s) — no expensive web research needed. Verify it fits, then install.
+  z.object({ verdict: z.literal('install'), candidates: z.array(CatalogCandidate), note: z.string().optional() }),
+  // local miss AND catalog empty — async research (step 3) queued; nothing actionable yet
   z.object({ verdict: z.literal('searching'), note: z.string().optional() }),
   // local miss AND this task-shape has recurred enough — agent should interactively BUILD a
   // skill (research with purpose → ask the user → synthesize → register_skill). Not automatic.

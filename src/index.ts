@@ -87,6 +87,7 @@ export function bootCore(opts: BootOpts = {}): Core {
     settings,
     recurrence,
     misfits,
+    catalog,
     memoryDir: cfg.memoryDir || undefined,
     skillsDir: cfg.skillsDir,
   })

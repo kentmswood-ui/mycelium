@@ -73,7 +73,7 @@ export async function startMcpServer(brain: Brain, catalog?: CatalogStore): Prom
     'consult',
     {
       description:
-        'MUST be called before starting any task. Returns a verdict: reuse (a local skill matched), recall (your memory covers it — read the notes), searching (researching ready-made options), build (recurring need with no coverage — interactively build a skill then call register_skill), or pass.',
+        'MUST be called before starting any task. Returns a verdict: reuse (a local skill matched), recall (your memory covers it — read the notes), install (no local skill, but the catalog knows ready-made ones — verify fit then offer to install, no web research needed), searching (catalog empty too, researching online), build (recurring need with no coverage — interactively build a skill then call register_skill), or pass.',
       inputSchema: { task: z.string(), tool: z.string(), model: z.string().optional() },
     },
     async (args) => (await h.consult(args)) as any,

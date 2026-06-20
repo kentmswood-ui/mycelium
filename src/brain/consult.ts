@@ -17,12 +17,14 @@ import { aliasedSkills } from './aliases.js'
 import type { SettingsStore } from './settings.js'
 import type { RecurrenceLedger } from './recurrence.js'
 import type { MisfitStore } from './misfits.js'
+import type { CatalogStore } from './catalog.js'
 
 const TRIVIAL = /\b(typo|rename|format|lint|whitespace|comment)\b/i
 const MIN_WORDS = 3
 
 export interface BrainDeps {
-  /** async research hook (cascade steps 2/3): online + skill-market lookup → install proposals */
+  /** async research hook (cascade step 3, EXPENSIVE): online + skill-market lookup → install proposals.
+   *  Only fired when the catalog has nothing — a catalog hit suppresses it (token saving). */
   onMiss?: (task: string, tool: string) => void
   /** runtime prefs source; falls back to conservative defaults when absent */
   settings?: SettingsStore
@@ -30,6 +32,9 @@ export interface BrainDeps {
   recurrence?: RecurrenceLedger
   /** negative-learning store; when present, known-misfit skills are suppressed for a task-shape */
   misfits?: MisfitStore
+  /** ecosystem catalog (step 2, FREE): on a local miss, suggest a ready-made skill to install
+   *  BEFORE any expensive web research. A hit short-circuits the research. */
+  catalog?: CatalogStore
   /** directory of the user's memory notes for step-1 recall; when absent, recall is skipped */
   memoryDir?: string
   /** canonical skills dir; required for register_skill to land interactively-built skills */
@@ -129,13 +134,32 @@ export class Brain {
       }
     }
 
-    // ---- Local miss. Count the recurrence; cheap one-offs never escalate. ----
+    // ---- Step 2 (FREE): the ecosystem catalog already knows a ready-made skill for this. Offer
+    // to install it BEFORE spending tokens on web research. A catalog hit short-circuits step 3. ----
+    if (this.deps.catalog) {
+      const cands = this.deps.catalog.suggest(new Set(tokenize(req.task)))
+      if (cands.length > 0) {
+        return {
+          verdict: 'install',
+          candidates: cands.map((c) => ({
+            name: c.name,
+            ...(c.purpose ? { purpose: c.purpose } : {}),
+            source: c.source,
+            ...(c.url ? { url: c.url } : {}),
+            tier: c.tier,
+          })),
+          note: 'no local skill, but the catalog knows ready-made ones — verify fit, then install (no web research needed)',
+        }
+      }
+    }
+
+    // ---- Local + catalog miss. Count the recurrence; cheap one-offs never escalate. ----
     const rec = this.deps.recurrence
     const count = rec ? rec.recordMiss(req.task) : 1
     const canSpend = !rec || rec.underQuota(prefs.dailyQuota)
 
-    // Steps 2/3 (online research + skill market → install proposals) run async, quota-gated.
-    // Charge the quota the first time we actually spend on a shape so the daily cap is real.
+    // Step 3 (EXPENSIVE): online research → install proposals. Only reached when the catalog had
+    // nothing, so the full web/forum crawl is now a rare last resort, not the default miss action.
     if (canSpend) {
       this.deps.onMiss?.(req.task, req.tool)
       rec?.chargeQuota()
